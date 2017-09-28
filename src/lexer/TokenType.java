@@ -15,7 +15,7 @@ public enum TokenType {
     DIVIDE("/"),
 
     //
-    IDENTIFIER("")
+    IDENTIFIER("id")
     ;
 
     private String value;
