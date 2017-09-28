@@ -5,7 +5,7 @@ import java.util.List;
 public class FollowedByFSM extends FiniteStateMachine{
 
     public FollowedByFSM(List<String> characters) {
-        super();
+        super(characters);
         State currentState = this.initialState;
         for(String character: characters) {
             State nextState = new State(false);
@@ -14,4 +14,10 @@ public class FollowedByFSM extends FiniteStateMachine{
         }
         currentState.setIsAcceptingState(true);
     }
+
+    @Override
+    public String toString() {
+       return super.toString("");
+    }
+
 }
