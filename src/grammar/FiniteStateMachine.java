@@ -8,7 +8,7 @@ public abstract class FiniteStateMachine {
         this.initialState = new State(false);
     }
 
-    public boolean parse(String input) {
+    public final boolean parse(String input) {
         State currentState = this.initialState;
         for(int i = 0; i < input.length(); i++) {
           String character = input.substring(i, 1);
@@ -18,6 +18,10 @@ public abstract class FiniteStateMachine {
         }
 
         return currentState.isAcceptingState();
+    }
+
+    public final void combine(FiniteStateMachine nextFSM) {
+
     }
 
 }
