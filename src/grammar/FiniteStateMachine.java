@@ -19,6 +19,10 @@ public abstract class FiniteStateMachine {
         this.characters.add(character);
     }
 
+    public FiniteStateMachine() {
+        this(new ArrayList<>());
+    }
+
     public final boolean parse(String input) {
         State currentState = this.initialState;
         for(int i = 0; i < input.length(); i++) {
@@ -47,7 +51,7 @@ public abstract class FiniteStateMachine {
 
     }
 
-    private State getFinalState() {
+    public State getFinalState() {
         State currentState = this.initialState;
         while(!currentState.isAcceptingState()) {
             currentState = currentState.getNextState();
