@@ -34,7 +34,7 @@ public class State {
     }
 
     public State getNextState() {
-        for(Map.Entry<String, State> transition : this.transitions.entrySet()) {
+        for (Map.Entry<String, State> transition : this.transitions.entrySet()) {
             return transition.getValue();
         }
 
@@ -56,29 +56,57 @@ public class State {
     @Override
     public boolean equals(Object other) {
         //If other isn't a State then non-equal
-        if(!(other instanceof State)) {
+        if (!(other instanceof State)) {
             return false;
         }
 
         State otherState = (State) other;
 
-        if(this == otherState) {
+        if (this == otherState) {
             return true;
         }
 
         //If number of transitions are different then non-equal
-        if(this.transitions.entrySet().size() != otherState.transitions.entrySet().size()) {
+        if (this.transitions.entrySet().size() != otherState.transitions.entrySet().size()) {
             return false;
         }
 
         //Loop through transitions and return false if any are missing
-        for(Map.Entry<String, State> transition : this.transitions.entrySet()) {
-            if(!otherState.transitions.entrySet().contains(transition)) {
+        for (Map.Entry<String, State> transition : this.transitions.entrySet()) {
+            if (!otherState.transitions.entrySet().contains(transition)) {
                 return false;
             }
         }
 
         return true;
 
+    }
+
+    @Override
+    public String toString() {
+        return this.print(null, 0);
+    }
+
+    private String print(State parent, int level) {
+        String output = "";
+        if (this.isAcceptingState()) {
+            output += "FINAL STATE\n";
+        } else {
+            output += "NON-FINAL STATE\n";
+        }
+
+        if (this != parent) {
+
+            for (Map.Entry<String, State> transition : this.transitions.entrySet()) {
+                for (int i = 0; i < level; i++) {
+                    for (int j = i; j <= level; j++) {
+                        output += "\t";
+                    }
+                }
+                output += "\t" + transition.getKey() + " -> " + transition.getValue().print(this, level + 1);
+            }
+        }
+
+        return output;
     }
 }
