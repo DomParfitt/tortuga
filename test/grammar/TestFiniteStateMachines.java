@@ -49,7 +49,7 @@ public class TestFiniteStateMachines {
     }
 
     @Test
-    public void testCombinedFSM() {
+    public void testCompoundFSM() {
         FiniteStateMachine or = new UnionFSM(Arrays.asList("a", "b"));
         FiniteStateMachine after = new FollowedByFSM(Arrays.asList("c"));
         or.combine(after);
@@ -60,12 +60,26 @@ public class TestFiniteStateMachines {
         fsm1.combine(fsm2);
         assertTrue(fsm1.parse("abcd"));
 
-//        List<FiniteStateMachine> fsms = new ArrayList<>();
-//        fsms.add(new UnionFSM(characters));
-//        fsms.add(new LoopingFSM(""));
-////        fsms.add(new FollowedByFSM(Arrays.asList("b")));
-//        for(FiniteStateMachine fsm : fsms) {
-//            System.out.print(fsm);
-//        }
+        FiniteStateMachine fsm3 = new FollowedByFSM(Arrays.asList("a"));
+        FiniteStateMachine fsm4 = new LoopingFSM("b");
+        fsm3.combine(fsm4);
+        assertTrue(fsm3.parse("abbbbbb"));
+
+        FiniteStateMachine fsm5 = new UnionFSM(characters);
+        FiniteStateMachine fsm6 = new LoopingFSM("");
+        fsm5.combine(fsm6);
+        assertTrue(fsm5.parse("aaabbabcc"));
+
+    }
+
+    @Test
+    public void testCompoundFSM2() {
+        FiniteStateMachine fsm1, fsm2, fsm3;
+        fsm1 = new UnionFSM(Arrays.asList("a", "b", "c"));
+        fsm2 = new LoopingFSM("");
+        CompoundFSM compound = new CompoundFSM(fsm1);
+        System.out.println(compound);
+        compound.addFiniteStateMachine(fsm2);
+        System.out.println(compound);
     }
 }
