@@ -32,10 +32,27 @@ public class TestFiniteStateMachines {
 
     @Test
     public void testLoopingFSM() {
-        fsm = new LoopingFSM("a");
+//        fsm = new LoopingFSM("a");
+//        System.out.println(fsm);
+//        assertTrue(fsm.parse("aaaaa"));
+//        assertFalse(fsm.parse("aaadaa"));
+        FiniteStateMachine inner = new UnionFSM(Arrays.asList("a", "b"));
+        fsm = new LoopingFSM(inner);
         System.out.println(fsm);
-        assertTrue(fsm.parse("aaaaa"));
-        assertFalse(fsm.parse("aaadaa"));
+        assertTrue(fsm.parse("aaaaaaa"));
+//        assertTrue(fsm.parse(""));
+        assertTrue(fsm.parse("a"));
+        assertTrue(fsm.parse("aaababa"));
+    }
+
+    @Test
+    public void testCompoundLoopingFSM() {
+        CompoundFSM compound = new CompoundFSM(new UnionFSM(Arrays.asList("a", "b")));
+        compound.addFiniteStateMachine(new FollowedByFSM(Arrays.asList("c")));
+        System.out.println(compound);
+        fsm = new LoopingFSM(compound);
+        System.out.println(fsm);
+//        assertTrue(fsm.parse("abcabc"));
     }
 
     @Test
