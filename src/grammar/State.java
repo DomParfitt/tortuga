@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class State {
 
-    private Map<String, State> transitions;
+    private Map<Character, State> transitions;
     private boolean isAcceptingState;
 
     public State(boolean isAcceptingState) {
@@ -16,25 +16,25 @@ public class State {
         this.isAcceptingState = isAcceptingState;
     }
 
-    public State(boolean isAcceptingState, Map<String, State> transitions) {
+    public State(boolean isAcceptingState, Map<Character, State> transitions) {
         this(isAcceptingState);
         this.transitions = transitions;
     }
 
-    public boolean hasTransition(String character) {
+    public boolean hasTransition(Character character) {
         return this.transitions.containsKey(character);
     }
 
-    public Map<String, State> getTransitions() {
+    public Map<Character, State> getTransitions() {
         return this.transitions;
     }
 
-    public State getResultingState(String character) {
+    public State getResultingState(Character character) {
         return this.transitions.get(character);
     }
 
     public State getNextState() {
-        for (Map.Entry<String, State> transition : this.transitions.entrySet()) {
+        for (Map.Entry<Character, State> transition : this.transitions.entrySet()) {
             return transition.getValue();
         }
 
@@ -49,7 +49,7 @@ public class State {
         this.isAcceptingState = isAcceptingState;
     }
 
-    public void addTransition(String character, State transitionState) {
+    public void addTransition(Character character, State transitionState) {
         this.transitions.put(character, transitionState);
     }
 
@@ -72,7 +72,7 @@ public class State {
         }
 
         //Loop through transitions and return false if any are missing
-        for (Map.Entry<String, State> transition : this.transitions.entrySet()) {
+        for (Map.Entry<Character, State> transition : this.transitions.entrySet()) {
             if (!otherState.transitions.entrySet().contains(transition)) {
                 return false;
             }
@@ -97,7 +97,7 @@ public class State {
 
         if (this != parent) {
 
-            for (Map.Entry<String, State> transition : this.transitions.entrySet()) {
+            for (Map.Entry<Character, State> transition : this.transitions.entrySet()) {
                 for (int i = 0; i < level; i++) {
                     for (int j = i; j <= level; j++) {
                         output += "\t";

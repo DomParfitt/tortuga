@@ -4,10 +4,15 @@ import java.util.List;
 
 public class UnionFSM extends FiniteStateMachine {
 
-    public UnionFSM(List<String> characters) {
+//    public UnionFSM(String characters) {
+//        super(characters);
+//
+//    }
+
+    public UnionFSM(List<Character> characters) {
         super(characters);
         State acceptingState = new State(true);
-        for(String character : characters) {
+        for(Character character : characters) {
             this.initialState.addTransition(character, acceptingState);
         }
     }

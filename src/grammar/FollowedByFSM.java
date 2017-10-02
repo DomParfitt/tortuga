@@ -4,10 +4,10 @@ import java.util.List;
 
 public class FollowedByFSM extends FiniteStateMachine{
 
-    public FollowedByFSM(List<String> characters) {
+    public FollowedByFSM(List<Character> characters) {
         super(characters);
         State currentState = this.initialState;
-        for(String character: characters) {
+        for(Character character: characters) {
             State nextState = new State(false);
             currentState.addTransition(character, nextState);
             currentState = nextState;

@@ -14,17 +14,17 @@ public class LoopingFSM extends FiniteStateMachine {
 //        }
 //    }
 
-    @Deprecated
-    public LoopingFSM(String character) {
-        super(character);
-        this.initialState.setIsAcceptingState(true);
-        this.initialState.addTransition(character, this.initialState);
-    }
+//    @Deprecated
+//    public LoopingFSM( character) {
+//        super(character);
+//        this.initialState.setIsAcceptingState(true);
+//        this.initialState.addTransition(character, this.initialState);
+//    }
 
     public LoopingFSM(FiniteStateMachine fsm) {
         this.inner = fsm;
         State finalState = fsm.getFinalState();
-        for(Map.Entry<String, State> transition : fsm.initialState.getTransitions().entrySet()) {
+        for(Map.Entry<Character, State> transition : fsm.initialState.getTransitions().entrySet()) {
             finalState.addTransition(transition.getKey(), transition.getValue());
         }
         this.initialState = fsm.initialState;

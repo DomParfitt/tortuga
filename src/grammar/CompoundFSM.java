@@ -35,7 +35,7 @@ public class CompoundFSM extends FiniteStateMachine {
 
             //Get all transitions from the new machine's initial state and add them to the
             //current last machine's final state
-            for (Map.Entry<String, State> transition : machine.initialState.getTransitions().entrySet()) {
+            for (Map.Entry<Character, State> transition : machine.initialState.getTransitions().entrySet()) {
                 finalState.addTransition(transition.getKey(), transition.getValue());
             }
         }
