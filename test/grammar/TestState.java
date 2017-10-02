@@ -21,11 +21,11 @@ public class TestState {
 
     @Test
     public void testStatePrinting() {
-        FiniteStateMachine fsm = new UnionFSM(Arrays.asList("a", "b", "c"));
+        FiniteStateMachine fsm = new UnionFSM("abc");
         System.out.println(fsm.initialState);
-        fsm = new FollowedByFSM(Arrays.asList("a", "b", "c"));
+        fsm = new FollowedByFSM("abc");
         System.out.println(fsm.initialState);
-        fsm = new LoopingFSM("a");
-        System.out.println(fsm.initialState);
+//        fsm = new LoopingFSM("a");
+//        System.out.println(fsm.initialState);
     }
 }

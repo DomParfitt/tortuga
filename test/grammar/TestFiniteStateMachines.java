@@ -14,11 +14,11 @@ import static org.junit.Assert.assertTrue;
 public class TestFiniteStateMachines {
 
     FiniteStateMachine fsm, inner;
-    List<String> characters;
+    String characters;
 
     @Before
     public void setUp() {
-        characters = Arrays.asList("a", "b", "c");
+        characters = "abc";
     }
 
     @Test
@@ -82,7 +82,7 @@ public class TestFiniteStateMachines {
     @Test
     // (a|b)*
     public void testLoopingUnionFSM() {
-        inner = new UnionFSM(Arrays.asList("a", "b"));
+        inner = new UnionFSM("ab");
         fsm = new LoopingFSM(inner);
         System.out.print(fsm);
 
@@ -116,7 +116,7 @@ public class TestFiniteStateMachines {
     @Test
     // (abc)*
     public void testLoopingFollowedByFSM() {
-        inner = new FollowedByFSM(Arrays.asList("a", "b", "c"));
+        inner = new FollowedByFSM(characters);
         fsm = new LoopingFSM(inner);
         System.out.print(fsm);
 
@@ -147,8 +147,8 @@ public class TestFiniteStateMachines {
         /*
          * ((a|b)c)*
          */
-        CompoundFSM compound = new CompoundFSM(new UnionFSM(Arrays.asList("a", "b")));
-        compound.addFiniteStateMachine(new FollowedByFSM(Arrays.asList("c")));
+        CompoundFSM compound = new CompoundFSM(new UnionFSM("ab"));
+        compound.addFiniteStateMachine(new FollowedByFSM("c"));
 //        System.out.println("Compound: " + compound);
         fsm = new LoopingFSM(compound);
 //        System.out.println("Looping: " + fsm);
@@ -183,8 +183,8 @@ public class TestFiniteStateMachines {
 
     @Test
     public void testCompoundUnionFollowedByFSM() {
-        CompoundFSM compound = new CompoundFSM(new UnionFSM(Arrays.asList("a","b")));
-        compound.addFiniteStateMachine(new FollowedByFSM(Arrays.asList("c")));
+        CompoundFSM compound = new CompoundFSM(new UnionFSM("ab"));
+        compound.addFiniteStateMachine(new FollowedByFSM("c"));
         System.out.print(compound);
 
         try {
@@ -215,8 +215,8 @@ public class TestFiniteStateMachines {
          * (a|b)c*
          */
 
-        CompoundFSM compound = new CompoundFSM(new UnionFSM(Arrays.asList("a", "b")));
-        inner = new FollowedByFSM(Arrays.asList("c"));
+        CompoundFSM compound = new CompoundFSM(new UnionFSM("ab"));
+        inner = new FollowedByFSM("c");
         FiniteStateMachine looping = new LoopingFSM(inner);
         compound.addFiniteStateMachine(looping);
         System.out.print(compound);
@@ -249,8 +249,8 @@ public class TestFiniteStateMachines {
         /*
          * (a|b)(c|d)
          */
-        CompoundFSM compound = new CompoundFSM(new UnionFSM(Arrays.asList("a", "b")));
-        compound.addFiniteStateMachine(new UnionFSM(Arrays.asList("c", "d")));
+        CompoundFSM compound = new CompoundFSM(new UnionFSM("ab"));
+        compound.addFiniteStateMachine(new UnionFSM("cd"));
         System.out.print(compound);
 
         try {
@@ -287,8 +287,8 @@ public class TestFiniteStateMachines {
         /*
          * (ab)(cd)
          */
-        CompoundFSM compound = new CompoundFSM(new FollowedByFSM(Arrays.asList("a","b")));
-        compound.addFiniteStateMachine(new FollowedByFSM(Arrays.asList("c","d")));
+        CompoundFSM compound = new CompoundFSM(new FollowedByFSM("ab"));
+        compound.addFiniteStateMachine(new FollowedByFSM("cd"));
         System.out.print(compound);
 
         try {
