@@ -28,6 +28,7 @@ public class LoopingFSM extends FiniteStateMachine {
             finalState.addTransition(transition.getKey(), transition.getValue());
         }
         this.initialState = fsm.initialState;
+        this.initialState.setIsAcceptingState(true);
         this.characters = fsm.characters; //Not sure about this
     }
 
