@@ -1,5 +1,6 @@
 package lexer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,9 +13,25 @@ public class Lexer {
     }
 
     public List<Token> tokenize() {
+        List<Token> tokens = new ArrayList<>();
+
         //Split the input string on whitespace
         List<String> stringTokens = this.splitInputOnWhiteSpace();
-        return null;
+        for (String input : stringTokens) {
+            boolean matchFlag = false;
+            for (TokenType tokenType : TokenType.values()) {
+                if (tokenType.parse(input)) {
+                    Token token = new Token(tokenType, input, 0, 0);
+                    tokens.add(token);
+                    matchFlag = true;
+                    break;
+                }
+            }
+            if(!matchFlag) {
+                throw new TokenizeException("No valid token found on input string: " + input);
+            }
+        }
+        return tokens;
     }
 
     public List<String> splitInputOnWhiteSpace() {
