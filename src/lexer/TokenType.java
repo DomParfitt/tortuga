@@ -1,5 +1,7 @@
 package lexer;
 
+import grammar.FiniteStateMachine;
+
 public enum TokenType {
 
     //Keywords
@@ -19,8 +21,13 @@ public enum TokenType {
     ;
 
     private String value;
+    private FiniteStateMachine machine;
 
     TokenType(String value) {
         this.value = value;
+    }
+
+    public boolean parse(String input) {
+        return this.machine.parse(input);
     }
 }
