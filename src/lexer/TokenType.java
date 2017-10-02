@@ -7,6 +7,7 @@ public enum TokenType {
     //Base
     LETTER(new UnionFSM("abcdefghifjklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")),
     NUMBER(new UnionFSM("0123456789")),
+    PARENTHESES(new UnionFSM("()[]{}")),
 
     //Keywords
     IF(new FollowedByFSM("if")),
@@ -23,7 +24,6 @@ public enum TokenType {
     EQUALITY(new FollowedByFSM("==")),
 
     //
-    PARENTHESES(new UnionFSM("()[]{}")),
     IDENTIFIER(new LoopingFSM(LETTER.machine))
     ;
 
