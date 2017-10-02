@@ -66,6 +66,15 @@ public class TestLexer {
         this.testListEquality(expected, actual);
     }
 
+    @Test
+    public void testLexer() {
+        lexer = new Lexer("if var = ( 1 + 2 )");
+        List<Token> tokens = lexer.tokenize();
+        for(Token token : tokens) {
+            System.out.println(token);
+        }
+    }
+
     private void testListEquality(List<String> expected, List<String> actual) {
         assertEquals(expected.size(), actual.size());
         for(String token : expected) {
