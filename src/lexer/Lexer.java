@@ -17,6 +17,8 @@ public class Lexer {
 
         //Split the input string on whitespace
         List<String> stringTokens = this.splitInputOnWhiteSpace();
+        int line = 0;
+        int column = 0;
         for (String input : stringTokens) {
             boolean matchFlag = false;
             for (TokenType tokenType : TokenType.values()) {
@@ -28,8 +30,9 @@ public class Lexer {
                 }
             }
             if(!matchFlag) {
-                throw new TokenizeException("No valid token found on input string: " + input);
+                throw new TokenizeException("No valid token found on input string: " + input + " at column: " + column);
             }
+            column += input.length();
         }
         return tokens;
     }
