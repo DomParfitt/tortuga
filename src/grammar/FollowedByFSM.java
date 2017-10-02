@@ -42,6 +42,11 @@ public class FollowedByFSM extends FiniteStateMachine{
     }
 
     @Override
+    public FiniteStateMachine copy() {
+        return new FollowedByFSM(this.characters);
+    }
+
+    @Override
     public String toString() {
        return super.toString("");
     }

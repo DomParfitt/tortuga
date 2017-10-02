@@ -1,23 +1,33 @@
 package grammar;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * Abstract base class for a finite state machine
  */
 public abstract class FiniteStateMachine {
 
     protected State initialState;
     protected List<Character> characters;
 
+    /**
+     * Initialises a FiniteStateMachine using a list of characters
+     * @param characters the characters which are used for transitioning between states
+     */
     public FiniteStateMachine(List<Character> characters) {
         this.initialState = new State(false);
         this.characters = characters;
     }
 
+    /**
+     * Convenience constructor to initialise an FSM using a string in place of a list
+     * of characters
+     * @param characters the characters which are used for transitioning between states
+     */
     public FiniteStateMachine(String characters) {
         this(new ArrayList<>());
         char[] chars = characters.toCharArray();
@@ -27,12 +37,21 @@ public abstract class FiniteStateMachine {
 //        this.characters.add(Arrays.asList(chars));
     }
 
-//    protected abstract void initialise(List<Character> characters);
 
     public FiniteStateMachine() {
         this(new ArrayList<>());
     }
 
+//    protected abstract void initialise(List<Character> characters);
+
+    public abstract FiniteStateMachine copy();
+
+    /**
+     * Parses the input string and determines whether it is a valid string
+     * for the transitions within the FSM
+     * @param input the string to test
+     * @return true if the string is valid according to the FSM, false otherwise
+     */
     public final boolean parse(String input) {
         State currentState = this.initialState;
         for(int i = 0; i < input.length(); i++) {
@@ -62,6 +81,10 @@ public abstract class FiniteStateMachine {
 
     }
 
+    /**
+     * Gets the final state of the FSM, a.k.a the accepting state
+     * @return the final state
+     */
     public State getFinalState() {
         State currentState = this.initialState;
         while(!currentState.isAcceptingState()) {

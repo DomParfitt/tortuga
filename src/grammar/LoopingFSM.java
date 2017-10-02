@@ -22,14 +22,19 @@ public class LoopingFSM extends FiniteStateMachine {
 //    }
 
     public LoopingFSM(FiniteStateMachine fsm) {
-        this.inner = fsm;
-        State finalState = fsm.getFinalState();
-        for(Map.Entry<Character, State> transition : fsm.initialState.getTransitions().entrySet()) {
+        this.inner = fsm.copy();
+        State finalState = this.inner.getFinalState();
+        for(Map.Entry<Character, State> transition : this.inner.initialState.getTransitions().entrySet()) {
             finalState.addTransition(transition.getKey(), transition.getValue());
         }
-        this.initialState = fsm.initialState;
+        this.initialState = this.inner.initialState;
         this.initialState.setIsAcceptingState(true);
-        this.characters = fsm.characters; //Not sure about this
+        this.characters = this.inner.characters; //Not sure about this
+    }
+
+    @Override
+    public FiniteStateMachine copy() {
+        return new LoopingFSM(this.inner);
     }
 
     @Override

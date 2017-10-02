@@ -23,8 +23,9 @@ public class CompoundFSM extends FiniteStateMachine {
     }
 
     public void addFiniteStateMachine(FiniteStateMachine machine) {
+        FiniteStateMachine copy = machine.copy();
         if (this.finiteStateMachines.isEmpty()) {
-            this.initialState = machine.initialState;
+            this.initialState = copy.initialState;
         } else {
             //Get the last FSM in the list
             FiniteStateMachine last = this.finiteStateMachines.get(this.finiteStateMachines.size() - 1);
@@ -35,13 +36,18 @@ public class CompoundFSM extends FiniteStateMachine {
 
             //Get all transitions from the new machine's initial state and add them to the
             //current last machine's final state
-            for (Map.Entry<Character, State> transition : machine.initialState.getTransitions().entrySet()) {
+            for (Map.Entry<Character, State> transition : copy.initialState.getTransitions().entrySet()) {
                 finalState.addTransition(transition.getKey(), transition.getValue());
             }
         }
 
         //Add the new machine to the list
-        this.finiteStateMachines.add(machine);
+        this.finiteStateMachines.add(copy);
+    }
+
+    @Override
+    public FiniteStateMachine copy() {
+        return new CompoundFSM(this.finiteStateMachines);
     }
 
     @Override

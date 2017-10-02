@@ -32,6 +32,11 @@ public class UnionFSM extends FiniteStateMachine {
     }
 
     @Override
+    public FiniteStateMachine copy(){
+        return new UnionFSM(this.characters);
+    }
+
+    @Override
     public String toString() {
        return super.toString("|");
     }
