@@ -24,21 +24,8 @@ public enum TokenType {
 
     //
     PARENTHESES(new UnionFSM("()[]{}")),
-    IDENTIFIER(new LoopingFSM(BaseType.LETTER.machine)) //TODO: Needs fixing, the constructor should take a copy of the FSM
+    IDENTIFIER(new LoopingFSM(LETTER.machine))
     ;
-
-    //TODO: Figure a way to keep this separate
-    private static enum BaseType {
-
-        LETTER(new UnionFSM("abcdefghifjklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"));
-//        NUMBER(new UnionFSM("0123456789"));
-
-        private FiniteStateMachine machine;
-
-        BaseType(FiniteStateMachine machine) {
-            this.machine = machine;
-        }
-    }
 
     private String value; //TODO: Not sure if this is necessary
     private FiniteStateMachine machine;
