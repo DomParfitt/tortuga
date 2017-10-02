@@ -27,6 +27,8 @@ public abstract class FiniteStateMachine {
 //        this.characters.add(Arrays.asList(chars));
     }
 
+//    protected abstract void initialise(List<Character> characters);
+
     public FiniteStateMachine() {
         this(new ArrayList<>());
     }
@@ -78,5 +80,14 @@ public abstract class FiniteStateMachine {
         }
 //        output += ")";
         return output;
+    }
+
+    protected static List<Character> stringToCharList(String characters) {
+        List<Character> characterList = new ArrayList<>();
+        for(Character character : characters.toCharArray()) {
+            characterList.add(character);
+        }
+
+        return characterList;
     }
 }
