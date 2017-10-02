@@ -24,6 +24,10 @@ public class UnionFSM extends FiniteStateMachine {
 //        }
     }
 
+    public UnionFSM(FiniteStateMachine first, FiniteStateMachine second) {
+        this.initialise(first.characters);
+    }
+
     private void initialise(List<Character> characters) {
         State acceptingState = new State(true);
         for(Character character : characters) {
