@@ -33,6 +33,10 @@ public class State {
         return this.transitions.get(character);
     }
 
+    public boolean hasNextState() {
+        return !this.transitions.isEmpty();
+    }
+
     public State getNextState() {
         for (Map.Entry<Character, State> transition : this.transitions.entrySet()) {
             return transition.getValue();

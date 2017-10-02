@@ -10,6 +10,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class TestFiniteStateMachines {
 
@@ -307,6 +308,30 @@ public class TestFiniteStateMachines {
             //Fails on empty input
             assertFalse(compound.parse(""));
 
+            System.out.println(" - PASSING");
+
+        } catch (AssertionError e ) {
+            System.out.println(" - FAILING");
+            throw e;
+        }
+
+    }
+
+
+    @Test
+    public void testUnionCompoundFSM() {
+        /*
+         * a|(bc)
+         */
+        FiniteStateMachine fsm1,fsm2;
+        fsm1 = new UnionFSM("a");
+        fsm2 = new FollowedByFSM("bc");
+        fsm = new UnionFSM(fsm1, fsm2);
+        System.out.print(fsm);
+
+        try {
+            //Tests go here
+            fail();
             System.out.println(" - PASSING");
 
         } catch (AssertionError e ) {

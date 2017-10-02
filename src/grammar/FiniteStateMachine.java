@@ -34,7 +34,6 @@ public abstract class FiniteStateMachine {
         for(char character : chars) {
             this.characters.add(character);
         }
-//        this.characters.add(Arrays.asList(chars));
     }
 
 
@@ -89,6 +88,18 @@ public abstract class FiniteStateMachine {
         State currentState = this.initialState;
         while(!currentState.isAcceptingState()) {
             currentState = currentState.getNextState();
+        }
+
+        return currentState;
+    }
+
+    public State getPenultimateState() {
+        State currentState = this.initialState;
+        while(currentState.hasNextState()) {
+            State nextState = currentState.getNextState();
+            if(nextState.isAcceptingState()) {
+                return currentState;
+            }
         }
 
         return currentState;
