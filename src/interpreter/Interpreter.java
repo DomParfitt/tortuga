@@ -15,6 +15,8 @@ public class Interpreter {
     public static void main(String[] args) {
         if (args.length != 1) {
             System.err.println("Please provide a file name");
+        } else if (args[0].endsWith(".tortuga")) {
+            System.err.println("File provided is not a valid tortuga source file");
         } else {
 
             String filePath = args[0];
