@@ -1,30 +1,46 @@
 package lexer;
 
-import grammar.FiniteStateMachine;
+import grammar.*;
 
 public enum TokenType {
 
+    //Base
+    NUMBER(new UnionFSM("0123456789")),
+
     //Keywords
-    IF("if"),
-    ELSE("else"),
-    WHILE("while"),
-    FOR("for"),
+    IF(new FollowedByFSM("if")),
+    ELSE(new FollowedByFSM("else")),
+    WHILE(new FollowedByFSM("while")),
+    FOR(new FollowedByFSM("for")),
 
     //Operators
-    PLUS("+"),
-    MINUS("-"),
-    MULTIPLY("*"),
-    DIVIDE("/"),
+    PLUS(new FollowedByFSM("+")),
+    MINUS(new FollowedByFSM("-")),
+    MULTIPLY(new FollowedByFSM("*")),
+    DIVIDE(new FollowedByFSM("/")),
 
     //
-    IDENTIFIER("id")
+    IDENTIFIER(new LoopingFSM(BaseType.LETTER.machine))
     ;
 
-    private String value;
+    //TODO: Figure a way to keep this separate
+    private static enum BaseType {
+
+        LETTER(new UnionFSM("abcdefghifjklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+//        NUMBER(new UnionFSM("0123456789"));
+
+        private FiniteStateMachine machine;
+
+        BaseType(FiniteStateMachine machine) {
+            this.machine = machine;
+        }
+    }
+
+    private String value; //TODO: Not sure if this is necessary
     private FiniteStateMachine machine;
 
-    TokenType(String value) {
-        this.value = value;
+    TokenType(FiniteStateMachine machine) {
+        this.machine = machine;
     }
 
     public boolean parse(String input) {
