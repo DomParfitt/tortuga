@@ -5,6 +5,7 @@ import grammar.*;
 public enum TokenType {
 
     //Base
+    LETTER(new UnionFSM("abcdefghifjklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")),
     NUMBER(new UnionFSM("0123456789")),
 
     //Keywords
@@ -18,9 +19,12 @@ public enum TokenType {
     MINUS(new FollowedByFSM("-")),
     MULTIPLY(new FollowedByFSM("*")),
     DIVIDE(new FollowedByFSM("/")),
+    ASSIGNMENT(new FollowedByFSM("=")),
+    EQUALITY(new FollowedByFSM("==")),
 
     //
-    IDENTIFIER(new LoopingFSM(BaseType.LETTER.machine))
+    PARENTHESES(new UnionFSM("()[]{}")),
+    IDENTIFIER(new LoopingFSM(BaseType.LETTER.machine)) //TODO: Needs fixing, the constructor should take a copy of the FSM
     ;
 
     //TODO: Figure a way to keep this separate
