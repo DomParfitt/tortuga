@@ -19,7 +19,7 @@ public class Lexer {
         List<String> stringTokens = this.splitInputOnWhiteSpace();
         int line = 0;
         int column = 0;
-        for (String input : stringTokens) {
+        for (String input : stringTokens) { //TODO: Doing this way requires unnecessary whitespace in source
             boolean matchFlag = false;
             for (TokenType tokenType : TokenType.values()) {
                 if (tokenType.parse(input)) {
