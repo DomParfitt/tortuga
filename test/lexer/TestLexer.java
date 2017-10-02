@@ -23,7 +23,7 @@ public class TestLexer {
         lexer = new Lexer("This is a test");
         List<String> expected = Arrays.asList("This", "is", "a", "test");
         List<String> actual = lexer.splitInputOnWhiteSpace();
-        this.testListEquality(expected, actual);
+        this.assertListEquality(expected, actual);
     }
 
     @Test
@@ -31,7 +31,7 @@ public class TestLexer {
         lexer = new Lexer("This  is   a test");
         List<String> expected = Arrays.asList("This", "is", "a", "test");
         List<String> actual = lexer.splitInputOnWhiteSpace();
-        this.testListEquality(expected, actual);
+        this.assertListEquality(expected, actual);
     }
 
     @Test
@@ -39,7 +39,7 @@ public class TestLexer {
         lexer = new Lexer("This\tis\t a test");
         List<String> expected = Arrays.asList("This", "is", "a", "test");
         List<String> actual = lexer.splitInputOnWhiteSpace();
-        this.testListEquality(expected, actual);
+        this.assertListEquality(expected, actual);
     }
 
     @Test
@@ -47,7 +47,7 @@ public class TestLexer {
         lexer = new Lexer("This\tis\t\t a test");
         List<String> expected = Arrays.asList("This", "is", "a", "test");
         List<String> actual = lexer.splitInputOnWhiteSpace();
-        this.testListEquality(expected, actual);
+        this.assertListEquality(expected, actual);
     }
 
     @Test
@@ -55,7 +55,7 @@ public class TestLexer {
         lexer = new Lexer("This\nis\n a test");
         List<String> expected = Arrays.asList("This", "is", "a", "test");
         List<String> actual = lexer.splitInputOnWhiteSpace();
-        this.testListEquality(expected, actual);
+        this.assertListEquality(expected, actual);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class TestLexer {
         lexer = new Lexer("This\nis\n\n a test");
         List<String> expected = Arrays.asList("This", "is", "a", "test");
         List<String> actual = lexer.splitInputOnWhiteSpace();
-        this.testListEquality(expected, actual);
+        this.assertListEquality(expected, actual);
     }
 
     @Test
@@ -75,7 +75,7 @@ public class TestLexer {
         }
     }
 
-    private void testListEquality(List<String> expected, List<String> actual) {
+    private void assertListEquality(List<String> expected, List<String> actual) {
         assertEquals(expected.size(), actual.size());
         for(String token : expected) {
             assertTrue(actual.contains(token));
