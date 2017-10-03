@@ -37,12 +37,19 @@ public abstract class FiniteStateMachine {
     }
 
 
+    /**
+     * Empty constructor
+     */
     public FiniteStateMachine() {
         this(new ArrayList<>());
     }
 
 //    protected abstract void initialise(List<Character> characters);
 
+    /**
+     * Creates a copy of the FiniteStateMachine
+     * @return a copy of this FiniteStateMachine
+     */
     public abstract FiniteStateMachine copy();
 
     /**
@@ -68,6 +75,7 @@ public abstract class FiniteStateMachine {
         return currentState.isAcceptingState();
     }
 
+    @Deprecated
     public final void combine(FiniteStateMachine next) {
         State finalState = this.getFinalState();
         finalState.setIsAcceptingState(false);
@@ -96,6 +104,10 @@ public abstract class FiniteStateMachine {
         return currentState;
     }
 
+    /**
+     * Gets the set of final states that this FSM can end on
+     * @return the set of terminal states
+     */
     public Set<State> getFinalStates() {
         return this.initialState.getFinalStates();
     }
