@@ -3,37 +3,40 @@ package grammar;
 import com.sun.deploy.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-public class FollowedByFSM extends FiniteStateMachine{
+public class FollowedByFSM extends FiniteStateMachine {
 
     public FollowedByFSM(String characters) {
         super(characters);
         List<Character> charList = FiniteStateMachine.stringToCharList(characters);
         this.initialise(charList);
-//        State currentState = this.initialState;
-//        for(Character character: characters.toCharArray()) {
-//            State nextState = new State(false);
-//            currentState.addTransition(character, nextState);
-//            currentState = nextState;
-//        }
-//        currentState.setIsAcceptingState(true);
     }
 
     public FollowedByFSM(List<Character> characters) {
         super(characters);
         this.initialise(characters);
-//        State currentState = this.initialState;
-//        for(Character character: characters) {
-//            State nextState = new State(false);
-//            currentState.addTransition(character, nextState);
-//            currentState = nextState;
-//        }
-//        currentState.setIsAcceptingState(true);
+    }
+
+    public FollowedByFSM(FiniteStateMachine first, FiniteStateMachine second) {
+        FiniteStateMachine firstCopy, secondCopy;
+        firstCopy = first.copy();
+        secondCopy = second.copy();
+        this.initialState = firstCopy.initialState;
+        Set<State> finalStates = firstCopy.getFinalStates();
+        for (State finalState : finalStates) {
+            for (Map.Entry<Character, State> transition : secondCopy.initialState.getTransitions().entrySet()) {
+
+                finalState.addTransition(transition.getKey(), transition.getValue());
+            }
+            finalState.setIsAcceptingState(false);
+        }
     }
 
     private void initialise(List<Character> characters) {
         State currentState = this.initialState;
-        for(Character character: characters) {
+        for (Character character : characters) {
             State nextState = new State(false);
             currentState.addTransition(character, nextState);
             currentState = nextState;
@@ -48,7 +51,7 @@ public class FollowedByFSM extends FiniteStateMachine{
 
     @Override
     public String toString() {
-       return super.toString("");
+        return super.toString("");
     }
 
 }
