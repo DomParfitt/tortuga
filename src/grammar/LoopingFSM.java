@@ -1,7 +1,7 @@
 package grammar;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class LoopingFSM extends FiniteStateMachine {
 
@@ -23,12 +23,14 @@ public class LoopingFSM extends FiniteStateMachine {
 
     public LoopingFSM(FiniteStateMachine fsm) {
         this.inner = fsm.copy();
-        State finalState = this.inner.getFinalState();
-        for(Map.Entry<Character, State> transition : this.inner.initialState.getTransitions().entrySet()) {
-            finalState.addTransition(transition.getKey(), transition.getValue());
-        }
         this.initialState = this.inner.initialState;
         this.initialState.setIsAcceptingState(true);
+        Set<State> finalStates = this.inner.getFinalStates();
+        for (State finalState : finalStates) {
+            for (Map.Entry<Character, State> transition : this.inner.initialState.getTransitions().entrySet()) {
+                finalState.addTransition(transition.getKey(), transition.getValue());
+            }
+        }
         this.characters = this.inner.characters; //Not sure about this
     }
 
