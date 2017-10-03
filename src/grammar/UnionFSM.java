@@ -1,6 +1,5 @@
 package grammar;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,15 +16,12 @@ public class UnionFSM extends FiniteStateMachine {
         this.initialise(characters);
     }
 
+    //TODO: This build a functional FSM but doesn't provide any string output when printing
     public UnionFSM(FiniteStateMachine first, FiniteStateMachine second) {
         FiniteStateMachine firstCopy, secondCopy;
         firstCopy = first.copy();
         secondCopy = second.copy();
         this.initialState = firstCopy.initialState;
-        State penultimateState = secondCopy.getPenultimateState();
-        for(Map.Entry<Character, State> transition : penultimateState.getTransitions().entrySet()) {
-            penultimateState.addTransition(transition.getKey(), firstCopy.getFinalState());
-        }
         for(Map.Entry<Character, State> transition : secondCopy.initialState.getTransitions().entrySet()) {
             this.initialState.addTransition(transition.getKey(), transition.getValue());
         }
