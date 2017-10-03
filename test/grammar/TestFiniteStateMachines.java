@@ -443,6 +443,10 @@ public class TestFiniteStateMachines {
 
     }
 
+    /*
+     * ADDITIONAL TESTS
+     */
+
     @Test
     public void testGetFinalStates() {
         fsm = new UnionFSM("abc");
