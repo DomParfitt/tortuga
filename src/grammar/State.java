@@ -90,6 +90,14 @@ public class State {
         this.transitions.put(character, transitionState);
     }
 
+    public State copy() {
+        State copy = new State(this.isAcceptingState());
+        for(Map.Entry<Character, State> transition : this.transitions.entrySet()){
+            copy.addTransition(transition.getKey(), transition.getValue()); //TODO: Copying here causes a SO error, but should it copy?
+        }
+        return copy;
+    }
+
     @Override
     public boolean equals(Object other) {
         //If other isn't a State then non-equal
