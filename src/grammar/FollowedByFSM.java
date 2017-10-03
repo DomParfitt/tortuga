@@ -29,9 +29,11 @@ public class FollowedByFSM extends FiniteStateMachine {
             for (Map.Entry<Character, State> transition : secondCopy.initialState.getTransitions().entrySet()) {
 
                 finalState.addTransition(transition.getKey(), transition.getValue());
-                finalState.setIsAcceptingState(secondCopy.initialState.isAcceptingState());
+
             }
-//            finalState.setIsAcceptingState(false);
+
+            //If the initial state of the 2nd FSM is accepting then the final state can be as well
+            finalState.setIsAcceptingState(secondCopy.initialState.isAcceptingState());
         }
     }
 
