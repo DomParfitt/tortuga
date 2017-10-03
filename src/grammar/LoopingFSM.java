@@ -36,7 +36,10 @@ public class LoopingFSM extends FiniteStateMachine {
 
     @Override
     public FiniteStateMachine copy() {
-        return new LoopingFSM(this.inner);
+        FiniteStateMachine copy = new LoopingFSM(this.inner.copy());
+        copy.initialState = this.initialState.copy();
+        return copy;
+//        return new LoopingFSM(this.inner);
     }
 
     @Override

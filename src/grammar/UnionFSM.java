@@ -37,7 +37,10 @@ public class UnionFSM extends FiniteStateMachine {
 
     @Override
     public FiniteStateMachine copy(){
-        return new UnionFSM(this.characters);
+        FiniteStateMachine copy = new UnionFSM(this.characters);
+        copy.initialState = this.initialState.copy();
+        return copy;
+//        return new UnionFSM(this.characters);
     }
 
     @Override

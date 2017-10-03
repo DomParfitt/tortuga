@@ -46,7 +46,10 @@ public class FollowedByFSM extends FiniteStateMachine {
 
     @Override
     public FiniteStateMachine copy() {
-        return new FollowedByFSM(this.characters);
+        FiniteStateMachine copy = new FollowedByFSM(this.characters);
+        copy.initialState = this.initialState.copy();
+        return copy;
+//        return new FollowedByFSM(this.characters);
     }
 
     @Override
