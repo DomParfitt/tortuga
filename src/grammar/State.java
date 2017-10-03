@@ -10,32 +10,64 @@ public class State {
     private Map<Character, State> transitions;
     private boolean isAcceptingState;
 
+    /**
+     * Initialises a State with no transitions
+     * @param isAcceptingState true if the state is accepting, false otherwise
+     */
     public State(boolean isAcceptingState) {
         this.transitions = new HashMap<>();
         this.isAcceptingState = isAcceptingState;
     }
 
+    /**
+     * Initialises a state with transitions
+     * @param isAcceptingState true if the state is accepting, false otherwise
+     * @param transitions a map of transitions
+     */
     public State(boolean isAcceptingState, Map<Character, State> transitions) {
         this(isAcceptingState);
         this.transitions = transitions;
     }
 
+    /**
+     * Method to check whether there is a transition with a given character
+     * @param character the character to check for a transition with
+     * @return true if there is a transition, false otherwise
+     */
     public boolean hasTransition(Character character) {
         return this.transitions.containsKey(character);
     }
 
+    /**
+     * Gets all the transitions from this state
+     * @return the transitions
+     */
     public Map<Character, State> getTransitions() {
         return this.transitions;
     }
 
+    /**
+     * Gets the state that results from following the transition of the given
+     * character
+     * @param character the character to use for the transition
+     * @return the state resulting from the transition
+     */
     public State getResultingState(Character character) {
         return this.transitions.get(character);
     }
 
+    /**
+     * Checks whether there exists any transition from this state
+     * @return true if there is a transition, false otherwise
+     */
     public boolean hasNextState() {
         return !this.transitions.isEmpty();
     }
 
+    /**
+     * Gets the set of states that can be transitioned to from this state
+     * @return a set of states
+     */
     public Set<State> getNextStates() {
         Set<State> nextStates = new HashSet<>();
         for (Map.Entry<Character, State> transition : this.transitions.entrySet()) {
@@ -55,6 +87,10 @@ public class State {
         return this;
     }
 
+    /**
+     * Gets a set of terminal states that can be reached from this state
+     * @return a set of terminal states
+     */
     public Set<State> getFinalStates() {
         Set<State> finalStates = new HashSet<>();
 
@@ -78,18 +114,35 @@ public class State {
 
     }
 
+    /**
+     * Checks whether this state is accepting, i.e. a parse can end on it
+     * @return true if this state is accepting, false otherwise
+     */
     public boolean isAcceptingState() {
         return this.isAcceptingState;
     }
 
+    /**
+     * Sets the accepting state flag of this state
+     * @param isAcceptingState the flag to set
+     */
     public void setIsAcceptingState(boolean isAcceptingState) {
         this.isAcceptingState = isAcceptingState;
     }
 
+    /**
+     * Adds a transition from this state to another
+     * @param character the character to transition using
+     * @param transitionState the state to transition to
+     */
     public void addTransition(Character character, State transitionState) {
         this.transitions.put(character, transitionState);
     }
 
+    /**
+     * Creates a copy of this state which is equal
+     * @return a copy of this state
+     */
     public State copy() {
         State copy = new State(this.isAcceptingState());
         for(Map.Entry<Character, State> transition : this.transitions.entrySet()){
