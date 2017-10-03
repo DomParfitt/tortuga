@@ -3,24 +3,18 @@ package grammar;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Concrete implementation of a FiniteStateMachine, which validates on zero or
+ * more of the inner FSM
+ */
 public class LoopingFSM extends FiniteStateMachine {
 
     private FiniteStateMachine inner;
-//    public LoopingFSM(List<String> characters) {
-//        super(characters);
-//        this.initialState.setIsAcceptingState(true);
-//        for(String character : characters) {
-//            this.initialState.addTransition(character, this.initialState);
-//        }
-//    }
 
-//    @Deprecated
-//    public LoopingFSM( character) {
-//        super(character);
-//        this.initialState.setIsAcceptingState(true);
-//        this.initialState.addTransition(character, this.initialState);
-//    }
-
+    /**
+     * Initialises a looping FSM 'around' the provided one
+     * @param fsm the FSM to loop on
+     */
     public LoopingFSM(FiniteStateMachine fsm) {
         this.inner = fsm.copy();
         this.initialState = this.inner.initialState;
