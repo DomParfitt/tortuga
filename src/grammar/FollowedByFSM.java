@@ -1,24 +1,41 @@
 package grammar;
 
-import com.sun.deploy.util.StringUtils;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Concrete implementation of FiniteStateMachine representing the case
+ * of some token A followed by another token B. These tokens can either
+ * be characters or other FSMs
+ */
 public class FollowedByFSM extends FiniteStateMachine {
 
+    /**
+     * Initialise using a string of characters
+     * @param characters the characters to use for parsing
+     */
     public FollowedByFSM(String characters) {
         super(characters);
         List<Character> charList = FiniteStateMachine.stringToCharList(characters);
         this.initialise(charList);
     }
 
+    /**
+     * Initialise with a list of characters
+     * @param characters the characters to use for parsing
+     */
     public FollowedByFSM(List<Character> characters) {
         super(characters);
         this.initialise(characters);
     }
 
+    /**
+     * Initialise this FSM by compounding two other FSMs. Results in an FSM
+     * which validates a string on the first followed by the second
+     * @param first the first FSM
+     * @param second the second FSM
+     */
     public FollowedByFSM(FiniteStateMachine first, FiniteStateMachine second) {
         FiniteStateMachine firstCopy, secondCopy;
         firstCopy = first.copy();
