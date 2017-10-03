@@ -1,7 +1,6 @@
 package grammar;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A class to represent a State within an FSM
@@ -37,12 +36,46 @@ public class State {
         return !this.transitions.isEmpty();
     }
 
+    public Set<State> getNextStates() {
+        Set<State> nextStates = new HashSet<>();
+        for (Map.Entry<Character, State> transition : this.transitions.entrySet()) {
+            nextStates.add(transition.getValue());
+//            return transition.getValue();
+        }
+
+        return nextStates;
+    }
+
+    @Deprecated
     public State getNextState() {
         for (Map.Entry<Character, State> transition : this.transitions.entrySet()) {
             return transition.getValue();
         }
 
         return this;
+    }
+
+    public Set<State> getFinalStates() {
+        Set<State> finalStates = new HashSet<>();
+
+        if (this.isAcceptingState()) {
+            finalStates.add(this);
+        }
+
+        Set<State> nextStates = this.getNextStates();
+        for (State state : nextStates) {
+            if (!finalStates.contains(state)) {
+                Set<State> transitionFinalStates = state.getFinalStates();
+                for (State finalState : transitionFinalStates) {
+//                    if (!finalStates.contains(finalState)) {
+                    finalStates.add(finalState);
+//                    }
+                }
+            }
+        }
+
+        return finalStates;
+
     }
 
     public boolean isAcceptingState() {
