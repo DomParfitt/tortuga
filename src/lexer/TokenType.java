@@ -6,7 +6,7 @@ public enum TokenType {
 
     //Base
     LETTER(new UnionFSM("abcdefghifjklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")),
-    NUMBER(new UnionFSM("0123456789")),
+    DIGIT(new UnionFSM("0123456789")),
     PARENTHESES(new UnionFSM("()[]{}")),
 
     //Keywords
@@ -24,7 +24,7 @@ public enum TokenType {
     EQUALITY(new FollowedByFSM("==")),
 
     //
-    IDENTIFIER(new LoopingFSM(LETTER.machine))
+    IDENTIFIER(FSMFactory.getIdentifierFSM())
     ;
 
     private String value; //TODO: Not sure if this is necessary
@@ -36,5 +36,9 @@ public enum TokenType {
 
     public boolean parse(String input) {
         return this.machine.parse(input);
+    }
+
+    public FiniteStateMachine getMachine() {
+        return machine;
     }
 }
