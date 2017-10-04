@@ -7,6 +7,7 @@ import java.util.*;
  */
 public class State {
 
+    private int number;
     private Map<Character, State> transitions;
     private boolean isAcceptingState;
 
@@ -14,20 +15,21 @@ public class State {
      * Initialises a State with no transitions
      * @param isAcceptingState true if the state is accepting, false otherwise
      */
-    public State(boolean isAcceptingState) {
+    public State(boolean isAcceptingState, int stateNumber) {
         this.transitions = new HashMap<>();
         this.isAcceptingState = isAcceptingState;
+        this.number = stateNumber;
     }
 
-    /**
-     * Initialises a state with transitions
-     * @param isAcceptingState true if the state is accepting, false otherwise
-     * @param transitions a map of transitions
-     */
-    public State(boolean isAcceptingState, Map<Character, State> transitions) {
-        this(isAcceptingState);
-        this.transitions = transitions;
-    }
+//    /**
+//     * Initialises a state with transitions
+//     * @param isAcceptingState true if the state is accepting, false otherwise
+//     * @param transitions a map of transitions
+//     */
+//    public State(boolean isAcceptingState, Map<Character, State> transitions) {
+//        this(isAcceptingState);
+//        this.transitions = transitions;
+//    }
 
     /**
      * Method to check whether there is a transition with a given character
@@ -144,7 +146,7 @@ public class State {
      * @return a copy of this state
      */
     public State copy() {
-        State copy = new State(this.isAcceptingState());
+        State copy = new State(this.isAcceptingState(), this.number);
         for(Map.Entry<Character, State> transition : this.transitions.entrySet()){
             copy.addTransition(transition.getKey(), transition.getValue()); //TODO: Copying here causes a SO error, but should it copy?
         }
@@ -176,6 +178,10 @@ public class State {
             }
         }
 
+        if(this.number != otherState.number) {
+            return false;
+        }
+
         return true;
 
     }
@@ -188,10 +194,12 @@ public class State {
     private String print(State parent, int level) {
         String output = "";
         if (this.isAcceptingState()) {
-            output += "FINAL STATE\n";
+            output += "FINAL STATE";
         } else {
-            output += "NON-FINAL STATE\n";
+            output += "NON-FINAL STATE";
         }
+
+        output += " (#" + this.number + ")\n";
 
         if (this != parent) {
 

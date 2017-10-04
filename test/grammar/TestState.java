@@ -28,7 +28,7 @@ public class TestState {
 
     @Test
     public void testSingleStateSingleFinal() {
-        s1 = new State(true);
+        s1 = new State(true, 0);
         Set<State> expected = new HashSet<>();
         expected.add(s1);
         Set<State> actual = s1.getFinalStates();
@@ -37,8 +37,8 @@ public class TestState {
 
     @Test
     public void testMultipleStatesSingleFinal() {
-        s1 = new State(false);
-        s2 = new State(true);
+        s1 = new State(false, 0);
+        s2 = new State(true, 1);
         s1.addTransition('a', s2);
         Set<State> expected = new HashSet<>();
         expected.add(s2);
@@ -48,9 +48,9 @@ public class TestState {
 
     @Test
     public void testMultipleStatesMultipleFinal() {
-        s1 = new State(false);
-        s2 = new State(true);
-        s3 = new State(true);
+        s1 = new State(false,0 );
+        s2 = new State(true, 1);
+        s3 = new State(true, 2);
         s1.addTransition('a', s2);
         s1.addTransition('b', s3);
         Set<State> expected = new HashSet<>();
@@ -62,7 +62,7 @@ public class TestState {
 
     @Test
     public void testSingleStateWithLoop() {
-        s1 = new State(true);
+        s1 = new State(true, 0);
         s1.addTransition('a', s1);
 
         Set<State> expected = new HashSet<>();
@@ -73,10 +73,10 @@ public class TestState {
 
     @Test
     public void testMultipleStatesMultipleFinalDifferentDepths() {
-        s1 = new State(false);
-        s2 = new State(true);
-        s3 = new State(false);
-        s4 = new State(true);
+        s1 = new State(false, 0);
+        s2 = new State(true, 1);
+        s3 = new State(false, 2);
+        s4 = new State(true, 4);
         s1.addTransition('a', s2);
         s1.addTransition('b', s3);
         s3.addTransition('c', s4);
@@ -93,7 +93,7 @@ public class TestState {
 
     @Test
     public void testCopyStateWithNoTransitions() {
-        s1 = new State(false);
+        s1 = new State(false, 0);
         s2 = s1.copy();
         assertTrue(s1.equals(s2));
         assertFalse(s1 == s2);
@@ -102,8 +102,8 @@ public class TestState {
 
     @Test
     public void testCopyStateWithSingleTransition() {
-        s1 = new State(false);
-        s2 = new State(true);
+        s1 = new State(false, 0);
+        s2 = new State(true, 1);
         s1.addTransition('a', s2);
         s3 = s1.copy();
         assertTrue(s1.equals(s3));
@@ -112,8 +112,8 @@ public class TestState {
 
     @Test
     public void testCopyStateWithMultipleTransitionToSingleTerminal() {
-        s1 = new State(false);
-        s2 = new State(true);
+        s1 = new State(false, 0);
+        s2 = new State(true, 1);
         s1.addTransition('a', s2);
         s1.addTransition('b', s2);
 
@@ -124,9 +124,9 @@ public class TestState {
 
     @Test
     public void testCopyStateWithMultipleTransitionToMultipleTerminal() {
-        s1 = new State(false);
-        s2 = new State(true);
-        s3 = new State(true);
+        s1 = new State(false, 0);
+        s2 = new State(true, 1);
+        s3 = new State(true, 2);
         s1.addTransition('a', s2);
         s1.addTransition('b', s3);
 
@@ -137,7 +137,7 @@ public class TestState {
 
     @Test
     public void testCopyStateWithSingleLoopTransition() {
-        s1 = new State(true);
+        s1 = new State(true, 0);
         s1.addTransition('a', s1);
 
         s2 = s1.copy();

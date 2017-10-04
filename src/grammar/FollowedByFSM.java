@@ -57,7 +57,7 @@ public class FollowedByFSM extends FiniteStateMachine {
     private void initialise(List<Character> characters) {
         State currentState = this.initialState;
         for (Character character : characters) {
-            State nextState = new State(false);
+            State nextState = new State(false, this.stateCounter++);
             currentState.addTransition(character, nextState);
             currentState = nextState;
         }
