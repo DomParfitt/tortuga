@@ -4,33 +4,41 @@ import grammar.*;
 
 public enum TokenType {
 
-    //Base
-    LETTER(new UnionFSM("abcdefghifjklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")),
-    DIGIT(new UnionFSM("0123456789")),
-    PARENTHESES(new UnionFSM("()[]{}")),
+    //Literals
+    LETTER(TokenCategory.LITERAL, new UnionFSM("abcdefghifjklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")),
+    DIGIT(TokenCategory.LITERAL, new UnionFSM("0123456789")),
+
+    //Separators
+    PARENTHESES(TokenCategory.SEPARATOR, new UnionFSM("()[]{}")),
 
     //Keywords
-    IF(new FollowedByFSM("if")),
-    ELSE(new FollowedByFSM("else")),
-    WHILE(new FollowedByFSM("while")),
-    FOR(new FollowedByFSM("for")),
+    IF(TokenCategory.KEYWORD, new FollowedByFSM("if")),
+    ELSE(TokenCategory.KEYWORD, new FollowedByFSM("else")),
+    WHILE(TokenCategory.KEYWORD, new FollowedByFSM("while")),
+    FOR(TokenCategory.KEYWORD, new FollowedByFSM("for")),
 
     //Operators
-    PLUS(new FollowedByFSM("+")),
-    MINUS(new FollowedByFSM("-")),
-    MULTIPLY(new FollowedByFSM("*")),
-    DIVIDE(new FollowedByFSM("/")),
-    ASSIGNMENT(new FollowedByFSM("=")),
-    EQUALITY(new FollowedByFSM("==")),
+    PLUS(TokenCategory.OPERATOR, new FollowedByFSM("+")),
+    MINUS(TokenCategory.OPERATOR, new FollowedByFSM("-")),
+    MULTIPLY(TokenCategory.OPERATOR, new FollowedByFSM("*")),
+    DIVIDE(TokenCategory.OPERATOR, new FollowedByFSM("/")),
+    ASSIGNMENT(TokenCategory.OPERATOR, new FollowedByFSM("=")),
+    EQUALITY(TokenCategory.OPERATOR, new FollowedByFSM("==")),
+    GREATERTHAN(TokenCategory.OPERATOR, new FollowedByFSM(">")),
+    GREATERTHANEQUALS(TokenCategory.OPERATOR, new FollowedByFSM(">=")),
+    LESSTHAN(TokenCategory.OPERATOR, new FollowedByFSM("<")),
+    LESSTHANEQUALS(TokenCategory.OPERATOR, new FollowedByFSM("<=")),
 
-    //
-    IDENTIFIER(FSMFactory.getIdentifierFSM())
+    //Identifiers
+    IDENTIFIER(TokenCategory.IDENTIFIER, FSMFactory.getIdentifierFSM())
     ;
 
     private String value; //TODO: Not sure if this is necessary
+    private TokenCategory category;
     private FiniteStateMachine machine;
 
-    TokenType(FiniteStateMachine machine) {
+    TokenType(TokenCategory category, FiniteStateMachine machine) {
+        this.category = category;
         this.machine = machine;
     }
 
