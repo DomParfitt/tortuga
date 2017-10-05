@@ -10,11 +10,11 @@ public class TestFSMFactory {
 
     @Test
     public void testGetIdentifierFSM() {
-        try {
+//        try {
             fsm = FSMFactory.getIdentifierFSM();
-        } catch (StackOverflowError e) {
-            System.err.println("Stack overflow");
-            fail();
-        }
+//        } catch (StackOverflowError e) {
+//            System.err.println("Stack overflow");
+//            fail();
+//        }
     }
 }
