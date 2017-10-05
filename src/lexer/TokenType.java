@@ -51,4 +51,8 @@ public enum TokenType {
     public FiniteStateMachine getMachine() {
         return machine;
     }
+
+    public TokenCategory getCategory() {
+        return category;
+    }
 }
