@@ -7,30 +7,34 @@ import java.util.*;
  */
 public class State {
 
+    private int number;
     private Map<Character, State> transitions;
     private boolean isAcceptingState;
 
     /**
      * Initialises a State with no transitions
+     *
      * @param isAcceptingState true if the state is accepting, false otherwise
      */
-    public State(boolean isAcceptingState) {
+    public State(boolean isAcceptingState, int stateNumber) {
         this.transitions = new HashMap<>();
         this.isAcceptingState = isAcceptingState;
+        this.number = stateNumber;
     }
 
-    /**
-     * Initialises a state with transitions
-     * @param isAcceptingState true if the state is accepting, false otherwise
-     * @param transitions a map of transitions
-     */
-    public State(boolean isAcceptingState, Map<Character, State> transitions) {
-        this(isAcceptingState);
-        this.transitions = transitions;
-    }
+//    /**
+//     * Initialises a state with transitions
+//     * @param isAcceptingState true if the state is accepting, false otherwise
+//     * @param transitions a map of transitions
+//     */
+//    public State(boolean isAcceptingState, Map<Character, State> transitions) {
+//        this(isAcceptingState);
+//        this.transitions = transitions;
+//    }
 
     /**
      * Method to check whether there is a transition with a given character
+     *
      * @param character the character to check for a transition with
      * @return true if there is a transition, false otherwise
      */
@@ -40,6 +44,7 @@ public class State {
 
     /**
      * Gets all the transitions from this state
+     *
      * @return the transitions
      */
     public Map<Character, State> getTransitions() {
@@ -49,6 +54,7 @@ public class State {
     /**
      * Gets the state that results from following the transition of the given
      * character
+     *
      * @param character the character to use for the transition
      * @return the state resulting from the transition
      */
@@ -58,6 +64,7 @@ public class State {
 
     /**
      * Checks whether there exists any transition from this state
+     *
      * @return true if there is a transition, false otherwise
      */
     public boolean hasNextState() {
@@ -66,6 +73,7 @@ public class State {
 
     /**
      * Gets the set of states that can be transitioned to from this state
+     *
      * @return a set of states
      */
     public Set<State> getNextStates() {
@@ -89,8 +97,10 @@ public class State {
 
     /**
      * Gets a set of terminal states that can be reached from this state
+     *
      * @return a set of terminal states
      */
+    //TODO: This isn't working and causes an SO
     public Set<State> getFinalStates() {
         Set<State> finalStates = new HashSet<>();
 
@@ -116,6 +126,7 @@ public class State {
 
     /**
      * Checks whether this state is accepting, i.e. a parse can end on it
+     *
      * @return true if this state is accepting, false otherwise
      */
     public boolean isAcceptingState() {
@@ -124,6 +135,7 @@ public class State {
 
     /**
      * Sets the accepting state flag of this state
+     *
      * @param isAcceptingState the flag to set
      */
     public void setIsAcceptingState(boolean isAcceptingState) {
@@ -132,7 +144,8 @@ public class State {
 
     /**
      * Adds a transition from this state to another
-     * @param character the character to transition using
+     *
+     * @param character       the character to transition using
      * @param transitionState the state to transition to
      */
     public void addTransition(Character character, State transitionState) {
@@ -141,14 +154,67 @@ public class State {
 
     /**
      * Creates a copy of this state which is equal
+     *
      * @return a copy of this state
      */
-    public State copy() {
-        State copy = new State(this.isAcceptingState());
-        for(Map.Entry<Character, State> transition : this.transitions.entrySet()){
+    public State oldCopy() {
+        State copy = new State(this.isAcceptingState(), this.number);
+        for (Map.Entry<Character, State> transition : this.transitions.entrySet()) {
             copy.addTransition(transition.getKey(), transition.getValue()); //TODO: Copying here causes a SO error, but should it copy?
         }
         return copy;
+    }
+
+    public State copy() {
+        CopyTracker copyTracker = new CopyTracker();
+        List<State> copiedStates = new ArrayList<>();
+        copyTracker.copiedStates = copiedStates;
+        copyTracker.copy = this;
+//        copyTracker.initialState = null;
+
+        copyTracker = this.safeCopyHelper(copyTracker);
+
+        return copyTracker.initialState;
+//        copiedStates = this.safeCopyHelper(copiedStates);
+
+//        return copiedStates.get(copiedStates.indexOf(this));
+
+    }
+
+    public CopyTracker safeCopyHelper(CopyTracker copyTracker) {
+
+        //Create a copy of this state without any transitions
+        State copy = new State(this.isAcceptingState(), this.number);
+
+        //Check whether a state with the same ID number is already present in the tracking list
+        for (State state : copyTracker.copiedStates) {
+
+            //If a copy is present return with the original list and the entry which is the pre-existing copy
+            if (state.number == this.number) {
+                CopyTracker ct = new CopyTracker();
+                ct.copiedStates = copyTracker.copiedStates;
+                ct.copy = state;
+                ct.initialState = copyTracker.initialState;
+                return ct;
+            }
+        }
+
+        //Copy is not present in list so add it and set it as the copy to be returned
+        copyTracker.copiedStates.add(copy);
+        copyTracker.copy = copy;
+        if(copyTracker.initialState == null) {
+            copyTracker.initialState = copy;
+        }
+
+        //Recursively copy the states from each transition and add them
+        for (Map.Entry<Character, State> transition : this.transitions.entrySet()) {
+            State nextState = transition.getValue();
+            copyTracker = nextState.safeCopyHelper(copyTracker);
+
+            copy.addTransition(transition.getKey(), copyTracker.copy);
+        }
+
+        return copyTracker;
     }
 
     @Override
@@ -176,22 +242,29 @@ public class State {
             }
         }
 
+        if (this.number != otherState.number) {
+            return false;
+        }
+
         return true;
 
     }
 
     @Override
     public String toString() {
-        return this.print(null, 0);
+        return this.simplePrint();
+//        return this.print(null, 0);
     }
 
     private String print(State parent, int level) {
         String output = "";
         if (this.isAcceptingState()) {
-            output += "FINAL STATE\n";
+            output += "FINAL STATE";
         } else {
-            output += "NON-FINAL STATE\n";
+            output += "NON-FINAL STATE";
         }
+
+        output += " (#" + this.number + ")\n";
 
         if (this != parent) {
 
@@ -206,5 +279,25 @@ public class State {
         }
 
         return output;
+    }
+
+    private String simplePrint() {
+        String output = "";
+
+        if(this.isAcceptingState()) {
+            output += "FINAL STATE";
+        } else {
+            output += "NON-FINAL STATE";
+        }
+
+        output += " (#" + this.number + ") [" + this.transitions.size() + " transitions]";
+
+        return output;
+    }
+
+    private class CopyTracker {
+        List<State> copiedStates;
+        boolean addedNewCopy;
+        State initialState, copy;
     }
 }
