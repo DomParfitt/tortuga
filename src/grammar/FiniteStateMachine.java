@@ -10,6 +10,7 @@ public abstract class FiniteStateMachine {
 
     protected State initialState;
     protected List<Character> characters;
+    protected int stateCounter = 0;
 
     /**
      * Initialises a FiniteStateMachine using a list of characters
@@ -17,7 +18,7 @@ public abstract class FiniteStateMachine {
      * @param characters the characters which are used for transitioning between states
      */
     public FiniteStateMachine(List<Character> characters) {
-        this.initialState = new State(false);
+        this.initialState = new State(false, this.stateCounter++);
         this.characters = characters;
     }
 

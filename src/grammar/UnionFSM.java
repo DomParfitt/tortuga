@@ -48,7 +48,7 @@ public class UnionFSM extends FiniteStateMachine {
     }
 
     private void initialise(List<Character> characters) {
-        State acceptingState = new State(true);
+        State acceptingState = new State(true, this.stateCounter++);
         for(Character character : characters) {
             this.initialState.addTransition(character, acceptingState);
         }
