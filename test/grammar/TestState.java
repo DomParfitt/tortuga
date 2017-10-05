@@ -113,7 +113,7 @@ public class TestState {
     @Test
     public void testCopyStateWithMultipleTransitionToSingleTerminal() {
         s1 = new State(false, 0);
-        s2 = new State(true, 0);
+        s2 = new State(true, 1);
         s1.addTransition('a', s2);
         s1.addTransition('b', s2);
 
@@ -125,8 +125,8 @@ public class TestState {
     @Test
     public void testCopyStateWithMultipleTransitionToMultipleTerminal() {
         s1 = new State(false, 0);
-        s2 = new State(true, 0);
-        s3 = new State(true, 0);
+        s2 = new State(true, 1);
+        s3 = new State(true, 2);
         s1.addTransition('a', s2);
         s1.addTransition('b', s3);
 
