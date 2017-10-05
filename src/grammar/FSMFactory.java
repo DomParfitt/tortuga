@@ -8,6 +8,8 @@ import lexer.TokenType;
  */
 public class FSMFactory {
 
+    private static FiniteStateMachine letterOrDigit;
+
     private static FiniteStateMachine identifierFSM;
 
     public static FiniteStateMachine getIdentifierFSM() {
@@ -19,7 +21,7 @@ public class FSMFactory {
             FiniteStateMachine letterOrUnderscore = new UnionFSM(TokenType.LETTER.getMachine(), new UnionFSM("_"));
 //            System.out.println("Initialised letterOrUnderscore");
 
-            FiniteStateMachine letterOrDigit = new UnionFSM(TokenType.LETTER.getMachine(), TokenType.DIGIT.getMachine());
+            FiniteStateMachine letterOrDigit = FSMFactory.getLetterOrDigitFSM();
 //            System.out.println("Initialised letterOrDigit");
 
             FiniteStateMachine letterOrDigitOrUnderscore = new UnionFSM(letterOrDigit, new UnionFSM("_"));
@@ -33,5 +35,13 @@ public class FSMFactory {
         }
 
         return FSMFactory.identifierFSM;
+    }
+
+    public static FiniteStateMachine getLetterOrDigitFSM() {
+        if(FSMFactory.letterOrDigit == null) {
+            FSMFactory.letterOrDigit = new UnionFSM(TokenType.LETTER.getMachine(), TokenType.DIGIT.getMachine());
+        }
+
+        return FSMFactory.letterOrDigit;
     }
 }
