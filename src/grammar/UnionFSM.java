@@ -1,7 +1,9 @@
 package grammar;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Concrete implementation of a FiniteStateMachine representing the case of
@@ -9,63 +11,40 @@ import java.util.Map;
  */
 public class UnionFSM extends FiniteStateMachine {
 
-    /**
-     * Convenience constructor using a string in place of a list
-     * @param characters
-     */
     public UnionFSM(String characters) {
-        super(characters);
-        List<Character> charList = FiniteStateMachine.stringToCharList(characters);
-        this.initialise(charList);
+        super();
+        State terminalState = new State(this.stateCounter++, true);
+        this.states.add(terminalState);
+        this.terminalStateIndex = this.stateCounter - 1;
+        Transition transition = new Transition(characters, this.getInitialState(), this.getTerminalState());
+        this.transitions.add(transition);
     }
 
-    /**
-     * Initialises with a list of characters, each of which represents a valid
-     * transition from the initial state to the final state
-     * @param characters
-     */
-    public UnionFSM(List<Character> characters) {
-        super(characters);
-        this.initialise(characters);
-    }
-
-    /**
-     * Compound constructor for creating an FSM from two FSMs where validating on either
-     * is enough to validate an input
-     * @param first the first FSM
-     * @param second the second FSM
-     */
-    //TODO: This build a functional FSM but doesn't provide any string output when printing
     public UnionFSM(FiniteStateMachine first, FiniteStateMachine second) {
-        FiniteStateMachine firstCopy, secondCopy;
-        firstCopy = first.copy();
-        secondCopy = second.copy();
-        this.initialState = firstCopy.initialState;
-        for(Map.Entry<Character, State> transition : secondCopy.initialState.getTransitions().entrySet()) {
-            State newState = transition.getValue().copy();
-            newState.number = this.stateCounter++;
-            this.initialState.addTransition(transition.getKey(), newState);
-        }
+        FiniteStateMachine firstCopy = first.copy();
 
-    }
-
-    private void initialise(List<Character> characters) {
-        State acceptingState = new State(true, this.stateCounter++);
-        for(Character character : characters) {
-            this.initialState.addTransition(character, acceptingState);
-        }
     }
 
     @Override
-    public FiniteStateMachine copy(){
-        FiniteStateMachine copy = new UnionFSM(this.characters);
-        copy.initialState = this.initialState.copy();
+    public FiniteStateMachine copy() {
+        FiniteStateMachine copy = new UnionFSM("");
+        copy.terminalStateIndex = this.terminalStateIndex;
+        copy.states = this.copyStates();
+        copy.transitions = this.copyTransitions(copy.states);
+
         return copy;
-//        return new UnionFSM(this.characters);
     }
 
     @Override
-    public String toString() {
-       return super.toString("|");
+    public void addTransition(Character character) {
+        State initalState = this.getInitialState();
+        State terminalState = this.getTerminalState();
+        Transition transition = new Transition(character, initalState, terminalState);
+        this.transitions.add(transition);
+    }
+
+    @Override
+    public void addState(State state) {
+
     }
 }
