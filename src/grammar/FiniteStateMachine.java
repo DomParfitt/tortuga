@@ -8,158 +8,140 @@ import java.util.*;
  */
 public abstract class FiniteStateMachine {
 
-    protected State initialState;
-    protected List<Character> characters;
     protected int stateCounter = 0;
+    protected int initialStateIndex = 0;
+    protected int terminalStateIndex = 0;
 
-    /**
-     * Initialises a FiniteStateMachine using a list of characters
-     *
-     * @param characters the characters which are used for transitioning between states
-     */
-    public FiniteStateMachine(List<Character> characters) {
-        this.initialState = new State(false, this.stateCounter++);
-        this.characters = characters;
-    }
+    protected List<State> states;
+    protected Set<Transition> transitions;
 
-    /**
-     * Convenience constructor to initialise an FSM using a string in place of a list
-     * of characters
-     *
-     * @param characters the characters which are used for transitioning between states
-     */
-    public FiniteStateMachine(String characters) {
-        this(new ArrayList<>());
-        char[] chars = characters.toCharArray();
-        for (char character : chars) {
-            this.characters.add(character);
-        }
-//        this.characters.add(Arrays.asList(chars));
-    }
-
-
-    /**
-     * Empty constructor
-     */
     public FiniteStateMachine() {
-        this(new ArrayList<>());
+        this.states = new ArrayList<>();
+        this.transitions = new TreeSet<>();
+        State intialState = new State(this.stateCounter++, false); //TODO: Initialise this as accepting?
+        intialState.setCurrentState(true);
+        this.states.add(intialState);
     }
 
-//    protected abstract void initialise(List<Character> characters);
+//    /**
+//     * Copy constructor
+//     * @param fsm
+//     */
+//    public FiniteStateMachine(FiniteStateMachine fsm) {
+//        FiniteStateMachine copy = fsm.copy();
+//        this.stateCounter = copy.stateCounter;
+//        this.states = copy.states;
+//        this.transitions = copy.transitions;
+//        this.terminalStateIndex = copy.terminalStateIndex;
+//
+//    }
 
-    /**
-     * Creates a copy of the FiniteStateMachine
-     * @return a copy of this FiniteStateMachine
-     */
-    public abstract FiniteStateMachine copy();
+    public State getInitialState() {
+        return this.states.get(this.initialStateIndex);
+    }
 
-    /**
-     * Parses the input string and determines whether it is a valid string
-     * for the transitions within the FSM
-     *
-     * @param input the string to test
-     * @return true if the string is valid according to the FSM, false otherwise
-     */
-    public final boolean parse(String input) {
-        State currentState = this.initialState;
-        for (int i = 0; i < input.length(); i++) {
-            char character = input.charAt(i);
-//          String character = input.substring(i, i+1);
-            if (currentState.hasTransition(character)) {
-                currentState = currentState.getResultingState(character);
-            } else {
-                //FSM cannot transition with current character, therefore illegal character
-                return false;
+    public State getTerminalState() {
+        return this.states.get(this.terminalStateIndex);
+    }
+
+    public State getCurrentState() {
+        for(State state : this.states) {
+            if(state.isCurrentState()) {
+                return state;
             }
         }
 
-        return currentState.isAcceptingState();
+        return this.getInitialState();
     }
 
-    @Deprecated
-    public final void combine(FiniteStateMachine next) {
-        State finalState = this.getFinalState();
-        finalState.setIsAcceptingState(false);
-        for (Map.Entry<Character, State> transition : next.initialState.getTransitions().entrySet()) {
-//            State nextState = transition.getValue();
-//            nextState.setIsAcceptingState(true);
-            finalState.addTransition(transition.getKey(), transition.getValue());
-        }
-        System.out.println("");
-//        finalState.addTransition(, next.initialState);
-
+    public void setCurrentState(State state) {
+        this.getCurrentState().setCurrentState(false);
+        state.setCurrentState(true);
     }
 
-    /**
-     * Gets the final state of the FSM, a.k.a the accepting state
-     *
-     * @return the final state
-     */
-    @Deprecated
-    public State getFinalState() {
-        State currentState = this.initialState;
-        while (!currentState.isAcceptingState()) {
-            currentState = currentState.getNextState();
-        }
-
-        return currentState;
-    }
-
-    /**
-     * Gets the set of final states that this FSM can end on
-     * @return the set of terminal states
-     */
-    public Set<State> getFinalStates() {
-        return this.initialState.getFinalStates();
-    }
-
-    @Deprecated
-    public State getPenultimateState() {
-        State currentState = this.initialState;
-        while (currentState.hasNextState()) {
-            State nextState = currentState.getNextState();
-            if (nextState.isAcceptingState()) {
-                return currentState;
-            }
-        }
-
-        return currentState;
-    }
-
-    @Deprecated
-    public Set<State> getPenultimateStates() {
-        Set<State> penultimates = new HashSet<>();
-        State currentState = this.initialState;
-        while (currentState.hasNextState()) {
-            Set<State> nextStates = currentState.getNextStates();
-            for (State nextState : nextStates) {
-
-                if (nextState.isAcceptingState()) {
-                    penultimates.add(currentState);
+    public boolean hasTransition(Character character) {
+        for(Transition transition : this.transitions) {
+            if(transition.getFromState().equals(this.getCurrentState())) {
+                if(transition.hasTransition(character)) {
+                    return true;
                 }
             }
         }
 
-        return penultimates;
+        return false;
     }
 
-    protected String toString(String separator) {
-        String output = ""; //"(";
-        String prefix = "";
-        for (Character character : this.characters) {
-            output += prefix + character;
-            prefix = separator;
+    public State getTransition(Character character) {
+        for(Transition transition : this.transitions) {
+            if(transition.getFromState().equals(this.getCurrentState())) {
+                if(transition.hasTransition(character)) {
+                    return transition.getResultingState(character);
+                }
+            }
         }
-//        output += ")";
+
+        return null;
+    }
+
+    public abstract void addTransition(Character character);
+
+    public abstract void addState(State state);
+
+    public final boolean parse(String input) {
+        this.setCurrentState(this.getInitialState());
+        char[] characters = input.toCharArray();
+        for(Character character : characters) {
+            if(this.hasTransition(character)) {
+                this.setCurrentState(this.getTransition(character));
+            } else {
+                return false;
+            }
+        }
+        return this.getCurrentState().isAcceptingState();
+    }
+
+    public abstract FiniteStateMachine copy();
+
+    protected List<State> copyStates() {
+        List<State> states = new ArrayList<>();
+        for (State state : this.states) {
+            states.add(state.copy());
+        }
+
+        return states;
+    }
+
+    protected Set<Transition> copyTransitions(List<State> states) {
+        Set<Transition> transitions = new TreeSet<>();
+        for(Transition transition : this.transitions) {
+            String characters = "";
+            for (Character character : transition.characters) {
+                characters += character;
+            }
+
+            State fromState = states.get(states.indexOf(transition.getFromState()));
+            State toState = states.get(states.indexOf(transition.getToState()));
+            Transition transitionCopy = new Transition(characters, fromState, toState);
+
+            transitions.add(transitionCopy);
+        }
+
+        return transitions;
+    }
+
+    @Override
+    public String toString() {
+        String output = "STATES\n";
+        for(State state : this.states) {
+            output += "\t" + state + "\n";
+        }
+
+        output += "\nTRANSITIONS\n";
+        for(Transition transition :  this.transitions) {
+            output += "\t" + transition + "\n";
+        }
+
         return output;
     }
 
-    protected static List<Character> stringToCharList(String characters) {
-        List<Character> characterList = new ArrayList<>();
-        for (Character character : characters.toCharArray()) {
-            characterList.add(character);
-        }
-
-        return characterList;
-    }
 }
