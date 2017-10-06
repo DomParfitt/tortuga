@@ -38,7 +38,7 @@ public class TestState {
     @Test
     public void testMultipleStatesSingleFinal() {
         s1 = new State(false, 0);
-        s2 = new State(true, 1);
+        s2 = new State(true, 0);
         s1.addTransition('a', s2);
         Set<State> expected = new HashSet<>();
         expected.add(s2);
@@ -48,9 +48,9 @@ public class TestState {
 
     @Test
     public void testMultipleStatesMultipleFinal() {
-        s1 = new State(false,0 );
-        s2 = new State(true, 1);
-        s3 = new State(true, 2);
+        s1 = new State(false, 0);
+        s2 = new State(true, 0);
+        s3 = new State(true, 0);
         s1.addTransition('a', s2);
         s1.addTransition('b', s3);
         Set<State> expected = new HashSet<>();
@@ -74,9 +74,9 @@ public class TestState {
     @Test
     public void testMultipleStatesMultipleFinalDifferentDepths() {
         s1 = new State(false, 0);
-        s2 = new State(true, 1);
-        s3 = new State(false, 2);
-        s4 = new State(true, 4);
+        s2 = new State(true, 0);
+        s3 = new State(false, 0);
+        s4 = new State(true, 0);
         s1.addTransition('a', s2);
         s1.addTransition('b', s3);
         s3.addTransition('c', s4);

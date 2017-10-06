@@ -10,6 +10,8 @@ public enum TokenType {
 
     //Separators
     PARENTHESES(TokenCategory.SEPARATOR, new UnionFSM("()[]{}")),
+    COMMA(TokenCategory.SEPARATOR, new UnionFSM(",")),
+    SEMICOLON(TokenCategory.SEPARATOR, new UnionFSM(";")),
 
     //Keywords
     IF(TokenCategory.KEYWORD, new FollowedByFSM("if")),
@@ -48,5 +50,9 @@ public enum TokenType {
 
     public FiniteStateMachine getMachine() {
         return machine;
+    }
+
+    public TokenCategory getCategory() {
+        return category;
     }
 }

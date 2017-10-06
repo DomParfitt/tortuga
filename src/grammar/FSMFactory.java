@@ -8,6 +8,8 @@ import lexer.TokenType;
  */
 public class FSMFactory {
 
+    private static FiniteStateMachine letterOrDigit;
+
     private static FiniteStateMachine identifierFSM;
 
     public static FiniteStateMachine getIdentifierFSM() {
@@ -17,26 +19,29 @@ public class FSMFactory {
         if (FSMFactory.identifierFSM == null) {
 
             FiniteStateMachine letterOrUnderscore = new UnionFSM(TokenType.LETTER.getMachine(), new UnionFSM("_"));
-            System.out.println("Initialised letterOrUnderscore");
+//            System.out.println("Initialised letterOrUnderscore");
 
-            FiniteStateMachine letterOrDigit = new UnionFSM(TokenType.LETTER.getMachine(), TokenType.DIGIT.getMachine());
-            System.out.println("Initialised letterOrDigit");
+            FiniteStateMachine letterOrDigit = FSMFactory.getLetterOrDigitFSM();
+//            System.out.println("Initialised letterOrDigit");
 
             FiniteStateMachine letterOrDigitOrUnderscore = new UnionFSM(letterOrDigit, new UnionFSM("_"));
-            System.out.println("Initialised letterOrDigitOrUnderscore");
+//            System.out.println("Initialised letterOrDigitOrUnderscore");
 
             FiniteStateMachine loopOnLetterOrDigitOrUnderscore = new LoopingFSM(letterOrDigitOrUnderscore);
-            System.out.println("Initialised loopOnLetterOrDigitOrUnderscore");
+//            System.out.println("Initialised loopOnLetterOrDigitOrUnderscore");
 
-            FiniteStateMachine loopOnLetterOrDigit = new LoopingFSM(letterOrDigit);
-            System.out.println("Initialised loopOnLetterOrDigit");
-
-//            FiniteStateMachine fsm = new UnionFSM(TokenType.LETTER.getMachine(), new UnionFSM("_"));
-            //TODO: Causes an SO on State.getFinalStates()
-            FSMFactory.identifierFSM = new FollowedByFSM(letterOrUnderscore, letterOrDigit);
-            System.out.println("Initialised identifier using letterOrUnderscore followed by letterOrDigit");
+            FSMFactory.identifierFSM = new FollowedByFSM(letterOrUnderscore, loopOnLetterOrDigitOrUnderscore);
+//            System.out.println("Initialised identifier using letterOrUnderscore followed by letterOrDigit");
         }
 
         return FSMFactory.identifierFSM;
+    }
+
+    public static FiniteStateMachine getLetterOrDigitFSM() {
+        if(FSMFactory.letterOrDigit == null) {
+            FSMFactory.letterOrDigit = new UnionFSM(TokenType.LETTER.getMachine(), TokenType.DIGIT.getMachine());
+        }
+
+        return FSMFactory.letterOrDigit;
     }
 }

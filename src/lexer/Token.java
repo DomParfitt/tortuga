@@ -14,8 +14,27 @@ public class Token {
         this.column = column;
     }
 
+    public TokenType getTokenType() {
+        return this.type;
+    }
+
+    public TokenCategory getTokenCategory() {
+        return this.getTokenType().getCategory();
+    }
+
     @Override
     public String toString() {
         return "[" + this.type + ": \"" + this.value + "\"]";
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if(!(other instanceof Token)) {
+            return false;
+        }
+
+        Token otherToken = (Token) other;
+
+        return (this.type == otherToken.type) && (this.value == otherToken.value);
     }
 }

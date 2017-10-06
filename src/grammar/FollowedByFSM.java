@@ -65,6 +65,7 @@ public class FollowedByFSM extends FiniteStateMachine {
     }
 
     @Override
+    //TODO: This handles a basic FollowedBy but not any kind of compound
     public FiniteStateMachine copy() {
         FiniteStateMachine copy = new FollowedByFSM(this.characters);
         copy.initialState = this.initialState.copy();

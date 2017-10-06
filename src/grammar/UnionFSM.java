@@ -42,7 +42,9 @@ public class UnionFSM extends FiniteStateMachine {
         secondCopy = second.copy();
         this.initialState = firstCopy.initialState;
         for(Map.Entry<Character, State> transition : secondCopy.initialState.getTransitions().entrySet()) {
-            this.initialState.addTransition(transition.getKey(), transition.getValue());
+            State newState = transition.getValue().copy();
+            newState.number = this.stateCounter++;
+            this.initialState.addTransition(transition.getKey(), newState);
         }
 
     }
