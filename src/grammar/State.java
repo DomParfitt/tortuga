@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class State {
 
-    private int number;
+    public int number;
     private Map<Character, State> transitions;
     private boolean isAcceptingState;
 
@@ -237,9 +237,16 @@ public class State {
 
         //Loop through transitions and return false if any are missing
         for (Map.Entry<Character, State> transition : this.transitions.entrySet()) {
-            if (!otherState.transitions.entrySet().contains(transition)) {
+            if(!otherState.transitions.keySet().contains(transition.getKey())) {
                 return false;
+            } else {
+                if(transition.getValue().number != otherState.transitions.get(transition.getKey()).number) {
+                    return false;
+                }
             }
+//            if (!otherState.transitions.entrySet().contains(transition)) {
+//                return false;
+//            }
         }
 
         if (this.number != otherState.number) {
