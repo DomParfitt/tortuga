@@ -25,36 +25,45 @@ public class UnionFSM extends FiniteStateMachine {
         FiniteStateMachine secondCopy = second.copy();
         this.initialise(firstCopy);
 
-        //Update the state numbers in the secondCopy
-        for(State state : secondCopy.states) {
-
-            //Update any transitions that contain this state
-            for(Transition transition : secondCopy.transitions) {
-                State fromState = transition.fromState;
-                State toState = transition.toState;
-                if(fromState.equals(state)) {
-                    fromState.setNumber(fromState.getNumber() + this.stateCounter);
-                }
-                if(toState.equals(state)) {
-                    toState.setNumber(toState.getNumber() + this.stateCounter);
-                }
-            }
-
-            //Update the state number to account for states in first FSM
-            state.setNumber(state.getNumber() + this.stateCounter++);
-        }
-
         State secondInitial = secondCopy.getInitialState();
         State secondTerminal = secondCopy.getTerminalState();
 
         //Add all states from secondCopy into this, except initial and terminal state
         for(State state : secondCopy.states) {
+
+            //We don't want to copy across the initial or terminal states
             if(!state.equals(secondInitial) && !state.equals(secondTerminal)) {
-                this.addState(state);
+
+                //Add the state and get its new number
+                int newNumber = this.addState(state);
+
+                //Find any transitions referencing that state and update their number
+                for(Transition transition : secondCopy.transitions) {
+                    if(transition.fromState.equals(state)) {
+                        transition.fromState.setNumber(newNumber);
+                    }
+
+                    if(transition.toState.equals(state)) {
+                        transition.toState.setNumber(newNumber);
+                    }
+                }
             }
         }
 
         //Add all transitions from secondCopy into this, replacing initial and terminal states with this's
+        for(Transition transition : secondCopy.transitions) {
+            State fromState = transition.fromState;
+            State toState = transition.toState;
+            if(fromState.equals(secondInitial)) {
+                transition.fromState = this.getInitialState();
+            }
+
+            if(toState.equals(secondTerminal)) {
+                transition.toState = this.getTerminalState();
+            }
+
+            this.addTransition(transition);
+        }
 
     }
 
@@ -68,16 +77,12 @@ public class UnionFSM extends FiniteStateMachine {
         return copy;
     }
 
-    @Override
-    public void addTransition(Character character) {
-        State initalState = this.getInitialState();
-        State terminalState = this.getTerminalState();
-        Transition transition = new Transition(character, initalState, terminalState);
-        this.transitions.add(transition);
-    }
+//    @Override
+//    public void addTransition(Character character) {
+//        State initalState = this.getInitialState();
+//        State terminalState = this.getTerminalState();
+//        Transition transition = new Transition(character, initalState, terminalState);
+//        this.transitions.add(transition);
+//    }
 
-    @Override
-    public void addState(State state) {
-
-    }
 }
