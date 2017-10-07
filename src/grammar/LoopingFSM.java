@@ -9,6 +9,10 @@ import java.util.Set;
  */
 public class LoopingFSM extends FiniteStateMachine {
 
+    public LoopingFSM() {
+
+    }
+
     public LoopingFSM(FiniteStateMachine fsm) {
         FiniteStateMachine copy = fsm.copy();
         this.initialise(copy);
@@ -27,7 +31,7 @@ public class LoopingFSM extends FiniteStateMachine {
 
     @Override
     public FiniteStateMachine copy() {
-        FiniteStateMachine copy = new LoopingFSM(null);
+        FiniteStateMachine copy = new LoopingFSM();
         copy.states = this.copyStates();
         copy.transitions = this.copyTransitions(copy.states);
 
