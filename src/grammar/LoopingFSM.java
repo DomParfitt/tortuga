@@ -11,9 +11,7 @@ public class LoopingFSM extends FiniteStateMachine {
 
     public LoopingFSM(FiniteStateMachine fsm) {
         FiniteStateMachine copy = fsm.copy();
-        this.stateCounter = copy.stateCounter;
-        this.states = copy.states;
-        this.transitions = copy.transitions;
+        this.initialise(copy);
         for(Transition transition : copy.transitions) {
             if(transition.toState.equals(copy.getTerminalState())) {
                 transition.toState = copy.getInitialState();
