@@ -18,6 +18,10 @@ public class State {
         return this.number;
     }
 
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
     public boolean isAcceptingState() {
         return this.isAcceptingState;
     }
