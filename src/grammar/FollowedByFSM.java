@@ -31,16 +31,6 @@ public class FollowedByFSM extends FiniteStateMachine {
     }
 
     @Override
-    public void addTransition(Character character) {
-        //TODO: Implement
-    }
-
-    @Override
-    public void addState(State state) {
-        //TODO: Implement
-    }
-
-    @Override
     public FiniteStateMachine copy() {
         FiniteStateMachine copy = new FollowedByFSM("");
         copy.terminalStateIndex = this.terminalStateIndex;
