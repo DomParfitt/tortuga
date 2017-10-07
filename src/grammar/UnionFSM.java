@@ -52,13 +52,11 @@ public class UnionFSM extends FiniteStateMachine {
 
         //Add all transitions from secondCopy into this, replacing initial and terminal states with this's
         for(Transition transition : secondCopy.transitions) {
-            State fromState = transition.fromState;
-            State toState = transition.toState;
-            if(fromState.equals(secondInitial)) {
+            if(transition.fromState.equals(secondInitial)) {
                 transition.fromState = this.getInitialState();
             }
 
-            if(toState.equals(secondTerminal)) {
+            if(transition.toState.equals(secondTerminal)) {
                 transition.toState = this.getTerminalState();
             }
 
