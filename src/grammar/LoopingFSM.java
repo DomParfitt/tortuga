@@ -26,16 +26,6 @@ public class LoopingFSM extends FiniteStateMachine {
     }
 
     @Override
-    public void addTransition(Character character) {
-
-    }
-
-    @Override
-    public void addState(State state) {
-
-    }
-
-    @Override
     public FiniteStateMachine copy() {
         FiniteStateMachine copy = new LoopingFSM(null);
         copy.states = this.copyStates();
