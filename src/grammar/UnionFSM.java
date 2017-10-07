@@ -68,19 +68,12 @@ public class UnionFSM extends FiniteStateMachine {
     @Override
     public FiniteStateMachine copy() {
         FiniteStateMachine copy = new UnionFSM("");
+        copy.stateCounter = this.stateCounter;
         copy.terminalStateIndex = this.terminalStateIndex;
         copy.states = this.copyStates();
         copy.transitions = this.copyTransitions(copy.states);
 
         return copy;
     }
-
-//    @Override
-//    public void addTransition(Character character) {
-//        State initalState = this.getInitialState();
-//        State terminalState = this.getTerminalState();
-//        Transition transition = new Transition(character, initalState, terminalState);
-//        this.transitions.add(transition);
-//    }
 
 }
