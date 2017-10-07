@@ -63,4 +63,15 @@ public class Transition implements Comparable {
             return this.toState.getNumber() - other.toState.getNumber();
         }
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if(!(other instanceof Transition)) {
+            return false;
+        }
+
+        Transition otherTransition = (Transition) other;
+
+        return this.fromState.equals(otherTransition.fromState) && this.toState.equals(otherTransition.toState);
+    }
 }
