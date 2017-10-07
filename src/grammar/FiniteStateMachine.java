@@ -35,8 +35,8 @@ public abstract class FiniteStateMachine {
 //        this.terminalStateIndex = copy.terminalStateIndex;
 //
 //    }
-    
-    protected  void initialise(FiniteStateMachine fsm) {
+
+    protected void initialise(FiniteStateMachine fsm) {
         this.states = fsm.states;
         this.transitions = fsm.transitions;
         this.terminalStateIndex = fsm.terminalStateIndex;
@@ -52,8 +52,8 @@ public abstract class FiniteStateMachine {
     }
 
     public State getCurrentState() {
-        for(State state : this.states) {
-            if(state.isCurrentState()) {
+        for (State state : this.states) {
+            if (state.isCurrentState()) {
                 return state;
             }
         }
@@ -61,15 +61,20 @@ public abstract class FiniteStateMachine {
         return this.getInitialState();
     }
 
-    public void setCurrentState(State state) {
+    public void setCurrentState(State newState) {
         this.getCurrentState().setCurrentState(false);
-        state.setCurrentState(true);
+        for (State state : this.states) {
+            if (state.equals(newState)) {
+                state.setCurrentState(true);
+
+            }
+        }
     }
 
     public boolean hasTransition(Character character) {
-        for(Transition transition : this.transitions) {
-            if(transition.getFromState().equals(this.getCurrentState())) {
-                if(transition.hasTransition(character)) {
+        for (Transition transition : this.transitions) {
+            if (transition.getFromState().equals(this.getCurrentState())) {
+                if (transition.hasTransition(character)) {
                     return true;
                 }
             }
@@ -79,9 +84,9 @@ public abstract class FiniteStateMachine {
     }
 
     public State getTransition(Character character) {
-        for(Transition transition : this.transitions) {
-            if(transition.getFromState().equals(this.getCurrentState())) {
-                if(transition.hasTransition(character)) {
+        for (Transition transition : this.transitions) {
+            if (transition.getFromState().equals(this.getCurrentState())) {
+                if (transition.hasTransition(character)) {
                     return transition.getResultingState(character);
                 }
             }
@@ -90,15 +95,29 @@ public abstract class FiniteStateMachine {
         return null;
     }
 
-    public abstract void addTransition(Character character);
+    public void addTransition(Transition transition) {
+        this.transitions.add(transition);
+    }
 
-    public abstract void addState(State state);
+    /**
+     * Adds a new state to the set of state belonging to this FSM. Updates the
+     * number of the added state to reflect the state counter of this FSM.
+     *
+     * @param state the state to be added
+     * @return the new number of the added state
+     */
+    public int addState(State state) {
+        State newState = state.copy();
+        newState.setNumber(this.stateCounter++);
+        this.states.add(newState);
+        return this.stateCounter - 1;
+    }
 
     public final boolean parse(String input) {
         this.setCurrentState(this.getInitialState());
         char[] characters = input.toCharArray();
-        for(Character character : characters) {
-            if(this.hasTransition(character)) {
+        for (Character character : characters) {
+            if (this.hasTransition(character)) {
                 this.setCurrentState(this.getTransition(character));
             } else {
                 return false;
@@ -120,7 +139,7 @@ public abstract class FiniteStateMachine {
 
     protected Set<Transition> copyTransitions(List<State> states) {
         Set<Transition> transitions = new TreeSet<>();
-        for(Transition transition : this.transitions) {
+        for (Transition transition : this.transitions) {
             String characters = "";
             for (Character character : transition.characters) {
                 characters += character;
@@ -139,12 +158,12 @@ public abstract class FiniteStateMachine {
     @Override
     public String toString() {
         String output = "STATES\n";
-        for(State state : this.states) {
+        for (State state : this.states) {
             output += "\t" + state + "\n";
         }
 
         output += "\nTRANSITIONS\n";
-        for(Transition transition :  this.transitions) {
+        for (Transition transition : this.transitions) {
             output += "\t" + transition + "\n";
         }
 
