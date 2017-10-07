@@ -96,7 +96,19 @@ public abstract class FiniteStateMachine {
     }
 
     public void addTransition(Transition transition) {
-        this.transitions.add(transition);
+        boolean exists = false;
+        for (Transition existing : this.transitions) {
+            if (existing.equals(transition)) {
+                for (Character character : transition.characters) {
+                    existing.characters.add(character);
+                }
+                exists = true;
+            }
+        }
+
+        if (!exists) {
+            this.transitions.add(transition);
+        }
     }
 
     /**
