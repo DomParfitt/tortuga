@@ -712,7 +712,7 @@ public class TestFiniteStateMachines {
      *  - Union FollowedBy FollowedBy -> ((a|b)(cd))*
      *  - Union FollowedBy Union -> ((a|b)(c|d))*
      *  - FollowedBy Union FollowedBy -> ((ab)|(cd))*
-     *  - Union Union Union -> ((a|b)|(c|d))* ( == (a|b|c|d)*)
+     *  - Union Union Union -> ((a|b)|(c|d))* ( == (a|b|c|d)*) - DONE
      *  - FollowedBy Union Union -> ((ab)|(c|d))*
      *  - Union Union FollowedBy -> ((a|b)|(cd))*
      */
