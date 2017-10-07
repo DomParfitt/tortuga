@@ -35,6 +35,13 @@ public abstract class FiniteStateMachine {
 //        this.terminalStateIndex = copy.terminalStateIndex;
 //
 //    }
+    
+    protected  void initialise(FiniteStateMachine fsm) {
+        this.states = fsm.states;
+        this.transitions = fsm.transitions;
+        this.terminalStateIndex = fsm.terminalStateIndex;
+        this.stateCounter = fsm.stateCounter;
+    }
 
     public State getInitialState() {
         return this.states.get(this.initialStateIndex);
