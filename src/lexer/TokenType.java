@@ -5,6 +5,8 @@ import grammar.*;
 public enum TokenType {
 
     //Literals
+    WHITESPACE(TokenCategory.LITERAL, new LoopingFSM(new UnionFSM(" \n\t\r\f"))),
+    NEWLINE(TokenCategory.LITERAL, new LoopingFSM(new UnionFSM("\n\r"))),
     LETTER(TokenCategory.LITERAL, new UnionFSM("abcdefghifjklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")),
     DIGIT(TokenCategory.LITERAL, new UnionFSM("0123456789")),
 
