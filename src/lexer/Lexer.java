@@ -17,7 +17,7 @@ public class Lexer {
     }
 
     @Deprecated
-    public List<Token> tokenize() throws TokenizeException {
+    public List<Token> tokenize() {
         List<Token> tokens = new ArrayList<>();
 
         //Split the input string on whitespace
@@ -51,7 +51,7 @@ public class Lexer {
      * @return a List of Tokens
      * @throws TokenizeException upon encountering a substring that has no valid tokens
      */
-    public List<Token> tokenize(String input) throws TokenizeException {
+    public List<Token> tokenize(String input) {
         List<Token> tokens = new ArrayList<>();
         int line = 1;
         int column = 0;
