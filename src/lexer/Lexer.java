@@ -125,7 +125,8 @@ public class Lexer {
                 i++;
 
                 //Check if character is a newline and update line and column trackers as necessary
-                if(sub.matches("\n") || sub.matches("\r") || sub.matches("\r\n")) {
+//                if(sub.matches("\n") || sub.matches("\r") || sub.matches("\r\n")) {
+                if(TokenType.NEWLINE.parse(sub)) {
                     line++;
                     column = i;
                 }
@@ -157,7 +158,8 @@ public class Lexer {
     }
 
     private boolean isWhitespace(String input) {
-        return input.matches("\\s+");
+        return TokenType.WHITESPACE.parse(input);
+//        return input.matches("\\s+");
     }
 
     public List<String> splitInputOnWhiteSpace() {
