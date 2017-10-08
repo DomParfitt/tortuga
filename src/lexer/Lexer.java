@@ -74,7 +74,7 @@ public class Lexer {
                 lookahead++;
 
                 //If there is another character to check then do so
-                if (i + lookahead < input.length()) {
+                if (i + lookahead <= input.length()) {
 
                     //Get the matching tokens from the substring up to the lookahead offset
                     lookaheadMatches = this.getMatchingTokenTypes(input.substring(i, i + lookahead));
@@ -86,7 +86,7 @@ public class Lexer {
                 }
 
                 //Keeping doing a lookahead as long as the result isn't empty and there are characters to check
-                while (!lookaheadMatches.isEmpty() && lookahead + i < input.length()) {
+                while (!lookaheadMatches.isEmpty() && lookahead + i <= input.length()) {
 
                     //Get the matching tokens from the substring up to the lookahead offset in a temp variable
                     List<TokenType> nextLookaheadMatches = this.getMatchingTokenTypes(input.substring(i, i + lookahead));
