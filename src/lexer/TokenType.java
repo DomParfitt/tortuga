@@ -14,7 +14,8 @@ public enum TokenType {
     IDENTIFIER(TokenCategory.IDENTIFIER, FSMFactory.getIdentifierFSM()),
 
     //Separators
-    PARENTHESES(TokenCategory.SEPARATOR, new UnionFSM("()[]{}")),
+    OPENPAREN(TokenCategory.SEPARATOR, new UnionFSM("([{")),
+    CLOSEPAREN(TokenCategory.SEPARATOR, new UnionFSM(")]}")),
     COMMA(TokenCategory.SEPARATOR, new UnionFSM(",")),
     SEMICOLON(TokenCategory.SEPARATOR, new UnionFSM(";")),
 
