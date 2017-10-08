@@ -1,5 +1,6 @@
 package lexer;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -15,58 +16,58 @@ public class TestLexer {
 
     private static Lexer lexer;
 
-//    @BeforeAll
-//    public static void setUp() {
-//
+    @Before
+    public void setUp() {
+        lexer = new Lexer();
+    }
+
+//    @Test
+//    public void testSplitOnWhiteSpaceWithSpaces() {
+//        lexer = new Lexer("This is a test");
+//        List<String> expected = Arrays.asList("This", "is", "a", "test");
+//        List<String> actual = lexer.splitInputOnWhiteSpace();
+//        this.assertListEquality(expected, actual);
 //    }
-
-    @Test
-    public void testSplitOnWhiteSpaceWithSpaces() {
-        lexer = new Lexer("This is a test");
-        List<String> expected = Arrays.asList("This", "is", "a", "test");
-        List<String> actual = lexer.splitInputOnWhiteSpace();
-        this.assertListEquality(expected, actual);
-    }
-
-    @Test
-    public void testSplitOnWhiteSpaceWithConsecutiveSpaces() {
-        lexer = new Lexer("This  is   a test");
-        List<String> expected = Arrays.asList("This", "is", "a", "test");
-        List<String> actual = lexer.splitInputOnWhiteSpace();
-        this.assertListEquality(expected, actual);
-    }
-
-    @Test
-    public void testSplitOnWhiteSpaceWithTabs() {
-        lexer = new Lexer("This\tis\t a test");
-        List<String> expected = Arrays.asList("This", "is", "a", "test");
-        List<String> actual = lexer.splitInputOnWhiteSpace();
-        this.assertListEquality(expected, actual);
-    }
-
-    @Test
-    public void testSplitOnWhiteSpaceWithConsecutiveTabs() {
-        lexer = new Lexer("This\tis\t\t a test");
-        List<String> expected = Arrays.asList("This", "is", "a", "test");
-        List<String> actual = lexer.splitInputOnWhiteSpace();
-        this.assertListEquality(expected, actual);
-    }
-
-    @Test
-    public void testSplitOnWhiteSpaceWithNewLine() {
-        lexer = new Lexer("This\nis\n a test");
-        List<String> expected = Arrays.asList("This", "is", "a", "test");
-        List<String> actual = lexer.splitInputOnWhiteSpace();
-        this.assertListEquality(expected, actual);
-    }
-
-    @Test
-    public void testSplitOnWhiteSpaceWithConsecutiveNewLines() {
-        lexer = new Lexer("This\nis\n\n a test");
-        List<String> expected = Arrays.asList("This", "is", "a", "test");
-        List<String> actual = lexer.splitInputOnWhiteSpace();
-        this.assertListEquality(expected, actual);
-    }
+//
+//    @Test
+//    public void testSplitOnWhiteSpaceWithConsecutiveSpaces() {
+//        lexer = new Lexer("This  is   a test");
+//        List<String> expected = Arrays.asList("This", "is", "a", "test");
+//        List<String> actual = lexer.splitInputOnWhiteSpace();
+//        this.assertListEquality(expected, actual);
+//    }
+//
+//    @Test
+//    public void testSplitOnWhiteSpaceWithTabs() {
+//        lexer = new Lexer("This\tis\t a test");
+//        List<String> expected = Arrays.asList("This", "is", "a", "test");
+//        List<String> actual = lexer.splitInputOnWhiteSpace();
+//        this.assertListEquality(expected, actual);
+//    }
+//
+//    @Test
+//    public void testSplitOnWhiteSpaceWithConsecutiveTabs() {
+//        lexer = new Lexer("This\tis\t\t a test");
+//        List<String> expected = Arrays.asList("This", "is", "a", "test");
+//        List<String> actual = lexer.splitInputOnWhiteSpace();
+//        this.assertListEquality(expected, actual);
+//    }
+//
+//    @Test
+//    public void testSplitOnWhiteSpaceWithNewLine() {
+//        lexer = new Lexer("This\nis\n a test");
+//        List<String> expected = Arrays.asList("This", "is", "a", "test");
+//        List<String> actual = lexer.splitInputOnWhiteSpace();
+//        this.assertListEquality(expected, actual);
+//    }
+//
+//    @Test
+//    public void testSplitOnWhiteSpaceWithConsecutiveNewLines() {
+//        lexer = new Lexer("This\nis\n\n a test");
+//        List<String> expected = Arrays.asList("This", "is", "a", "test");
+//        List<String> actual = lexer.splitInputOnWhiteSpace();
+//        this.assertListEquality(expected, actual);
+//    }
 
     @Test
     public void testValidIdentifiers() {
@@ -76,41 +77,36 @@ public class TestLexer {
 
         //Passes on alphabetic identifier
         input = "var";
-        lexer = new Lexer(input);
         expected.add(new Token(TokenType.IDENTIFIER, "var", 0, 0));
-        actual = lexer.tokenize();
+        actual = lexer.tokenize(input);
         this.assertListEquality(expected, actual);
         expected.clear();
 
         //Passes on alphanumeric identifier
         input = "var123";
-        lexer = new Lexer(input);
         expected.add(new Token(TokenType.IDENTIFIER, "var123", 0, 0));
-        actual = lexer.tokenize();
+        actual = lexer.tokenize(input);
         this.assertListEquality(expected, actual);
         expected.clear();
 
         //Passes on identifier beginning with underscore
         input = "_var123";
-        lexer = new Lexer(input);
         expected.add(new Token(TokenType.IDENTIFIER, "_var123", 0, 0));
-        actual = lexer.tokenize();
+        actual = lexer.tokenize(input);
         this.assertListEquality(expected, actual);
         expected.clear();
 
         //Passes on alphanumeric containing underscore
         input = "var_123";
-        lexer = new Lexer(input);
         expected.add(new Token(TokenType.IDENTIFIER, "var_123", 0, 0));
-        actual = lexer.tokenize();
+        actual = lexer.tokenize(input);
         this.assertListEquality(expected, actual);
         expected.clear();
 
         //Fails on identifier containing invalid character
         try {
             input = "var_1?23";
-            lexer = new Lexer(input);
-            actual = lexer.tokenize();
+            actual = lexer.tokenize(input);
             fail();
         } catch (TokenizeException e) {
             System.out.println(e.getMessage());
@@ -118,18 +114,25 @@ public class TestLexer {
 
         //"Fails" on identifier which is a keyword (checks the category return is keyword, not identifier)
         input = "if";
-        lexer = new Lexer(input);
         expected.add(new Token(TokenType.IF, "if", 0, 0));
-        actual = lexer.tokenize();
+        actual = lexer.tokenize(input);
         Token token = actual.get(0);
         assertTrue(token.getTokenCategory() == TokenCategory.KEYWORD);
     }
 
     @Test
     public void testLexer() {
-        lexer = new Lexer("if _var123 = ( 1 + 2 )");
-        List<Token> tokens = lexer.tokenize();
+        List<Token> tokens = lexer.tokenize("if _var123 = ( 1 + 2 )");
         for (Token token : tokens) {
+            System.out.println(token);
+        }
+    }
+
+    @Test
+    public void testNewTokenize() {
+
+        List<Token> tokens = lexer.tokenize("if a = 1;\n4>3;\nx=2");
+        for(Token token : tokens) {
             System.out.println(token);
         }
     }
