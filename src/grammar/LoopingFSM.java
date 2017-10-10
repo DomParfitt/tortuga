@@ -9,37 +9,32 @@ import java.util.Set;
  */
 public class LoopingFSM extends FiniteStateMachine {
 
-    private FiniteStateMachine inner;
+    public LoopingFSM() {
 
-    /**
-     * Initialises a looping FSM 'around' the provided one
-     * @param fsm the FSM to loop on
-     */
+    }
+
     public LoopingFSM(FiniteStateMachine fsm) {
-        this.inner = fsm.copy();
-        this.initialState = this.inner.initialState;
-        this.initialState.setIsAcceptingState(true);
-        Set<State> finalStates = this.inner.getFinalStates();
-        for (State finalState : finalStates) {
-            for (Map.Entry<Character, State> transition : this.inner.initialState.getTransitions().entrySet()) {
-                finalState.addTransition(transition.getKey(), transition.getValue());
+        FiniteStateMachine copy = fsm.copy();
+        this.initialise(copy);
+        for(Transition transition : copy.transitions) {
+            if(transition.toState.equals(copy.getTerminalState())) {
+                transition.toState = copy.getInitialState();
             }
         }
-        this.characters = this.inner.characters; //Not sure about this
+
+        State terminalState = copy.getTerminalState();
+        copy.states.remove(terminalState);
+        copy.getInitialState().setAcceptingState(true);
+        this.terminalStateIndex = this.initialStateIndex;
+
     }
 
     @Override
     public FiniteStateMachine copy() {
-        FiniteStateMachine copy = new LoopingFSM(this.inner.copy());
-        copy.initialState = this.initialState.copy();
-        return copy;
-//        return new LoopingFSM(this.inner);
-    }
+        FiniteStateMachine copy = new LoopingFSM();
+        copy.states = this.copyStates();
+        copy.transitions = this.copyTransitions(copy.states);
 
-    @Override
-    public String toString() {
-//        return "(" + this.characters.get(0) + "*)";
-//        return this.characters.get(0) + "*";
-        return "(" + this.inner + ")*";
+        return copy;
     }
 }

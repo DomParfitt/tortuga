@@ -11,71 +11,79 @@ import java.util.Set;
  */
 public class FollowedByFSM extends FiniteStateMachine {
 
-    /**
-     * Initialise using a string of characters
-     * @param characters the characters to use for parsing
-     */
+
     public FollowedByFSM(String characters) {
-        super(characters);
-        List<Character> charList = FiniteStateMachine.stringToCharList(characters);
-        this.initialise(charList);
+        super();
+        for (Character character : characters.toCharArray()) {
+            State nextState = new State(this.stateCounter++, false);
+            this.states.add(nextState);
+            this.terminalStateIndex = this.stateCounter - 1;
+            Transition transition = new Transition(character, this.getCurrentState(), nextState);
+            this.transitions.add(transition);
+            this.setCurrentState(nextState);
+        }
+        this.getTerminalState().setAcceptingState(true);
+
     }
 
-    /**
-     * Initialise with a list of characters
-     * @param characters the characters to use for parsing
-     */
-    public FollowedByFSM(List<Character> characters) {
-        super(characters);
-        this.initialise(characters);
-    }
-
-    /**
-     * Initialise this FSM by compounding two other FSMs. Results in an FSM
-     * which validates a string on the first followed by the second
-     * @param first the first FSM
-     * @param second the second FSM
-     */
     public FollowedByFSM(FiniteStateMachine first, FiniteStateMachine second) {
-        FiniteStateMachine firstCopy, secondCopy;
-        firstCopy = first.copy();
-        secondCopy = second.copy();
-        this.initialState = firstCopy.initialState;
-        Set<State> finalStates = firstCopy.getFinalStates();
-        for (State finalState : finalStates) {
-            for (Map.Entry<Character, State> transition : secondCopy.initialState.getTransitions().entrySet()) {
+        FiniteStateMachine firstCopy = first.copy();
+        FiniteStateMachine secondCopy = second.copy();
+        this.initialise(firstCopy);
 
-                finalState.addTransition(transition.getKey(), transition.getValue());
+        State secondInitial = secondCopy.getInitialState();
+        //Add each state of secondCopy except initial
+        boolean addedState = false;
+        for (State state : secondCopy.states) {
+            if (!state.equals(secondInitial)) {
+                int newNumber = this.addState(state);
+                addedState = true;
+
+                //Find any transitions referencing that state and update their number
+                for (Transition transition : secondCopy.transitions) {
+                    if (transition.fromState.equals(state)) {
+                        transition.fromState.setNumber(newNumber);
+                    }
+
+                    if (transition.toState.equals(state)) {
+                        transition.toState.setNumber(newNumber);
+                    }
+                }
 
             }
-
-            //If the initial state of the 2nd FSM is accepting then the final state can be as well
-            finalState.setIsAcceptingState(secondCopy.initialState.isAcceptingState());
         }
-    }
+        //Update secondCopy transitions with initial to use this's terminal
+        //Add transitions
+        //Add all transitions from secondCopy into this, replacing initial and terminal states with this's
+        for (Transition transition : secondCopy.transitions) {
+            if (transition.fromState.equals(secondInitial)) {
+                transition.fromState = this.getTerminalState();
+            }
 
-    private void initialise(List<Character> characters) {
-        State currentState = this.initialState;
-        for (Character character : characters) {
-            State nextState = new State(false, this.stateCounter++);
-            currentState.addTransition(character, nextState);
-            currentState = nextState;
+            if (transition.toState.equals(secondInitial)) {
+                transition.toState = this.getTerminalState();
+            }
+
+            this.addTransition(transition);
         }
-        currentState.setIsAcceptingState(true);
+
+        //Mark terminal state of this as non-terminal if new states have been added
+        if (addedState) {
+            this.getTerminalState().setAcceptingState(false);
+        }
+
+        //Update terminal index of this
+        this.terminalStateIndex = this.stateCounter - 1;
     }
 
     @Override
-    //TODO: This handles a basic FollowedBy but not any kind of compound
     public FiniteStateMachine copy() {
-        FiniteStateMachine copy = new FollowedByFSM(this.characters);
-        copy.initialState = this.initialState.copy();
+        FiniteStateMachine copy = new FollowedByFSM("");
+        copy.stateCounter = this.stateCounter;
+        copy.terminalStateIndex = this.terminalStateIndex;
+        copy.states = this.copyStates();
+        copy.transitions = this.copyTransitions(copy.states);
+
         return copy;
-//        return new FollowedByFSM(this.characters);
     }
-
-    @Override
-    public String toString() {
-        return super.toString("");
-    }
-
 }

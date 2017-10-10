@@ -26,7 +26,7 @@ public class TestFiniteStateMachines {
     // a|b|c
     public void testUnion() {
         fsm = new UnionFSM(characters);
-        System.out.print(fsm);
+        System.out.print("a|b|c");
 
         try {
             //Passes on any single character in provided set
@@ -54,7 +54,7 @@ public class TestFiniteStateMachines {
     // abc
     public void testFollowedBy() {
         fsm = new FollowedByFSM(characters);
-        System.out.print(fsm);
+        System.out.print("abc");
 
         try {
             //Passes on character chain matching provided set
@@ -85,7 +85,7 @@ public class TestFiniteStateMachines {
     public void testLooping() {
         fsm = new LoopingFSM(new UnionFSM("a"));
 
-        System.out.print(fsm);
+        System.out.print("a*");
 
         try {
             //Passes on empty input
@@ -105,7 +105,7 @@ public class TestFiniteStateMachines {
 
             System.out.println(" - PASSING");
 
-        } catch (AssertionError e ) {
+        } catch (AssertionError e) {
             System.out.println(" - FAILING");
             throw e;
         }
@@ -122,7 +122,7 @@ public class TestFiniteStateMachines {
     public void testLoopingUnion() {
         inner = new UnionFSM("ab");
         fsm = new LoopingFSM(inner);
-        System.out.print(fsm);
+        System.out.print("(a|b)*");
 
         try {
             //Passes on repeated characters from provided set
@@ -156,7 +156,7 @@ public class TestFiniteStateMachines {
     public void testLoopingFollowedBy() {
         inner = new FollowedByFSM(characters);
         fsm = new LoopingFSM(inner);
-        System.out.print(fsm);
+        System.out.print("(abc)*");
 
         try {
             //Passes on empty input
@@ -183,23 +183,84 @@ public class TestFiniteStateMachines {
      * SIMPLE COMPOUNDS
      *
      * TODO:
-     *  - Single FollowedBy FollowedBy -> a(bc) ( == abc)
-     *  - FollowedBy FollowedBy Single -> (ab)c ( == abc)
+     *  - Single FollowedBy FollowedBy -> a(bc) ( == abc) - DONE
+     *  - FollowedBy FollowedBy Single -> (ab)c ( == abc) - DONE
      *  - Single FollowedBy Union -> a(b|c) - DONE
      *  - Union FollowedBy Single -> (a|b)c - DONE
      *  - Single Union FollowedBy -> a|(bc) - DONE
-     *  - FollowedBy Union Single -> (ab)|c
-     *  - Single Union Union -> a|(b|c) ( == a|b|c)
-     *  - Union Union Single -> (a|b)|c ( == a|b|c)
+     *  - FollowedBy Union Single -> (ab)|c - DONE
+     *  - Single Union Union -> a|(b|c) ( == a|b|c) - DONE
+     *  - Union Union Single -> (a|b)|c ( == a|b|c) - DONE
      *
      */
+
+    @Test
+    // a(bc)
+    public void testSingleFollowedByFollowedBy() {
+
+        fsm = new FollowedByFSM(new FollowedByFSM("a"), new FollowedByFSM("bc"));
+        System.out.print("a(bc)");
+
+        try {
+            //Passes on valid chain
+            assertTrue(fsm.parse("abc"));
+
+            //Fails on empty input
+            assertFalse(fsm.parse(""));
+
+            //Fails on single character from chain
+            assertFalse(fsm.parse("a"));
+
+            //Fails on single character not from chain
+            assertFalse(fsm.parse("d"));
+
+            //Fails on chain containing invalid character
+            assertFalse(fsm.parse("abcd"));
+
+            System.out.println(" - PASSING");
+
+        } catch (AssertionError e) {
+            System.out.println(" - FAILING");
+            throw e;
+        }
+    }
+
+    @Test
+    // (ab)c
+    public void testFollowedByFollowedBySingle() {
+
+        fsm = new FollowedByFSM(new FollowedByFSM("ab"), new FollowedByFSM("c"));
+        System.out.print("(ab)c)");
+
+        try {
+            //Passes on valid chain
+            assertTrue(fsm.parse("abc"));
+
+            //Fails on empty input
+            assertFalse(fsm.parse(""));
+
+            //Fails on single character from chain
+            assertFalse(fsm.parse("a"));
+
+            //Fails on single character not from chain
+            assertFalse(fsm.parse("d"));
+
+            //Fails on chain containing invalid character
+            assertFalse(fsm.parse("abcd"));
+
+            System.out.println(" - PASSING");
+
+        } catch (AssertionError e) {
+            System.out.println(" - FAILING");
+            throw e;
+        }
+    }
 
     @Test
     // (a|b)c
     public void testUnionFollowedBySingle() {
 
         fsm = new FollowedByFSM(new UnionFSM("ab"), new FollowedByFSM("c"));
-        System.out.print(fsm);
         System.out.print("(a|b)c");
 
         try {
@@ -229,7 +290,7 @@ public class TestFiniteStateMachines {
     public void testSingleFollowedByUnion() {
 
         fsm = new FollowedByFSM(new FollowedByFSM("a"), new UnionFSM("bc"));
-        System.out.print(fsm);
+        System.out.print("a(b|c)");
 
         try {
             //Passes on valid chain
@@ -251,7 +312,7 @@ public class TestFiniteStateMachines {
 
             System.out.println(" - PASSING");
 
-        } catch (AssertionError e ) {
+        } catch (AssertionError e) {
             System.out.println(" - FAILING");
             throw e;
         }
@@ -263,7 +324,7 @@ public class TestFiniteStateMachines {
     public void testSingleUnionFollowedBy() {
 
         fsm = new UnionFSM(new UnionFSM("a"), new FollowedByFSM("bc"));
-        System.out.print(fsm);
+        System.out.print("a|(bc)");
 
         try {
             //Passes on either of expected inputs
@@ -278,35 +339,214 @@ public class TestFiniteStateMachines {
 
             System.out.println(" - PASSING");
 
-        } catch (AssertionError e ) {
+        } catch (AssertionError e) {
             System.out.println(" - FAILING");
             throw e;
         }
 
     }
 
+    @Test
+    // (ab)|c
+    public void testFollowedByUnionSingle() {
+        fsm = new UnionFSM(new FollowedByFSM("ab"), new FollowedByFSM("c"));
+        System.out.print("a|(bc)");
+
+        try {
+            //Passes on either of expected inputs
+            assertTrue(fsm.parse("ab"));
+            assertTrue(fsm.parse("c"));
+
+            //Fails on empty input
+            assertFalse(fsm.parse(""));
+
+            //Fails on invalid chain
+            assertFalse(fsm.parse("abc"));
+
+            System.out.println(" - PASSING");
+
+        } catch (AssertionError e) {
+            System.out.println(" - FAILING");
+            throw e;
+        }
+
+    }
+
+    @Test
+    // a|(b|c)
+    public void testSingleUnionUnion() {
+
+        fsm = new UnionFSM(new UnionFSM("a"), new UnionFSM("bc"));
+        System.out.print("a|(b|c)");
+
+        try {
+            //Passes on any of valid input characters
+            assertTrue(fsm.parse("a"));
+            assertTrue(fsm.parse("b"));
+            assertTrue(fsm.parse("c"));
+
+            //Fails on empty input
+            assertFalse(fsm.parse(""));
+
+            //Fails on multiple valid characters
+            assertFalse(fsm.parse("ab"));
+
+            //Fails on invalid character
+            assertFalse(fsm.parse("d"));
+
+
+            System.out.println(" - PASSING");
+
+        } catch (AssertionError e) {
+            System.out.println(" - FAILING");
+            throw e;
+        }
+
+    }
+
+    @Test
+    // (a|b)|c
+    public void testUnionUnionSingle() {
+
+        fsm = new UnionFSM(new UnionFSM("ab"), new UnionFSM("c"));
+        System.out.print("(a|b)|c");
+
+        try {
+            //Passes on any of valid input characters
+            assertTrue(fsm.parse("a"));
+            assertTrue(fsm.parse("b"));
+            assertTrue(fsm.parse("c"));
+
+            //Fails on empty input
+            assertFalse(fsm.parse(""));
+
+            //Fails on multiple valid characters
+            assertFalse(fsm.parse("ab"));
+
+            //Fails on invalid character
+            assertFalse(fsm.parse("d"));
+
+
+            System.out.println(" - PASSING");
+
+        } catch (AssertionError e) {
+            System.out.println(" - FAILING");
+            throw e;
+        }
+
+    }
 
     /*
      * TRUE COMPOUNDS
      *
      * TODO:
      *  - FollowedBy FollowedBy FollowedBy -> (ab)(cd) ( == abcd) - DONE
-     *  - FollowedBy FollowedBy Union -> (ab)(c|d)
-     *  - Union FollowedBy FollowedBy -> (a|b)(cd)
+     *  - FollowedBy FollowedBy Union -> (ab)(c|d) - DONE
+     *  - Union FollowedBy FollowedBy -> (a|b)(cd) - DONE
      *  - Union FollowedBy Union -> (a|b)(c|d) - DONE
-     *  - FollowedBy Union FollowedBy -> (ab)|(cd)
+     *  - FollowedBy Union FollowedBy -> (ab)|(cd) - DONE
      *  - Union Union Union -> (a|b)|(c|d) ( == a|b|c|d) - DONE
-     *  - FollowedBy Union Union -> (ab)|(c|d)
-     *  - Union Union FollowedBy -> (a|b)|(cd)
+     *  - FollowedBy Union Union -> (ab)|(c|d) - DONE
+     *  - Union Union FollowedBy -> (a|b)|(cd) - DONE
      *
      */
 
     @Test
-    // (a|b)(c|d)
+// (ab)(cd)
+    public void testFollowedByFollowedByFollowedBy() {
+
+        fsm = new FollowedByFSM(new FollowedByFSM("ab"), new FollowedByFSM("cd"));
+        System.out.print("(ab)(cd)");
+
+        try {
+            //Passes on legal chain
+            assertTrue(fsm.parse("abcd"));
+
+            //Fails on single character from provided set
+            assertFalse(fsm.parse("a"));
+
+            //Fails on repeated characters in provided set
+            assertFalse(fsm.parse("aabbbc"));
+
+            //Fails on chain containing character not in provided set
+            assertFalse(fsm.parse("abcde"));
+
+            //Fails on empty input
+            assertFalse(fsm.parse(""));
+
+            System.out.println(" - PASSING");
+
+        } catch (AssertionError e) {
+            System.out.println(" - FAILING");
+            throw e;
+        }
+    }
+
+    @Test
+    // (ab)(c|d)
+    public void testFollowedByFollowedByUnion() {
+
+        fsm = new FollowedByFSM(new FollowedByFSM("ab"), new UnionFSM("cd"));
+        System.out.print("(ab)(c|d)");
+
+        try {
+            //Passes on valid input
+            assertTrue(fsm.parse("abc"));
+            assertTrue(fsm.parse("abd"));
+
+            //Fails on empty input
+            assertFalse(fsm.parse(""));
+
+            //Fails on partial chain
+            assertFalse(fsm.parse("ab"));
+            assertFalse(fsm.parse("c"));
+
+            //Fails on invalid character
+            assertFalse(fsm.parse("e"));
+
+            System.out.println(" - PASSING");
+
+        } catch (AssertionError e) {
+            System.out.println(" - FAILING");
+            throw e;
+        }
+    }
+
+    @Test
+    // (a|b)(cd)
+    public void UnionFollowedByFollowedBy() {
+        fsm = new FollowedByFSM(new UnionFSM("ab"), new FollowedByFSM("cd"));
+        System.out.print("(a|b)(cd)");
+
+        try {
+            //Passes on valid input
+            assertTrue(fsm.parse("acd"));
+            assertTrue(fsm.parse("bcd"));
+
+            //Fails on empty input
+            assertFalse(fsm.parse(""));
+
+            //Fails on partial chain
+            assertFalse(fsm.parse("ab"));
+            assertFalse(fsm.parse("c"));
+
+            //Fails on invalid character
+            assertFalse(fsm.parse("e"));
+
+            System.out.println(" - PASSING");
+
+        } catch (AssertionError e) {
+            System.out.println(" - FAILING");
+            throw e;
+        }
+    }
+
+    @Test
+// (a|b)(c|d)
     public void testUnionFollowedByUnion() {
 
         fsm = new FollowedByFSM(new UnionFSM("ab"), new UnionFSM("cd"));
-        System.out.println(fsm);
+        System.out.print("(a|b)(c|d)");
 
         try {
             //Passes on single character from first union and single from second union
@@ -331,49 +571,47 @@ public class TestFiniteStateMachines {
 
             System.out.println(" - PASSING");
 
-        } catch (AssertionError e ) {
+        } catch (AssertionError e) {
             System.out.println(" - FAILING");
             throw e;
         }
     }
 
     @Test
-    // (ab)(cd)
-    public void testFollowedByFollowedByFollowedBy() {
+    // (ab)|(cd)
+    public void testFollowedByUnionFollowedBy() {
 
-        fsm = new FollowedByFSM(new FollowedByFSM("ab"), new FollowedByFSM("cd"));
-        System.out.println(fsm);
+        fsm = new UnionFSM(new FollowedByFSM("ab"), new FollowedByFSM("cd"));
+        System.out.print("(ab)|(cd)");
 
         try {
-            //Passes on legal chain
-            assertTrue(fsm.parse("abcd"));
-
-            //Fails on single character from provided set
-            assertFalse(fsm.parse("a"));
-
-            //Fails on repeated characters in provided set
-            assertFalse(fsm.parse("aabbbc"));
-
-            //Fails on chain containing character not in provided set
-            assertFalse(fsm.parse("abcde"));
+            //Passes on either valid chain
+            assertTrue(fsm.parse("ab"));
+            assertTrue(fsm.parse("cd"));
 
             //Fails on empty input
             assertFalse(fsm.parse(""));
 
+            //Fails on both
+            assertFalse(fsm.parse("abcd"));
+
+            //Fails on invalid character
+            assertFalse(fsm.parse("e"));
+
             System.out.println(" - PASSING");
 
-        } catch (AssertionError e ) {
+        } catch (AssertionError e) {
             System.out.println(" - FAILING");
             throw e;
         }
     }
 
     @Test
-    // (a|b)|(c|d)
+// (a|b)|(c|d)
     public void testUnionUnionUnion() {
 
         fsm = new UnionFSM(new UnionFSM("ab"), new UnionFSM("cd"));
-        System.out.println(fsm);
+        System.out.print("(a|b)|(c|d)");
 
         try {
             //Passes on single valid character
@@ -381,7 +619,7 @@ public class TestFiniteStateMachines {
             assertTrue(fsm.parse("b"));
             assertTrue(fsm.parse("c"));
             assertTrue(fsm.parse("d"));
-            
+
             //Fails on invalid chain
             assertFalse(fsm.parse("ac"));
             assertFalse(fsm.parse("ad"));
@@ -399,7 +637,66 @@ public class TestFiniteStateMachines {
 
             System.out.println(" - PASSING");
 
-        } catch (AssertionError e ) {
+        } catch (AssertionError e) {
+            System.out.println(" - FAILING");
+            throw e;
+        }
+    }
+
+    @Test
+    //(ab)|(c|d)
+    public void testFollowedByUnionUnion() {
+
+        fsm = new UnionFSM(new FollowedByFSM("ab"), new UnionFSM("cd"));
+        System.out.print("(ab)|(c|d)");
+
+        try {
+            //Passes on any valid chain
+            assertTrue(fsm.parse("ab"));
+            assertTrue(fsm.parse("c"));
+            assertTrue(fsm.parse("d"));
+
+            //Fails on empty input
+            assertFalse(fsm.parse(""));
+
+            //Fails on multiple valid chains
+            assertFalse(fsm.parse("abcd"));
+
+            //Fails on invalid character
+            assertFalse(fsm.parse("e"));
+
+            System.out.println(" - PASSING");
+
+        } catch (AssertionError e) {
+            System.out.println(" - FAILING");
+            throw e;
+        }
+    }
+
+    @Test
+    // (a|b)|(cd)
+    public void testUnionUnionFollowedBy() {
+        fsm = new UnionFSM(new UnionFSM("ab"), new FollowedByFSM("cd"));
+        System.out.print("(a|b)|(cd)");
+
+        try {
+            //Passes on any valid chain
+            assertTrue(fsm.parse("a"));
+            assertTrue(fsm.parse("b"));
+            assertTrue(fsm.parse("cd"));
+
+            //Fails on empty input
+            assertFalse(fsm.parse(""));
+
+            //Fails on multiple valid chains
+            assertFalse(fsm.parse("abcd"));
+
+            //Fails on invalid character
+            assertFalse(fsm.parse("e"));
+
+            System.out.println(" - PASSING");
+
+        } catch (AssertionError e) {
             System.out.println(" - FAILING");
             throw e;
         }
@@ -415,18 +712,17 @@ public class TestFiniteStateMachines {
      *  - Union FollowedBy FollowedBy -> ((a|b)(cd))*
      *  - Union FollowedBy Union -> ((a|b)(c|d))*
      *  - FollowedBy Union FollowedBy -> ((ab)|(cd))*
-     *  - Union Union Union -> ((a|b)|(c|d))* ( == (a|b|c|d)*)
+     *  - Union Union Union -> ((a|b)|(c|d))* ( == (a|b|c|d)*) - DONE
      *  - FollowedBy Union Union -> ((ab)|(c|d))*
      *  - Union Union FollowedBy -> ((a|b)|(cd))*
      */
 
     @Test
-    // ((a|b)c)*
+// ((a|b)c)*
     public void testLoopingOnUnionFollowedByFollowedBy() {
 
         fsm = new FollowedByFSM(new UnionFSM("ab"), new FollowedByFSM("c"));
         FiniteStateMachine loop = new LoopingFSM(fsm);
-        System.out.print(fsm);
         System.out.print("((a|b)c)*");
 
         try {
@@ -457,11 +753,11 @@ public class TestFiniteStateMachines {
     }
 
     @Test
-    // ((a|b)|(c|d))*
+// ((a|b)|(c|d))*
     public void testLoopingOnUnionUnionUnion() {
         FiniteStateMachine union = new UnionFSM(new UnionFSM("ab"), new UnionFSM("cd"));
         fsm = new LoopingFSM(union);
-        System.out.print(fsm);
+        System.out.print("((a|b)|(c|d))*");
 
         try {
             //Passes on empty input
@@ -496,7 +792,7 @@ public class TestFiniteStateMachines {
 
             System.out.println(" - PASSING");
 
-        } catch (AssertionError e ) {
+        } catch (AssertionError e) {
             System.out.println(" - FAILING");
             throw e;
         }
@@ -507,11 +803,11 @@ public class TestFiniteStateMachines {
      */
 
     @Test
-    // (a|b)c*
+// (a|b)c*
     public void testUnionFollowedByLoopingFollowedBy() {
 
         fsm = new FollowedByFSM(new UnionFSM("ab"), new LoopingFSM(new FollowedByFSM("c")));
-        System.out.println(fsm);
+        System.out.print("(a|b)c*");
 
         try {
 
@@ -536,28 +832,6 @@ public class TestFiniteStateMachines {
 
     }
 
-    /*
-     * ADDITIONAL TESTS
-     */
-
-    @Test
-    public void testGetFinalStates() {
-        fsm = new UnionFSM("abc");
-        LoopingFSM loop = new LoopingFSM(fsm);
-
-        Set<State> expected = new HashSet<>();
-        expected.add(loop.initialState);
-        expected.add(loop.initialState.getResultingState('a'));
-
-        Set<State> actual = loop.getFinalStates();
-
-        assertEquals(expected.size(), actual.size());
-        for(State state : actual) {
-            assertTrue(expected.contains(state));
-        }
-
-    }
-
     // FSM Test Case
     public void testTemplate() {
 
@@ -568,7 +842,7 @@ public class TestFiniteStateMachines {
 
             System.out.println(" - PASSING");
 
-        } catch (AssertionError e ) {
+        } catch (AssertionError e) {
             System.out.println(" - FAILING");
             throw e;
         }
