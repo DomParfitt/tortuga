@@ -1,10 +1,7 @@
-package grammar;
+package automata;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.experimental.theories.suppliers.TestedOn;
-
-import java.util.*;
 
 import static org.junit.Assert.*;
 

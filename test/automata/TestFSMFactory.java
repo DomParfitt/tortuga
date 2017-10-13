@@ -1,4 +1,4 @@
-package grammar;
+package automata;
 
 import org.junit.Test;
 
