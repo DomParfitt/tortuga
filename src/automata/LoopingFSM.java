@@ -1,7 +1,4 @@
-package grammar;
-
-import java.util.Map;
-import java.util.Set;
+package automata;
 
 /**
  * Concrete implementation of a FiniteStateMachine, which validates on zero or

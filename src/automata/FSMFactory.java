@@ -1,6 +1,5 @@
-package grammar;
+package automata;
 
-import lexer.Token;
 import lexer.TokenType;
 
 /**

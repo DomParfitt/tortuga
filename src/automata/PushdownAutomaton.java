@@ -1,7 +1,8 @@
-package parser;
+package automata;
 
-import grammar.FiniteStateMachine;
+import automata.FiniteStateMachine;
 import lexer.Token;
+import parser.Stack;
 
 public class PushdownAutomaton extends FiniteStateMachine {
 

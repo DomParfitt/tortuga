@@ -1,4 +1,4 @@
-package grammar;
+package automata;
 
 import java.util.ArrayList;
 import java.util.List;

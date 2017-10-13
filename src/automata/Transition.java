@@ -1,4 +1,4 @@
-package grammar;
+package automata;
 
 import java.util.Set;
 import java.util.TreeSet;
