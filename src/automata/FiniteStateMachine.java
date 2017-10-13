@@ -20,9 +20,9 @@ public abstract class FiniteStateMachine {
     public FiniteStateMachine() {
         this.states = new ArrayList<>();
         this.transitions = new TreeSet<>();
-        State intialState = new State(this.stateCounter++, false); //TODO: Initialise this as accepting?
-        intialState.setCurrentState(true);
-        this.states.add(intialState);
+        State initialState = new State(this.stateCounter++, false); //TODO: Initialise this as accepting?
+        initialState.setCurrentState(true);
+        this.states.add(initialState);
     }
 
     protected final void initialise(FiniteStateMachine fsm) {
