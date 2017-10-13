@@ -1,6 +1,6 @@
 package lexer;
 
-import grammar.*;
+import automata.*;
 
 public enum TokenType {
 
