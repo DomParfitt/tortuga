@@ -30,6 +30,10 @@ public class Transition implements Comparable {
         return this.toState;
     }
 
+    public Set<Character> getCharacters() {
+        return this.characters;
+    }
+
     public boolean hasTransition(State from, Character character) {
         return (this.fromState == from) && (this.characters.contains(character));
     }

@@ -165,6 +165,14 @@ public abstract class FiniteStateMachine {
         return transitions;
     }
 
+    public List<State> getStates() {
+        return this.states;
+    }
+
+    public Set<Transition> getTransitions() {
+        return this.transitions;
+    }
+
     @Override
     public String toString() {
         String output = "STATES\n";
