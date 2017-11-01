@@ -3,6 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Tortuga.iml" filepath="$PROJECT_DIR$/Tortuga.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tortuga-visualiser.iml" filepath="$PROJECT_DIR$/.idea/modules/tortuga-visualiser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tortuga-visualiser_main.iml" filepath="$PROJECT_DIR$/.idea/modules/tortuga-visualiser_main.iml" group="tortuga-visualiser" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tortuga-visualiser_test.iml" filepath="$PROJECT_DIR$/.idea/modules/tortuga-visualiser_test.iml" group="tortuga-visualiser" />
     </modules>
   </component>
 </project>
