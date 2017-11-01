@@ -14,4 +14,9 @@ public class FSMController {
         return TokenType.IDENTIFIER.getMachine();
     }
 
+    @RequestMapping("/hello")
+    public String hello() {
+        return "greeting";
+    }
+
 }
