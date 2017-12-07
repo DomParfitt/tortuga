@@ -23,8 +23,8 @@ public class Stack<T> {
      * @return the top element of the stack
      */
     public T pop() {
-        if(this.stack.size() > 0) {
-            return this.stack.remove(this.stack.size() - 1);
+        if(this.isEmpty()) {
+            return this.stack.remove(this.getTopIndex());
         } else {
             throw new StackUnderflowError();
         }
@@ -36,6 +36,35 @@ public class Stack<T> {
      */
     public void push(T item) {
         this.stack.add(item);
+    }
+
+    /**
+     * Peeks at the top entry on the stack without removing it
+     * @return the value on the top of the stack
+     */
+    public T peek() {
+        if(this.isEmpty()) {
+            return this.stack.get(this.getTopIndex());
+        } else {
+            throw new StackUnderflowError();
+        }
+    }
+
+    /**
+     * Checks whether the stack is empty or not
+     * @return true, if the stack is empty, false otherwise
+     */
+    public boolean isEmpty() {
+        return !(this.stack.size() > 0);
+    }
+
+    /**
+     * Returns the index of the topmost element on the stack, i.e. the next
+     * element to be popped
+     * @return the index of the topmost element on the stack
+     */
+    private int getTopIndex() {
+        return this.stack.size() - 1;
     }
 
 }
