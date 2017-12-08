@@ -1,5 +1,7 @@
 package automata;
 
+import utils.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +16,7 @@ public class UnionFSM extends FiniteStateMachine<Character> {
         State terminalState = new State(this.stateCounter++, true);
         this.states.add(terminalState);
         this.terminalStateIndex = this.stateCounter - 1;
-        List<Character> inputSymbols = new ArrayList<>();
-        for(char character : characters.toCharArray()) {
-            inputSymbols.add(new Character(character));
-        }
-        Transition<Character> transition = new Transition<Character>(inputSymbols, this.getInitialState(), this.getTerminalState());
+        Transition<Character> transition = new Transition<Character>(StringUtils.toCharacterList(characters), this.getInitialState(), this.getTerminalState());
         this.transitions.add(transition);
     }
 

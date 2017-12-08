@@ -136,7 +136,7 @@ public abstract class FiniteStateMachine<T> {
         }
     }
 
-    public abstract FiniteStateMachine copy();
+    public abstract FiniteStateMachine<T> copy();
 
     protected final List<State> copyStates() {
         List<State> states = new ArrayList<>();

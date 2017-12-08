@@ -17,16 +17,16 @@ public class FSMFactory {
         //TODO: Implementation of singleton, is this necessary?
         if (FSMFactory.identifierFSM == null) {
 
-            FiniteStateMachine letterOrUnderscore = new UnionFSM(TokenType.LETTER.getMachine(), new UnionFSM("_"));
+            FiniteStateMachine<Character> letterOrUnderscore = new UnionFSM(TokenType.LETTER.getMachine(), new UnionFSM("_"));
 //            System.out.println("Initialised letterOrUnderscore");
 
-            FiniteStateMachine letterOrDigit = FSMFactory.getLetterOrDigitFSM();
+            FiniteStateMachine<Character> letterOrDigit = FSMFactory.getLetterOrDigitFSM();
 //            System.out.println("Initialised letterOrDigit");
 
-            FiniteStateMachine letterOrDigitOrUnderscore = new UnionFSM(letterOrDigit, new UnionFSM("_"));
+            FiniteStateMachine<Character> letterOrDigitOrUnderscore = new UnionFSM(letterOrDigit, new UnionFSM("_"));
 //            System.out.println("Initialised letterOrDigitOrUnderscore");
 
-            FiniteStateMachine loopOnLetterOrDigitOrUnderscore = new LoopingFSM(letterOrDigitOrUnderscore);
+            FiniteStateMachine<Character> loopOnLetterOrDigitOrUnderscore = new LoopingFSM(letterOrDigitOrUnderscore);
 //            System.out.println("Initialised loopOnLetterOrDigitOrUnderscore");
 
             FSMFactory.identifierFSM = new FollowedByFSM(letterOrUnderscore, loopOnLetterOrDigitOrUnderscore);
