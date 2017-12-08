@@ -41,9 +41,9 @@ public enum TokenType {
 
     private String value; //TODO: Not sure if this is necessary
     private TokenCategory category;
-    private FiniteStateMachine<Character> machine;
+    private CharacterFSM machine;
 
-    TokenType(TokenCategory category, FiniteStateMachine<Character> machine) {
+    TokenType(TokenCategory category, CharacterFSM machine) {
         this.category = category;
         this.machine = machine;
     }
@@ -56,7 +56,7 @@ public enum TokenType {
         return this.machine.parse(input);
     }
 
-    public FiniteStateMachine<Character> getMachine() {
+    public CharacterFSM getMachine() {
         return machine;
     }
 

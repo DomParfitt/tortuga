@@ -7,26 +7,26 @@ import lexer.TokenType;
  */
 public class FSMFactory {
 
-    private static FiniteStateMachine<Character> letterOrDigit;
+    private static CharacterFSM letterOrDigit;
 
-    private static FiniteStateMachine<Character> identifierFSM;
+    private static CharacterFSM identifierFSM;
 
-    public static FiniteStateMachine<Character> getIdentifierFSM() {
+    public static CharacterFSM getIdentifierFSM() {
         // (letter|_)(letter|digit|_)*
 
         //TODO: Implementation of singleton, is this necessary?
         if (FSMFactory.identifierFSM == null) {
 
-            FiniteStateMachine<Character> letterOrUnderscore = new UnionFSM(TokenType.LETTER.getMachine(), new UnionFSM("_"));
+            CharacterFSM letterOrUnderscore = new UnionFSM(TokenType.LETTER.getMachine(), new UnionFSM("_"));
 //            System.out.println("Initialised letterOrUnderscore");
 
-            FiniteStateMachine<Character> letterOrDigit = FSMFactory.getLetterOrDigitFSM();
+            CharacterFSM letterOrDigit = FSMFactory.getLetterOrDigitFSM();
 //            System.out.println("Initialised letterOrDigit");
 
-            FiniteStateMachine<Character> letterOrDigitOrUnderscore = new UnionFSM(letterOrDigit, new UnionFSM("_"));
+            CharacterFSM letterOrDigitOrUnderscore = new UnionFSM(letterOrDigit, new UnionFSM("_"));
 //            System.out.println("Initialised letterOrDigitOrUnderscore");
 
-            FiniteStateMachine<Character> loopOnLetterOrDigitOrUnderscore = new LoopingFSM(letterOrDigitOrUnderscore);
+            CharacterFSM loopOnLetterOrDigitOrUnderscore = new LoopingFSM(letterOrDigitOrUnderscore);
 //            System.out.println("Initialised loopOnLetterOrDigitOrUnderscore");
 
             FSMFactory.identifierFSM = new FollowedByFSM(letterOrUnderscore, loopOnLetterOrDigitOrUnderscore);
@@ -36,7 +36,7 @@ public class FSMFactory {
         return FSMFactory.identifierFSM;
     }
 
-    public static FiniteStateMachine<Character> getLetterOrDigitFSM() {
+    public static CharacterFSM getLetterOrDigitFSM() {
         if(FSMFactory.letterOrDigit == null) {
             FSMFactory.letterOrDigit = new UnionFSM(TokenType.LETTER.getMachine(), TokenType.DIGIT.getMachine());
         }
