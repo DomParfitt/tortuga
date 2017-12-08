@@ -1,6 +1,7 @@
 package lexer;
 
 import automata.*;
+import utils.StringUtils;
 
 public enum TokenType {
 
@@ -40,22 +41,22 @@ public enum TokenType {
 
     private String value; //TODO: Not sure if this is necessary
     private TokenCategory category;
-    private FiniteStateMachine machine;
+    private FiniteStateMachine<Character> machine;
 
-    TokenType(TokenCategory category, FiniteStateMachine machine) {
+    TokenType(TokenCategory category, FiniteStateMachine<Character> machine) {
         this.category = category;
         this.machine = machine;
     }
 
     public boolean parse(String input) {
-        return this.machine.parse(input);
+        return this.machine.parse(StringUtils.toCharacterList(input));
     }
 
     public boolean parse(Character input) {
         return this.machine.parse(input);
     }
 
-    public FiniteStateMachine getMachine() {
+    public FiniteStateMachine<Character> getMachine() {
         return machine;
     }
 
