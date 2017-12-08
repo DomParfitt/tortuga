@@ -1,23 +1,30 @@
 package automata;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Concrete implementation of a FiniteStateMachine representing the case of
  * multiple tokens, whereby consuming any one of them will pass the validation
  */
-public class UnionFSM extends FiniteStateMachine {
+public class UnionFSM extends FiniteStateMachine<Character> {
 
     public UnionFSM(String characters) {
         super();
         State terminalState = new State(this.stateCounter++, true);
         this.states.add(terminalState);
         this.terminalStateIndex = this.stateCounter - 1;
-        Transition transition = new Transition(characters, this.getInitialState(), this.getTerminalState());
+        List<Character> inputSymbols = new ArrayList<>();
+        for(char character : characters.toCharArray()) {
+            inputSymbols.add(new Character(character));
+        }
+        Transition<Character> transition = new Transition<Character>(inputSymbols, this.getInitialState(), this.getTerminalState());
         this.transitions.add(transition);
     }
 
-    public UnionFSM(FiniteStateMachine first, FiniteStateMachine second) {
-        FiniteStateMachine firstCopy = first.copy();
-        FiniteStateMachine secondCopy = second.copy();
+    public UnionFSM(FiniteStateMachine<Character> first, FiniteStateMachine<Character> second) {
+        FiniteStateMachine<Character> firstCopy = first.copy();
+        FiniteStateMachine<Character> secondCopy = second.copy();
         this.initialise(firstCopy);
 
         State secondInitial = secondCopy.getInitialState();
@@ -33,7 +40,7 @@ public class UnionFSM extends FiniteStateMachine {
                 int newNumber = this.addState(state);
 
                 //Find any transitions referencing that state and update their number
-                for(Transition transition : secondCopy.transitions) {
+                for(Transition<Character> transition : secondCopy.transitions) {
                     if(transition.fromState.equals(state)) {
                         transition.fromState.setNumber(newNumber);
                     }
@@ -46,7 +53,7 @@ public class UnionFSM extends FiniteStateMachine {
         }
 
         //Add all transitions from secondCopy into this, replacing initial and terminal states with this's
-        for(Transition transition : secondCopy.transitions) {
+        for(Transition<Character> transition : secondCopy.transitions) {
             if(transition.fromState.equals(secondInitial)) {
                 transition.fromState = this.getInitialState();
             }
@@ -61,8 +68,8 @@ public class UnionFSM extends FiniteStateMachine {
     }
 
     @Override
-    public FiniteStateMachine copy() {
-        FiniteStateMachine copy = new UnionFSM("");
+    public FiniteStateMachine<Character> copy() {
+        FiniteStateMachine<Character> copy = new UnionFSM("");
         copy.stateCounter = this.stateCounter;
         copy.terminalStateIndex = this.terminalStateIndex;
         copy.states = this.copyStates();

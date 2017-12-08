@@ -1,22 +1,23 @@
 package automata;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
-public class Transition implements Comparable {
+public class Transition<T> implements Comparable {
 
-    Set<Character> characters = new TreeSet<>();
+    Set<T> inputSymbols = new HashSet<>();
     State fromState, toState;
 
-    public Transition(Character character, State from, State to) {
-        this.characters.add(character);
+    public Transition(T inputSymbol, State from, State to) {
+        this.inputSymbols.add(inputSymbol);
         this.fromState = from;
         this.toState = to;
     }
 
-    public Transition(String characters, State from, State to) {
-        for(Character character : characters.toCharArray()) {
-            this.characters.add(character);
+    public Transition(List<T> inputSymbols, State from, State to) {
+        for(T token : inputSymbols) {
+            this.inputSymbols.add(token);
         }
         this.fromState = from;
         this.toState = to;
@@ -30,19 +31,19 @@ public class Transition implements Comparable {
         return this.toState;
     }
 
-    public Set<Character> getCharacters() {
-        return this.characters;
+    public Set<T> getInputSymbols() {
+        return this.inputSymbols;
     }
 
-    public boolean hasTransition(State from, Character character) {
-        return (this.fromState == from) && (this.characters.contains(character));
+    public boolean hasTransition(State from, T inputSymbol) {
+        return (this.fromState == from) && (this.inputSymbols.contains(inputSymbol));
     }
 
-    public boolean hasTransition(Character character) {
-        return this.characters.contains(character);
+    public boolean hasTransition(T inputSymbol) {
+        return this.inputSymbols.contains(inputSymbol);
     }
 
-    public State getResultingState(Character character) {
+    public State getResultingState(T inputSymbol) {
         return this.toState;
     }
 
@@ -50,8 +51,8 @@ public class Transition implements Comparable {
     public String toString() {
         String output = "[";
         String prefix = "";
-        for(Character character : this.characters) {
-            output += prefix + character;
+        for(T inputSymbol : this.inputSymbols) {
+            output += prefix + inputSymbol;
             prefix = "|";
         }
         output += "]";

@@ -5,7 +5,7 @@ package automata;
  * of some token A followed by another token B. These tokens can either
  * be characters or other FSMs
  */
-public class FollowedByFSM extends FiniteStateMachine {
+public class FollowedByFSM extends FiniteStateMachine<Character> {
 
 
     public FollowedByFSM(String characters) {
@@ -14,7 +14,7 @@ public class FollowedByFSM extends FiniteStateMachine {
             State nextState = new State(this.stateCounter++, false);
             this.states.add(nextState);
             this.terminalStateIndex = this.stateCounter - 1;
-            Transition transition = new Transition(character, this.getCurrentState(), nextState);
+            Transition<Character> transition = new Transition<>(character, this.getCurrentState(), nextState);
             this.transitions.add(transition);
             this.setCurrentState(nextState);
         }
@@ -22,9 +22,9 @@ public class FollowedByFSM extends FiniteStateMachine {
 
     }
 
-    public FollowedByFSM(FiniteStateMachine first, FiniteStateMachine second) {
-        FiniteStateMachine firstCopy = first.copy();
-        FiniteStateMachine secondCopy = second.copy();
+    public FollowedByFSM(FiniteStateMachine<Character> first, FiniteStateMachine<Character> second) {
+        FiniteStateMachine<Character> firstCopy = first.copy();
+        FiniteStateMachine<Character> secondCopy = second.copy();
         this.initialise(firstCopy);
 
         State secondInitial = secondCopy.getInitialState();
@@ -36,7 +36,7 @@ public class FollowedByFSM extends FiniteStateMachine {
                 addedState = true;
 
                 //Find any transitions referencing that state and update their number
-                for (Transition transition : secondCopy.transitions) {
+                for (Transition<Character> transition : secondCopy.transitions) {
                     if (transition.fromState.equals(state)) {
                         transition.fromState.setNumber(newNumber);
                     }
@@ -51,7 +51,7 @@ public class FollowedByFSM extends FiniteStateMachine {
         //Update secondCopy transitions with initial to use this's terminal
         //Add transitions
         //Add all transitions from secondCopy into this, replacing initial and terminal states with this's
-        for (Transition transition : secondCopy.transitions) {
+        for (Transition<Character> transition : secondCopy.transitions) {
             if (transition.fromState.equals(secondInitial)) {
                 transition.fromState = this.getTerminalState();
             }
@@ -73,8 +73,8 @@ public class FollowedByFSM extends FiniteStateMachine {
     }
 
     @Override
-    public FiniteStateMachine copy() {
-        FiniteStateMachine copy = new FollowedByFSM("");
+    public FiniteStateMachine<Character> copy() {
+        FiniteStateMachine<Character> copy = new FollowedByFSM("");
         copy.stateCounter = this.stateCounter;
         copy.terminalStateIndex = this.terminalStateIndex;
         copy.states = this.copyStates();

@@ -3,7 +3,7 @@ package automata;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PDATransition<T> extends GenericTransition<T> {
+public class PDATransition<T> extends Transition<T> {
 
     Set<T> stackSymbols = new HashSet<>();
     StackAction stackAction;

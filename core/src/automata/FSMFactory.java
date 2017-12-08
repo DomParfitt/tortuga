@@ -7,11 +7,11 @@ import lexer.TokenType;
  */
 public class FSMFactory {
 
-    private static FiniteStateMachine letterOrDigit;
+    private static FiniteStateMachine<Character> letterOrDigit;
 
-    private static FiniteStateMachine identifierFSM;
+    private static FiniteStateMachine<Character> identifierFSM;
 
-    public static FiniteStateMachine getIdentifierFSM() {
+    public static FiniteStateMachine<Character> getIdentifierFSM() {
         // (letter|_)(letter|digit|_)*
 
         //TODO: Implementation of singleton, is this necessary?
@@ -36,7 +36,7 @@ public class FSMFactory {
         return FSMFactory.identifierFSM;
     }
 
-    public static FiniteStateMachine getLetterOrDigitFSM() {
+    public static FiniteStateMachine<Character> getLetterOrDigitFSM() {
         if(FSMFactory.letterOrDigit == null) {
             FSMFactory.letterOrDigit = new UnionFSM(TokenType.LETTER.getMachine(), TokenType.DIGIT.getMachine());
         }
