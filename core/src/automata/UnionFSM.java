@@ -9,7 +9,7 @@ import java.util.List;
  * Concrete implementation of a FiniteStateMachine representing the case of
  * multiple tokens, whereby consuming any one of them will pass the validation
  */
-public class UnionFSM extends FiniteStateMachine<Character> {
+public class UnionFSM extends CharacterFSM {
 
     public UnionFSM(String characters) {
         super();
@@ -20,9 +20,9 @@ public class UnionFSM extends FiniteStateMachine<Character> {
         this.transitions.add(transition);
     }
 
-    public UnionFSM(FiniteStateMachine<Character> first, FiniteStateMachine<Character> second) {
-        FiniteStateMachine<Character> firstCopy = first.copy();
-        FiniteStateMachine<Character> secondCopy = second.copy();
+    public UnionFSM(CharacterFSM first, CharacterFSM second) {
+        CharacterFSM firstCopy = first.copy();
+        CharacterFSM secondCopy = second.copy();
         this.initialise(firstCopy);
 
         State secondInitial = secondCopy.getInitialState();
@@ -66,8 +66,8 @@ public class UnionFSM extends FiniteStateMachine<Character> {
     }
 
     @Override
-    public FiniteStateMachine<Character> copy() {
-        FiniteStateMachine<Character> copy = new UnionFSM("");
+    public CharacterFSM copy() {
+        CharacterFSM copy = new UnionFSM("");
         copy.stateCounter = this.stateCounter;
         copy.terminalStateIndex = this.terminalStateIndex;
         copy.states = this.copyStates();

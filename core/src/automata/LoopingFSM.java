@@ -4,14 +4,14 @@ package automata;
  * Concrete implementation of a FiniteStateMachine, which validates on zero or
  * more of the inner FSM
  */
-public class LoopingFSM extends FiniteStateMachine<Character> {
+public class LoopingFSM extends CharacterFSM {
 
     public LoopingFSM() {
 
     }
 
-    public LoopingFSM(FiniteStateMachine<Character> fsm) {
-        FiniteStateMachine<Character> copy = fsm.copy();
+    public LoopingFSM(CharacterFSM fsm) {
+        CharacterFSM copy = fsm.copy();
         this.initialise(copy);
         for(Transition<Character> transition : copy.transitions) {
             if(transition.toState.equals(copy.getTerminalState())) {
@@ -27,8 +27,8 @@ public class LoopingFSM extends FiniteStateMachine<Character> {
     }
 
     @Override
-    public FiniteStateMachine<Character> copy() {
-        FiniteStateMachine<Character> copy = new LoopingFSM();
+    public CharacterFSM copy() {
+        CharacterFSM copy = new LoopingFSM();
         copy.states = this.copyStates();
         copy.transitions = this.copyTransitions(copy.states);
 

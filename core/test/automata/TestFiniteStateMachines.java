@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 
 public class TestFiniteStateMachines {
 
-    FiniteStateMachine fsm, inner;
+    CharacterFSM fsm, inner;
     String characters;
 
     @Before
@@ -60,7 +60,7 @@ public class TestFiniteStateMachines {
             //Fails on single character from provided set
             assertFalse(fsm.parse("a"));
 
-            //Fails on repeated characters in provided set
+            //Fails on repeated tokens in provided set
             assertFalse(fsm.parse("aabbbc"));
 
             //Fails on chain containing character not in provided set
@@ -91,13 +91,13 @@ public class TestFiniteStateMachines {
             //Passes on single valid character
             assertTrue(fsm.parse("a"));
 
-            //Passes on multiple valid characters
+            //Passes on multiple valid tokens
             assertTrue(fsm.parse("aaaa"));
 
             //Fails on invalid character
             assertFalse(fsm.parse("b"));
 
-            //Fails on valid plus invalid characters
+            //Fails on valid plus invalid tokens
             assertFalse(fsm.parse("aab"));
 
             System.out.println(" - PASSING");
@@ -122,7 +122,7 @@ public class TestFiniteStateMachines {
         System.out.print("(a|b)*");
 
         try {
-            //Passes on repeated characters from provided set
+            //Passes on repeated tokens from provided set
             assertTrue(fsm.parse("aaaaaaa"));
 
             //Passes on empty input
@@ -131,7 +131,7 @@ public class TestFiniteStateMachines {
             //Passes on single character from provided set
             assertTrue(fsm.parse("a"));
 
-            //Passes on input containing all characters from provided set
+            //Passes on input containing all tokens from provided set
             assertTrue(fsm.parse("aaababa"));
 
             //Fails on input containing character not from provided set
@@ -377,7 +377,7 @@ public class TestFiniteStateMachines {
         System.out.print("a|(b|c)");
 
         try {
-            //Passes on any of valid input characters
+            //Passes on any of valid input tokens
             assertTrue(fsm.parse("a"));
             assertTrue(fsm.parse("b"));
             assertTrue(fsm.parse("c"));
@@ -385,7 +385,7 @@ public class TestFiniteStateMachines {
             //Fails on empty input
             assertFalse(fsm.parse(""));
 
-            //Fails on multiple valid characters
+            //Fails on multiple valid tokens
             assertFalse(fsm.parse("ab"));
 
             //Fails on invalid character
@@ -409,7 +409,7 @@ public class TestFiniteStateMachines {
         System.out.print("(a|b)|c");
 
         try {
-            //Passes on any of valid input characters
+            //Passes on any of valid input tokens
             assertTrue(fsm.parse("a"));
             assertTrue(fsm.parse("b"));
             assertTrue(fsm.parse("c"));
@@ -417,7 +417,7 @@ public class TestFiniteStateMachines {
             //Fails on empty input
             assertFalse(fsm.parse(""));
 
-            //Fails on multiple valid characters
+            //Fails on multiple valid tokens
             assertFalse(fsm.parse("ab"));
 
             //Fails on invalid character
@@ -462,7 +462,7 @@ public class TestFiniteStateMachines {
             //Fails on single character from provided set
             assertFalse(fsm.parse("a"));
 
-            //Fails on repeated characters in provided set
+            //Fails on repeated tokens in provided set
             assertFalse(fsm.parse("aabbbc"));
 
             //Fails on chain containing character not in provided set
@@ -563,7 +563,7 @@ public class TestFiniteStateMachines {
             assertFalse(fsm.parse("c"));
             assertFalse(fsm.parse("d"));
 
-            //Fails on legal chain with extra characters
+            //Fails on legal chain with extra tokens
             assertFalse(fsm.parse("ace"));
 
             System.out.println(" - PASSING");
@@ -719,7 +719,7 @@ public class TestFiniteStateMachines {
     public void testLoopingOnUnionFollowedByFollowedBy() {
 
         fsm = new FollowedByFSM(new UnionFSM("ab"), new FollowedByFSM("c"));
-        FiniteStateMachine loop = new LoopingFSM(fsm);
+        CharacterFSM loop = new LoopingFSM(fsm);
         System.out.print("((a|b)c)*");
 
         try {
@@ -752,7 +752,7 @@ public class TestFiniteStateMachines {
     @Test
 // ((a|b)|(c|d))*
     public void testLoopingOnUnionUnionUnion() {
-        FiniteStateMachine union = new UnionFSM(new UnionFSM("ab"), new UnionFSM("cd"));
+        CharacterFSM union = new UnionFSM(new UnionFSM("ab"), new UnionFSM("cd"));
         fsm = new LoopingFSM(union);
         System.out.print("((a|b)|(c|d))*");
 
