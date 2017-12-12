@@ -11,6 +11,9 @@
 
     <modules>
         <module>core</module>
+        <module>lexer</module>
     </modules>
+
+
 
 </project>
