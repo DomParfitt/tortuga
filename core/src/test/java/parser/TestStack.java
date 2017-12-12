@@ -38,4 +38,11 @@ public class TestStack {
 
         }
     }
+
+    @Test
+    public void testPeek() {
+        this.stack.push("Test");
+        assertEquals("Test", this.stack.peek());
+        assertEquals("Test", this.stack.pop());
+    }
 }
