@@ -23,7 +23,7 @@ public class Stack<T> {
      * @return the top element of the stack
      */
     public T pop() {
-        if(this.isEmpty()) {
+        if(!this.isEmpty()) {
             return this.stack.remove(this.getTopIndex());
         } else {
             throw new StackUnderflowError();
@@ -43,7 +43,7 @@ public class Stack<T> {
      * @return the value on the top of the stack
      */
     public T peek() {
-        if(this.isEmpty()) {
+        if(!this.isEmpty()) {
             return this.stack.get(this.getTopIndex());
         } else {
             throw new StackUnderflowError();
