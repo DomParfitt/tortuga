@@ -1,0 +1,4 @@
+lexer\TestLexer.class
+parser\TestStack.class
+automata\TestFSMFactory.class
+automata\TestFiniteStateMachines.class

@@ -2,9 +2,6 @@ package automata;
 
 import utils.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Concrete implementation of a FiniteStateMachine representing the case of
  * multiple tokens, whereby consuming any one of them will pass the validation
