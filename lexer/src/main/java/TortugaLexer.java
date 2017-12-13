@@ -1,4 +1,5 @@
 import lexer.Lexer;
+import lexer.Token;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,7 +13,7 @@ public class TortugaLexer {
         if (args.length != 1) {
             System.err.println("Please provide a file name");
             return;
-        } else if (args[0].endsWith(".tortuga")) {
+        } else if (!args[0].endsWith(".tortuga")) {
             System.err.println("File provided is not a valid tortuga source file");
             return;
         }
@@ -25,14 +26,23 @@ public class TortugaLexer {
             while (in.hasNext()) {
                 strings.add(in.next());
             }
+
+            String input = "";
+            for(String string : strings) {
+                input += string + " ";
+            }
+
+            Lexer lexer = new Lexer();
+            List<Token> tokens = lexer.tokenize(input);
+
+            for(Token token : tokens) {
+                System.out.println(token);
+            }
+
         } catch (FileNotFoundException e) {
             System.err.println("Could not find the provided file");
         }
 
-        Lexer lexer = new Lexer();
-        for(String string : strings) {
-            lexer.tokenize(string);
 
-        }
     }
 }
