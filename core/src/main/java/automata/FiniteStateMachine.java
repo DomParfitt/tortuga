@@ -60,7 +60,7 @@ public abstract class FiniteStateMachine<T> {
         }
     }
 
-    public final boolean hasTransition(T token) {
+    public boolean hasTransition(T token) {
         for (Transition<T> transition : this.transitions) {
             if (transition.getFromState().equals(this.getCurrentState())) {
                 if (transition.hasTransition(token)) {
@@ -72,7 +72,7 @@ public abstract class FiniteStateMachine<T> {
         return false;
     }
 
-    public final State getTransition(T token) {
+    public final State getResultingState(T token) {
         for (Transition<T> transition : this.transitions) {
             if (transition.getFromState().equals(this.getCurrentState())) {
                 if (transition.hasTransition(token)) {
@@ -114,12 +114,12 @@ public abstract class FiniteStateMachine<T> {
         return this.stateCounter - 1;
     }
 
-    public final boolean parse(List<T> input) {
+    public boolean parse(List<T> input) {
         this.setCurrentState(this.getInitialState());
 //        char[] characters = input.toCharArray();
         for (T token : input) {
             if (this.hasTransition(token)) {
-                this.setCurrentState(this.getTransition(token));
+                this.setCurrentState(this.getResultingState(token));
             } else {
                 return false;
             }
@@ -127,10 +127,10 @@ public abstract class FiniteStateMachine<T> {
         return this.getCurrentState().isAcceptingState();
     }
 
-    public final boolean parse(T input) {
+    public boolean parse(T input) {
         this.setCurrentState((this.getInitialState()));
         if (this.hasTransition(input)) {
-            return this.getTransition(input).isAcceptingState();
+            return this.getResultingState(input).isAcceptingState();
         } else {
             return false;
         }
