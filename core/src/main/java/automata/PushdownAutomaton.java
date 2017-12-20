@@ -6,21 +6,32 @@ import parser.StackUnderflowError;
 
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
-public class PushdownAutomaton {
+public class PushdownAutomaton extends FiniteStateMachine<Token> {
 
-    protected Set<State> states;
+//    protected Set<State> states;
     protected Stack<Token> stack;
-    protected Set<PDATransition<Token>> transitions;
+    protected Set<PDATransition> transitions; //TODO: Does this override the named variable from superclass?
 
     public PushdownAutomaton() {
         //TODO: Implement
+        super();
+        this.stack = new Stack<>();
+        this.transitions = new TreeSet<>();
     }
 
+    public PushdownAutomaton(List<State> states, Set<PDATransition> transitions) {
+        this();
+        this.states = states;
+        this.transitions = transitions;
+    }
+
+    @Override
     public boolean parse(List<Token> tokens) {
         for(Token token : tokens) {
             if(this.hasTransition(token)) {
-                PDATransition<Token> transition = this.getTransition(token);
+                PDATransition transition = this.getTransition(token);
                 PushdownAction action = transition.getResultingState();
                 switch (action.getStackAction().getStackActionType()) {
                     case PUSH: {
@@ -53,19 +64,26 @@ public class PushdownAutomaton {
         return false; //TODO: Probably remove this
     }
 
-    private boolean hasTransition(Token token) {
-        for(PDATransition<Token> transition : this.transitions) {
-            if(transition.hasTransition(token)) {
-                return true;
-            }
-        }
-
-        return false;
+    @Override
+    public FiniteStateMachine<Token> copy() {
+        return null;
     }
 
-    private PDATransition<Token> getTransition(Token token) {
-        for(PDATransition<Token> transition : this.transitions) {
-            if(transition.hasTransition(token)) {
+//    @Override
+//    public boolean hasTransition(Token token) {
+//        for(PDATransition transition : this.transitions) {
+//            if(transition.hasTransition(token)) {
+//                return true;
+//            }
+//        }
+//
+//        return false;
+//    }
+//
+    //TODO: Rename this to getResultingState and resolve Transition to a single type
+    private PDATransition getTransition(Token token) {
+        for(PDATransition transition : this.transitions) {
+            if(transition.hasTransition(token.getTokenType())) {
                 return transition;
             }
         }
