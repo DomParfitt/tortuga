@@ -12,7 +12,7 @@ public class PushdownAutomaton extends FiniteStateMachine<Token> {
 
 //    protected Set<State> states;
     protected Stack<Token> stack;
-    protected Set<PDATransition> transitions; //TODO: Does this override the named variable from superclass?
+//    protected Set<PDATransition> transitions; //TODO: Does this override the named variable from superclass?
 
     public PushdownAutomaton() {
         //TODO: Implement
@@ -21,7 +21,7 @@ public class PushdownAutomaton extends FiniteStateMachine<Token> {
         this.transitions = new TreeSet<>();
     }
 
-    public PushdownAutomaton(List<State> states, Set<PDATransition> transitions) {
+    public PushdownAutomaton(List<State> states, Set<Transition<Token>> transitions) {
         this();
         this.states = states;
         this.transitions = transitions;
@@ -59,9 +59,12 @@ public class PushdownAutomaton extends FiniteStateMachine<Token> {
                 }
 
                 //Set action.getState() as current state
+                this.setCurrentState(action.getResultingState());
             }
         }
-        return false; //TODO: Probably remove this
+
+        return this.getCurrentState().isAcceptingState() && this.stack.isEmpty();
+//        return false; //TODO: Probably remove this
     }
 
     @Override
@@ -82,9 +85,11 @@ public class PushdownAutomaton extends FiniteStateMachine<Token> {
 //
     //TODO: Rename this to getResultingState and resolve Transition to a single type
     private PDATransition getTransition(Token token) {
-        for(PDATransition transition : this.transitions) {
-            if(transition.hasTransition(token.getTokenType())) {
-                return transition;
+        for(Transition transition : this.transitions) {
+            if (transition.getFromState().equals(this.getCurrentState())) {
+                if (transition.hasTransition(token)) {
+                    return (PDATransition) transition;
+                }
             }
         }
 
