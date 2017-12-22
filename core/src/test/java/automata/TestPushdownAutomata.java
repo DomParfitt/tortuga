@@ -2,9 +2,11 @@ package automata;
 
 import lexer.Lexer;
 import lexer.Token;
+import lexer.TokenType;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
@@ -22,10 +24,15 @@ public class TestPushdownAutomata {
     @Test
     public void testAdditionStatement() {
         pda = PDAFactory.getMathematicalStatement();
-        List<Token> tokens = lexer.tokenize("1 + 2");
+        List<Token> tokens = lexer.tokenize("(10) + 326");
+        List<TokenType> tokenTypes = new ArrayList<>();
+
         for(Token token : tokens) {
             System.out.println(token);
+            tokenTypes.add(token.getTokenType());
         }
-        assertTrue(pda.parse(tokens));
+
+        assertTrue(pda.parse(tokenTypes));
+        
     }
 }
