@@ -5,11 +5,19 @@ import utils.StringUtils;
 
 public enum TokenType {
 
+    //TokenTypes defined in order of precedence, from lowest to highest
+
     //Literals
     WHITESPACE(TokenCategory.LITERAL, new LoopingFSM(new UnionFSM(" \n\t\r\f"))),
     NEWLINE(TokenCategory.LITERAL, new LoopingFSM(new UnionFSM("\n\r"))),
+    QUOTE(TokenCategory.LITERAL, new FollowedByFSM("\"")),
     LETTER(TokenCategory.LITERAL, new UnionFSM("abcdefghifjklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")),
     DIGIT(TokenCategory.LITERAL, new UnionFSM("0123456789")),
+
+    //Primitive literals
+    INT(TokenCategory.LITERAL, new LoopingFSM(DIGIT.getMachine())),
+    STRING(TokenCategory.LITERAL, new FollowedByFSM(new FollowedByFSM(QUOTE.getMachine(), new LoopingFSM(LETTER.getMachine())), QUOTE.getMachine())),
+    //TODO: String doesn't work
 
     //Identifiers
     IDENTIFIER(TokenCategory.IDENTIFIER, FSMFactory.getIdentifierFSM()),
