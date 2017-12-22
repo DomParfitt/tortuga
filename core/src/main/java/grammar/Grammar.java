@@ -1,4 +1,4 @@
-package lexer;
+package grammar;
 
 import automata.FiniteStateMachine;
 

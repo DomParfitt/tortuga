@@ -2,7 +2,7 @@ package automata;
 
 import lexer.Lexer;
 import lexer.Token;
-import lexer.LexerGrammar;
+import grammar.LexerGrammar;
 import org.junit.Before;
 import org.junit.Test;
 

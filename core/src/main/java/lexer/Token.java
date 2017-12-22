@@ -1,5 +1,7 @@
 package lexer;
 
+import grammar.LexerGrammar;
+
 public class Token {
 
     private LexerGrammar type;

@@ -1,6 +1,6 @@
 package automata;
 
-import lexer.LexerGrammar;
+import grammar.LexerGrammar;
 
 /**
  * Factory class with static methods to get specific compound FSMs

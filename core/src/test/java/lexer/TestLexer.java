@@ -1,5 +1,6 @@
 package lexer;
 
+import grammar.LexerGrammar;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -76,28 +77,28 @@ public class TestLexer {
 
         //Passes on alphabetic identifier
         input = "var";
-        expected.add(new Token(TokenType.IDENTIFIER, "var", 0, 0));
+        expected.add(new Token(LexerGrammar.IDENTIFIER, "var", 0, 0));
         actual = lexer.tokenize(input);
         this.assertListEquality(expected, actual);
         expected.clear();
 
         //Passes on alphanumeric identifier
         input = "var123";
-        expected.add(new Token(TokenType.IDENTIFIER, "var123", 0, 0));
+        expected.add(new Token(LexerGrammar.IDENTIFIER, "var123", 0, 0));
         actual = lexer.tokenize(input);
         this.assertListEquality(expected, actual);
         expected.clear();
 
         //Passes on identifier beginning with underscore
         input = "_var123";
-        expected.add(new Token(TokenType.IDENTIFIER, "_var123", 0, 0));
+        expected.add(new Token(LexerGrammar.IDENTIFIER, "_var123", 0, 0));
         actual = lexer.tokenize(input);
         this.assertListEquality(expected, actual);
         expected.clear();
 
         //Passes on alphanumeric containing underscore
         input = "var_123";
-        expected.add(new Token(TokenType.IDENTIFIER, "var_123", 0, 0));
+        expected.add(new Token(LexerGrammar.IDENTIFIER, "var_123", 0, 0));
         actual = lexer.tokenize(input);
         this.assertListEquality(expected, actual);
         expected.clear();
@@ -113,10 +114,10 @@ public class TestLexer {
 
         //"Fails" on identifier which is a keyword (checks the category return is keyword, not identifier)
         input = "if";
-        expected.add(new Token(TokenType.IF, "if", 0, 0));
+        expected.add(new Token(LexerGrammar.IF, "if", 0, 0));
         actual = lexer.tokenize(input);
         Token token = actual.get(0);
-        assertTrue(token.getTokenCategory() == TokenCategory.KEYWORD);
+        assertTrue(token.getTokenCategory() == TokenType.KEYWORD);
     }
 
     @Test

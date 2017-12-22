@@ -1,6 +1,8 @@
-package lexer;
+package grammar;
 
 import automata.*;
+import grammar.Grammar;
+import lexer.TokenType;
 import utils.StringUtils;
 
 import java.util.List;

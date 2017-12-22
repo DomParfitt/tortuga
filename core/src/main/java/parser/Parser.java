@@ -1,7 +1,8 @@
 package parser;
 
 import ast.AbstractSyntaxTree;
-import lexer.LexerGrammar;
+import grammar.LexerGrammar;
+import grammar.ParserGrammar;
 
 import java.util.List;
 

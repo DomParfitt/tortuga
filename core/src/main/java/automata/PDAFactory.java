@@ -1,6 +1,6 @@
 package automata;
 
-import lexer.LexerGrammar;
+import grammar.LexerGrammar;
 
 import java.util.*;
 

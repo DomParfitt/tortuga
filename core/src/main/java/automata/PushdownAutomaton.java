@@ -1,6 +1,6 @@
 package automata;
 
-import lexer.LexerGrammar;
+import grammar.LexerGrammar;
 import parser.Stack;
 import parser.StackUnderflowError;
 

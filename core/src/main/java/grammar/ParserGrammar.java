@@ -1,9 +1,9 @@
-package parser;
+package grammar;
 
 import automata.PDAFactory;
 import automata.PushdownAutomaton;
-import lexer.Grammar;
-import lexer.LexerGrammar;
+import grammar.Grammar;
+import grammar.LexerGrammar;
 
 import java.util.List;
 
