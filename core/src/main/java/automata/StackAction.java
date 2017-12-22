@@ -1,6 +1,7 @@
 package automata;
 
 import lexer.Token;
+import lexer.TokenType;
 
 public class StackAction {
 
@@ -9,13 +10,13 @@ public class StackAction {
     }
 
     private StackActionType stackActionType;
-    private Token token;
+    private TokenType token;
 
     public StackAction(StackActionType stackActionType) {
         this(stackActionType, null);
     }
 
-    public StackAction(StackActionType stackActionType, Token token) {
+    public StackAction(StackActionType stackActionType, TokenType token) {
         this.stackActionType = stackActionType;
         this.token = token;
     }
@@ -24,7 +25,7 @@ public class StackAction {
         return stackActionType;
     }
 
-    public Token getToken() {
+    public TokenType getTokenType() {
         return token;
     }
 }

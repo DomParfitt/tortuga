@@ -6,12 +6,12 @@ import lexer.TokenType;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PDATransition extends Transition<Token> {
+public class PDATransition extends Transition<TokenType> {
 
 //    Set<T> stackSymbols = new HashSet<>();
     StackAction stackAction;
 
-    public PDATransition(Token inputSymbol, StackAction stackAction, State from, State to) {
+    public PDATransition(TokenType inputSymbol, StackAction stackAction, State from, State to) {
         super(inputSymbol, from, to);
         this.stackAction = stackAction;
     }
@@ -20,9 +20,9 @@ public class PDATransition extends Transition<Token> {
         return new PushdownAction(this.stackAction, this.toState);
     }
 
-    public boolean hasTransition(Token token) {
-        for(Token inputSymbol : this.inputSymbols) {
-            if(token.getTokenType().equals(inputSymbol.getTokenType())) {
+    public boolean hasTransition(TokenType token) {
+        for(TokenType inputSymbol : this.inputSymbols) {
+            if(token.equals(inputSymbol)) {
                 return true;
             }
         }
