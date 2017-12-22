@@ -1,7 +1,6 @@
 package automata;
 
-import lexer.Token;
-import lexer.TokenType;
+import lexer.LexerGrammar;
 
 import java.util.*;
 
@@ -13,17 +12,17 @@ public class PDAFactory {
         if (PDAFactory.mathematicalStatement == null) {
             List<State> states = PDAFactory.getListOfStates(4, 3);
 
-            Set<Transition<TokenType>> transitions = new HashSet<>();
-            transitions.add(new PDATransition(TokenType.OPENPAREN, new StackAction(StackAction.StackActionType.PUSH), states.get(0), states.get(0)));
-            transitions.add(new PDATransition(TokenType.INT, new StackAction(StackAction.StackActionType.NONE), states.get(0), states.get(1)));
-            transitions.add(new PDATransition(TokenType.PLUS, new StackAction(StackAction.StackActionType.NONE), states.get(1), states.get(2)));
-            transitions.add(new PDATransition(TokenType.MINUS, new StackAction(StackAction.StackActionType.NONE), states.get(1), states.get(2)));
-            transitions.add(new PDATransition(TokenType.DIVIDE, new StackAction(StackAction.StackActionType.NONE), states.get(1), states.get(2)));
-            transitions.add(new PDATransition(TokenType.MULTIPLY, new StackAction(StackAction.StackActionType.NONE), states.get(1), states.get(2)));
-            transitions.add(new PDATransition(TokenType.CLOSEPAREN, new StackAction(StackAction.StackActionType.POP, TokenType.OPENPAREN), states.get(1), states.get(1)));
-            transitions.add(new PDATransition(TokenType.INT, new StackAction(StackAction.StackActionType.NONE), states.get(2), states.get(3)));
-            transitions.add(new PDATransition(TokenType.OPENPAREN, new StackAction(StackAction.StackActionType.PUSH), states.get(2), states.get(0)));
-            transitions.add(new PDATransition(TokenType.CLOSEPAREN, new StackAction(StackAction.StackActionType.POP, TokenType.OPENPAREN), states.get(3), states.get(3)));
+            Set<Transition<LexerGrammar>> transitions = new HashSet<>();
+            transitions.add(new PDATransition(LexerGrammar.OPENPAREN, new StackAction(StackAction.StackActionType.PUSH), states.get(0), states.get(0)));
+            transitions.add(new PDATransition(LexerGrammar.INT, new StackAction(StackAction.StackActionType.NONE), states.get(0), states.get(1)));
+            transitions.add(new PDATransition(LexerGrammar.PLUS, new StackAction(StackAction.StackActionType.NONE), states.get(1), states.get(2)));
+            transitions.add(new PDATransition(LexerGrammar.MINUS, new StackAction(StackAction.StackActionType.NONE), states.get(1), states.get(2)));
+            transitions.add(new PDATransition(LexerGrammar.DIVIDE, new StackAction(StackAction.StackActionType.NONE), states.get(1), states.get(2)));
+            transitions.add(new PDATransition(LexerGrammar.MULTIPLY, new StackAction(StackAction.StackActionType.NONE), states.get(1), states.get(2)));
+            transitions.add(new PDATransition(LexerGrammar.CLOSEPAREN, new StackAction(StackAction.StackActionType.POP, LexerGrammar.OPENPAREN), states.get(1), states.get(1)));
+            transitions.add(new PDATransition(LexerGrammar.INT, new StackAction(StackAction.StackActionType.NONE), states.get(2), states.get(3)));
+            transitions.add(new PDATransition(LexerGrammar.OPENPAREN, new StackAction(StackAction.StackActionType.PUSH), states.get(2), states.get(0)));
+            transitions.add(new PDATransition(LexerGrammar.CLOSEPAREN, new StackAction(StackAction.StackActionType.POP, LexerGrammar.OPENPAREN), states.get(3), states.get(3)));
 
             mathematicalStatement = new PushdownAutomaton(states, transitions);
 

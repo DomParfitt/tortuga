@@ -1,6 +1,6 @@
 package automata;
 
-import lexer.TokenType;
+import lexer.LexerGrammar;
 
 /**
  * Factory class with static methods to get specific compound FSMs
@@ -17,7 +17,7 @@ public class FSMFactory {
         //TODO: Implementation of singleton, is this necessary?
         if (FSMFactory.identifierFSM == null) {
 
-            CharacterFSM letterOrUnderscore = new UnionFSM(TokenType.LETTER.getMachine(), new UnionFSM("_"));
+            CharacterFSM letterOrUnderscore = new UnionFSM(LexerGrammar.LETTER.getMachine(), new UnionFSM("_"));
 //            System.out.println("Initialised letterOrUnderscore");
 
             CharacterFSM letterOrDigit = FSMFactory.getLetterOrDigitFSM();
@@ -38,7 +38,7 @@ public class FSMFactory {
 
     public static CharacterFSM getLetterOrDigitFSM() {
         if(FSMFactory.letterOrDigit == null) {
-            FSMFactory.letterOrDigit = new UnionFSM(TokenType.LETTER.getMachine(), TokenType.DIGIT.getMachine());
+            FSMFactory.letterOrDigit = new UnionFSM(LexerGrammar.LETTER.getMachine(), LexerGrammar.DIGIT.getMachine());
         }
 
         return FSMFactory.letterOrDigit;

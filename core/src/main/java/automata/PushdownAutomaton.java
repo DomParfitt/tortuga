@@ -1,6 +1,6 @@
 package automata;
 
-import lexer.TokenType;
+import lexer.LexerGrammar;
 import parser.Stack;
 import parser.StackUnderflowError;
 
@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class PushdownAutomaton extends FiniteStateMachine<TokenType> {
+public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
 
 //    protected Set<State> states;
-    protected Stack<TokenType> stack;
+    protected Stack<LexerGrammar> stack;
 //    protected Set<PDATransition> transitions; //TODO: Does this override the named variable from superclass?
 
     public PushdownAutomaton() {
@@ -21,14 +21,14 @@ public class PushdownAutomaton extends FiniteStateMachine<TokenType> {
         this.transitions = new TreeSet<>();
     }
 
-    public PushdownAutomaton(List<State> states, Set<Transition<TokenType>> transitions) {
+    public PushdownAutomaton(List<State> states, Set<Transition<LexerGrammar>> transitions) {
         this();
         this.states = states;
         this.transitions = transitions;
     }
 
 //    public boolean parse(List<Token> tokens) {
-//        List<TokenType> tokenTypes = new ArrayList<>();
+//        List<LexerGrammar> tokenTypes = new ArrayList<>();
 //        for(Token token : tokens) {
 //            tokenTypes.add(token.getTokenType());
 //        }
@@ -37,8 +37,8 @@ public class PushdownAutomaton extends FiniteStateMachine<TokenType> {
 //    }
 
     @Override
-    public boolean parse(List<TokenType> tokens) {
-        for(TokenType token : tokens) {
+    public boolean parse(List<LexerGrammar> tokens) {
+        for(LexerGrammar token : tokens) {
             if(this.hasTransition(token)) {
                 PDATransition transition = this.getTransition(token);
                 PushdownAction action = transition.getResultingState();
@@ -79,7 +79,7 @@ public class PushdownAutomaton extends FiniteStateMachine<TokenType> {
     }
 
     @Override
-    public FiniteStateMachine<TokenType> copy() {
+    public FiniteStateMachine<LexerGrammar> copy() {
         return null;
     }
 
@@ -95,7 +95,7 @@ public class PushdownAutomaton extends FiniteStateMachine<TokenType> {
 //    }
 //
     //TODO: Rename this to getResultingState and resolve Transition to a single type
-    private PDATransition getTransition(TokenType token) {
+    private PDATransition getTransition(LexerGrammar token) {
         for(Transition transition : this.transitions) {
             if (transition.getFromState().equals(this.getCurrentState())) {
                 if (transition.hasTransition(token)) {
@@ -107,7 +107,7 @@ public class PushdownAutomaton extends FiniteStateMachine<TokenType> {
         return null;
     }
 
-    private boolean popAndCompare(TokenType expected) {
+    private boolean popAndCompare(LexerGrammar expected) {
         try {
             return this.stack.pop().equals(expected);
         } catch (StackUnderflowError e) {

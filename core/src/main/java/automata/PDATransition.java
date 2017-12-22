@@ -1,17 +1,13 @@
 package automata;
 
-import lexer.Token;
-import lexer.TokenType;
+import lexer.LexerGrammar;
 
-import java.util.HashSet;
-import java.util.Set;
-
-public class PDATransition extends Transition<TokenType> {
+public class PDATransition extends Transition<LexerGrammar> {
 
 //    Set<T> stackSymbols = new HashSet<>();
     StackAction stackAction;
 
-    public PDATransition(TokenType inputSymbol, StackAction stackAction, State from, State to) {
+    public PDATransition(LexerGrammar inputSymbol, StackAction stackAction, State from, State to) {
         super(inputSymbol, from, to);
         this.stackAction = stackAction;
     }
@@ -20,8 +16,8 @@ public class PDATransition extends Transition<TokenType> {
         return new PushdownAction(this.stackAction, this.toState);
     }
 
-    public boolean hasTransition(TokenType token) {
-        for(TokenType inputSymbol : this.inputSymbols) {
+    public boolean hasTransition(LexerGrammar token) {
+        for(LexerGrammar inputSymbol : this.inputSymbols) {
             if(token.equals(inputSymbol)) {
                 return true;
             }
