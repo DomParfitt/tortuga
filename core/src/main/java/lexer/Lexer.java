@@ -26,9 +26,9 @@ public class Lexer {
         int column = 0;
         for (String input : stringTokens) { //TODO: Doing this way requires unnecessary whitespace in source
             boolean matchFlag = false;
-            for (TokenType tokenType : TokenType.values()) {
-                if (tokenType.parse(input)) {
-                    Token token = new Token(tokenType, input, 0, 0);
+            for (LexerGrammar lexerGrammar : LexerGrammar.values()) {
+                if (lexerGrammar.parse(input)) {
+                    Token token = new Token(lexerGrammar, input, 0, 0);
                     tokens.add(token);
                     matchFlag = true;
                     break;
@@ -65,10 +65,10 @@ public class Lexer {
             if (!this.isWhitespace(sub)) {
 
                 //Get a list of tokens that the character matches
-                List<TokenType> initialMatches = this.getMatchingTokenTypes(sub);
+                List<LexerGrammar> initialMatches = this.getMatchingTokenTypes(sub);
 
                 //Create a list to hold matches from looking ahead
-                List<TokenType> lookaheadMatches = new ArrayList<>();
+                List<LexerGrammar> lookaheadMatches = new ArrayList<>();
 
                 //Increment the lookahead offset
                 lookahead++;
@@ -89,7 +89,7 @@ public class Lexer {
                 while (!lookaheadMatches.isEmpty() && lookahead + i <= input.length()) {
 
                     //Get the matching tokens from the substring up to the lookahead offset in a temp variable
-                    List<TokenType> nextLookaheadMatches = this.getMatchingTokenTypes(input.substring(i, i + lookahead));
+                    List<LexerGrammar> nextLookaheadMatches = this.getMatchingTokenTypes(input.substring(i, i + lookahead));
 
                     //If the temp variable is non-empty we can replace our original lookahead list with it and lookahead again
                     if (!nextLookaheadMatches.isEmpty()) {
@@ -108,12 +108,12 @@ public class Lexer {
                     throw new TokenizeException("No matching token");
                 } else if (!lookaheadMatches.isEmpty()) {
                     //Prioritise tokens from lookahead over initial
-                    TokenType type = lookaheadMatches.get(lookaheadMatches.size() - 1);
+                    LexerGrammar type = lookaheadMatches.get(lookaheadMatches.size() - 1);
                     Token token = new Token(type, input.substring(i, i + lookahead), line, i - column);
                     tokens.add(token);
                 } else if (!initialMatches.isEmpty()) {
                     //Nothing from lookahead so create token from initial character
-                    TokenType type = initialMatches.get(initialMatches.size() - 1);
+                    LexerGrammar type = initialMatches.get(initialMatches.size() - 1);
                     Token token = new Token(type, sub, line, i - column);
                     tokens.add(token);
                 }
@@ -126,7 +126,7 @@ public class Lexer {
 
                 //Check if character is a newline and update line and column trackers as necessary
 //                if(sub.matches("\n") || sub.matches("\r") || sub.matches("\r\n")) {
-                if(TokenType.NEWLINE.parse(sub)) {
+                if(LexerGrammar.NEWLINE.parse(sub)) {
                     line++;
                     column = i;
                 }
@@ -137,8 +137,8 @@ public class Lexer {
     }
 
     private boolean matchesTokenType(String input) {
-        for (TokenType tokenType : TokenType.values()) {
-            if (tokenType.parse(input)) {
+        for (LexerGrammar lexerGrammar : LexerGrammar.values()) {
+            if (lexerGrammar.parse(input)) {
                 return true;
             }
         }
@@ -146,19 +146,19 @@ public class Lexer {
         return false;
     }
 
-    private List<TokenType> getMatchingTokenTypes(String input) {
-        List<TokenType> tokenTypes = new ArrayList<>();
-        for (TokenType tokenType : TokenType.values()) {
-            if (tokenType.parse(input)) {
-                tokenTypes.add(tokenType);
+    private List<LexerGrammar> getMatchingTokenTypes(String input) {
+        List<LexerGrammar> lexerGrammars = new ArrayList<>();
+        for (LexerGrammar lexerGrammar : LexerGrammar.values()) {
+            if (lexerGrammar.parse(input)) {
+                lexerGrammars.add(lexerGrammar);
             }
         }
 
-        return tokenTypes;
+        return lexerGrammars;
     }
 
     private boolean isWhitespace(String input) {
-        return TokenType.WHITESPACE.parse(input);
+        return LexerGrammar.WHITESPACE.parse(input);
 //        return input.matches("\\s+");
     }
 
