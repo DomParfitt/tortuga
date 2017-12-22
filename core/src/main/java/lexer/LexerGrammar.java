@@ -3,7 +3,9 @@ package lexer;
 import automata.*;
 import utils.StringUtils;
 
-public enum LexerGrammar implements Grammar {
+import java.util.List;
+
+public enum LexerGrammar implements Grammar<Character> {
 
     //TokenTypes defined in order of precedence, from lowest to highest
 
@@ -48,11 +50,11 @@ public enum LexerGrammar implements Grammar {
     ;
 
     private String value; //TODO: Not sure if this is necessary
-    private TokenType category;
+    private TokenType tokenType;
     private CharacterFSM machine;
 
-    LexerGrammar(TokenType category, CharacterFSM machine) {
-        this.category = category;
+    LexerGrammar(TokenType tokenType, CharacterFSM machine) {
+        this.tokenType = tokenType;
         this.machine = machine;
     }
 
@@ -60,15 +62,26 @@ public enum LexerGrammar implements Grammar {
         return this.machine.parse(StringUtils.toCharacterList(input));
     }
 
-    public boolean parse(Character input) {
-        return this.machine.parse(input);
+//    @Override
+//    public boolean parse(Character input) {
+//        return this.machine.parse(input);
+//    }
+
+    @Override
+    public boolean parse(List<Character> input) {
+        String stringInput = "";
+        for(Character character : input) {
+            stringInput += character;
+        }
+        return this.machine.parse(stringInput);
     }
 
+    @Override
     public CharacterFSM getMachine() {
         return machine;
     }
 
-    public TokenType getCategory() {
-        return category;
+    public TokenType getTokenType() {
+        return tokenType;
     }
 }
