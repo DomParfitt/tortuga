@@ -58,22 +58,22 @@ public enum LexerGrammar implements Grammar<Character> {
     FOR(TokenType.KEYWORD)
     ;
 
-    private String value; //TODO: Not sure if this is necessary
+//    private String value; //TODO: Not sure if this is necessary
     private TokenType tokenType;
-    private LexerMachine machine;
+//    private LexerMachine machine;
 
     LexerGrammar(TokenType tokenType) {
         this.tokenType = tokenType;
-        this.machine = LexerMachineFactory.getMachine(this);
+//        this.machine = LexerMachineFactory.getMachine(this);
     }
 
-    LexerGrammar(TokenType tokenType, LexerMachine machine) {
-        this.tokenType = tokenType;
-        this.machine = machine;
-    }
+//    LexerGrammar(TokenType tokenType, LexerMachine machine) {
+//        this.tokenType = tokenType;
+//        this.machine = machine;
+//    }
 
     public boolean parse(String input) {
-        return this.machine.parse(StringUtils.toCharacterList(input));
+        return this.getMachine().parse(StringUtils.toCharacterList(input));
     }
 
 //    @Override
@@ -87,12 +87,13 @@ public enum LexerGrammar implements Grammar<Character> {
         for(Character character : input) {
             stringInput += character;
         }
-        return this.machine.parse(stringInput);
+        return this.getMachine().parse(stringInput);
     }
 
     @Override
     public synchronized LexerMachine getMachine() {
-        return machine;
+//        return machine;
+        return LexerMachineFactory.getMachine(this);
     }
 
     public TokenType getTokenType() {
