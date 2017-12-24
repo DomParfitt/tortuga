@@ -95,11 +95,11 @@ public class LexerMachineFactory {
     public static LexerMachine getIdentifierMachine() {
         // (letter|CLOSE_PAREN)(letter|digit|CLOSE_PAREN)*
 
-        LexerMachine letterOrUnderscore = new UnionFSM(LexerMachineFactory.getLetterMachine(), new UnionFSM("CLOSE_PAREN"));
+        LexerMachine letterOrUnderscore = new UnionFSM(getLetterMachine(), new UnionFSM("_"));
 
-        LexerMachine letterOrDigit = LexerMachineFactory.getLetterOrDigitMachine();
+        LexerMachine letterOrDigit = getLetterOrDigitMachine();
 
-        LexerMachine letterOrDigitOrUnderscore = new UnionFSM(letterOrDigit, new UnionFSM("CLOSE_PAREN"));
+        LexerMachine letterOrDigitOrUnderscore = new UnionFSM(letterOrDigit, new UnionFSM("_"));
 
         LexerMachine loopOnLetterOrDigitOrUnderscore = new LoopingFSM(letterOrDigitOrUnderscore);
 
@@ -131,8 +131,8 @@ public class LexerMachineFactory {
     }
 
     public static LexerMachine getFloatLiteralMachine() {
-//        LexerMachine intLiteral = getIntLiteralMachine();
-        return new FollowedByFSM(new FollowedByFSM(getIntLiteralMachine(), getPeriodMachine()), getIntLiteralMachine());
+        LexerMachine intAndPeriod = new FollowedByFSM(getIntLiteralMachine(), getPeriodMachine());
+        return new FollowedByFSM(intAndPeriod, getIntLiteralMachine());
     }
 
     public static LexerMachine getStringLiteralMachine() {
@@ -201,6 +201,6 @@ public class LexerMachineFactory {
     }
 
     private static LexerMachine getLetterOrDigitMachine() {
-        return new UnionFSM(LexerMachineFactory.getLetterMachine(), LexerMachineFactory.getDigitMachine());
+        return new UnionFSM(getLetterMachine(), getDigitMachine());
     }
 }
