@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 public class TestFiniteStateMachines {
 
-    CharacterFSM fsm, inner;
+    LexerMachine fsm, inner;
     String characters;
 
     @Before
@@ -720,7 +720,7 @@ public class TestFiniteStateMachines {
     public void testLoopingOnUnionFollowedByFollowedBy() {
 
         fsm = new FollowedByFSM(new UnionFSM("ab"), new FollowedByFSM("c"));
-        CharacterFSM loop = new LoopingFSM(fsm);
+        LexerMachine loop = new LoopingFSM(fsm);
         System.out.print("((a|b)c)*");
 
         try {
@@ -753,7 +753,7 @@ public class TestFiniteStateMachines {
     @Test
 // ((a|b)|(c|d))*
     public void testLoopingOnUnionUnionUnion() {
-        CharacterFSM union = new UnionFSM(new UnionFSM("ab"), new UnionFSM("cd"));
+        LexerMachine union = new UnionFSM(new UnionFSM("ab"), new UnionFSM("cd"));
         fsm = new LoopingFSM(union);
         System.out.print("((a|b)|(c|d))*");
 

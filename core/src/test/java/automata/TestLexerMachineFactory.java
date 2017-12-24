@@ -2,14 +2,14 @@ package automata;
 
 import org.junit.Test;
 
-public class TestFSMFactory {
+public class TestLexerMachineFactory {
 
     private FiniteStateMachine fsm;
 
     @Test
     public void testGetIdentifierFSM() {
 //        try {
-            fsm = FSMFactory.getIdentifierFSM();
+            fsm = LexerMachineFactory.getIdentifierMachine();
 //        } catch (StackOverflowError e) {
 //            System.err.println("Stack overflow");
 //            fail();
