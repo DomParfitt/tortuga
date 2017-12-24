@@ -1,5 +1,6 @@
 package grammar;
 
+import automata.LexerMachine;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -23,7 +24,7 @@ public class TestLexerGrammar {
     public void testStringLiteral() {
         grammar = LexerGrammar.STRING;
 
-        assertTrue(grammar.parse("\"Hello, world\""));
+        assertTrue(grammar.parse("\"Hello, world!\""));
     }
 
     @Test
