@@ -6,7 +6,7 @@ import utils.StringUtils;
  * Concrete implementation of a FiniteStateMachine representing the case of
  * multiple tokens, whereby consuming any one of them will pass the validation
  */
-public class UnionFSM extends CharacterFSM {
+public class UnionFSM extends LexerMachine {
 
     public UnionFSM(String characters) {
         super();
@@ -17,9 +17,9 @@ public class UnionFSM extends CharacterFSM {
         this.transitions.add(transition);
     }
 
-    public UnionFSM(CharacterFSM first, CharacterFSM second) {
-        CharacterFSM firstCopy = first.copy();
-        CharacterFSM secondCopy = second.copy();
+    public UnionFSM(LexerMachine first, LexerMachine second) {
+        LexerMachine firstCopy = first.copy();
+        LexerMachine secondCopy = second.copy();
         this.initialise(firstCopy);
 
         State secondInitial = secondCopy.getInitialState();
@@ -63,8 +63,8 @@ public class UnionFSM extends CharacterFSM {
     }
 
     @Override
-    public CharacterFSM copy() {
-        CharacterFSM copy = new UnionFSM("");
+    public LexerMachine copy() {
+        LexerMachine copy = new UnionFSM("");
         copy.stateCounter = this.stateCounter;
         copy.terminalStateIndex = this.terminalStateIndex;
         copy.states = this.copyStates();
