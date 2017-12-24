@@ -8,7 +8,7 @@ public interface Grammar<T> {
 
 //    public boolean parse(T input);
 
-    public boolean parse(List<T> input);
+    boolean parse(List<T> input);
 
-    public FiniteStateMachine<T> getMachine();
+    FiniteStateMachine<T> getMachine();
 }
