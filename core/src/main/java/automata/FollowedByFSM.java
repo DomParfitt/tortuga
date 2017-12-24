@@ -5,7 +5,7 @@ package automata;
  * of some token A followed by another token B. These tokens can either
  * be characters or other FSMs
  */
-public class FollowedByFSM extends CharacterFSM {
+public class FollowedByFSM extends LexerMachine {
 
 
     public FollowedByFSM(String characters) {
@@ -22,9 +22,9 @@ public class FollowedByFSM extends CharacterFSM {
 
     }
 
-    public FollowedByFSM(CharacterFSM first, CharacterFSM second) {
-        CharacterFSM firstCopy = first.copy();
-        CharacterFSM secondCopy = second.copy();
+    public FollowedByFSM(LexerMachine first, LexerMachine second) {
+        LexerMachine firstCopy = first.copy();
+        LexerMachine secondCopy = second.copy();
         this.initialise(firstCopy);
 
         State secondInitial = secondCopy.getInitialState();
@@ -73,8 +73,8 @@ public class FollowedByFSM extends CharacterFSM {
     }
 
     @Override
-    public CharacterFSM copy() {
-        CharacterFSM copy = new FollowedByFSM("");
+    public LexerMachine copy() {
+        LexerMachine copy = new FollowedByFSM("");
         copy.stateCounter = this.stateCounter;
         copy.terminalStateIndex = this.terminalStateIndex;
         copy.states = this.copyStates();
