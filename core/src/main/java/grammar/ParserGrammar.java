@@ -2,16 +2,18 @@ package grammar;
 
 import automata.PDAFactory;
 import automata.PushdownAutomaton;
-import grammar.Grammar;
-import grammar.LexerGrammar;
 
 import java.util.List;
 
 public enum ParserGrammar implements Grammar<LexerGrammar> {
 
-    MATH_STATEMENT(PDAFactory.getMathematicalStatement());
+    MATH_STATEMENT;
 
     PushdownAutomaton machine;
+
+    ParserGrammar() {
+        this.machine = PDAFactory.getMachine(this);
+    }
 
     ParserGrammar(PushdownAutomaton machine) {
         this.machine = machine;
