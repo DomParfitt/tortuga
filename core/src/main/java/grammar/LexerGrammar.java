@@ -1,7 +1,6 @@
 package grammar;
 
 import automata.*;
-import grammar.Grammar;
 import lexer.TokenType;
 import utils.StringUtils;
 
@@ -11,51 +10,64 @@ public enum LexerGrammar implements Grammar<Character> {
 
     //TokenTypes defined in order of precedence, from lowest to highest
 
-    //Literals
-    WHITESPACE(TokenType.LITERAL, new LoopingFSM(new UnionFSM(" \n\t\r\f"))),
-    NEWLINE(TokenType.LITERAL, new LoopingFSM(new UnionFSM("\n\r"))),
-    QUOTE(TokenType.LITERAL, new FollowedByFSM("\"")),
-    LETTER(TokenType.LITERAL, new UnionFSM("abcdefghifjklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")),
-    DIGIT(TokenType.LITERAL, new UnionFSM("0123456789")),
+    //Literals - these should be lowest precedence, i.e. they are mostly used to form other entries rather
+    //than existing as valid tokens in a program
+    WHITESPACE(TokenType.LITERAL),
+    NEWLINE(TokenType.LITERAL),
+    QUOTE(TokenType.LITERAL),
+    LETTER(TokenType.LITERAL),
+    DIGIT(TokenType.LITERAL),
 
-    //Primitive literals
-    INT(TokenType.LITERAL, new LoopingFSM(DIGIT.getMachine())),
-    STRING(TokenType.LITERAL, new FollowedByFSM(new FollowedByFSM(QUOTE.getMachine(), new LoopingFSM(LETTER.getMachine())), QUOTE.getMachine())),
-    //TODO: String doesn't work
-
-    //Identifiers
-    IDENTIFIER(TokenType.IDENTIFIER, FSMFactory.getIdentifierFSM()),
+    //Identifiers - must be lowest precedence of valid tokens within the program to ensure that any uses of
+    //valid keywords (such as if, else, while, etc.) are lexed as keywords and not identifiers
+    IDENTIFIER(TokenType.IDENTIFIER),
 
     //Separators
-    OPENPAREN(TokenType.SEPARATOR, new UnionFSM("([{")),
-    CLOSEPAREN(TokenType.SEPARATOR, new UnionFSM(")]}")),
-    COMMA(TokenType.SEPARATOR, new UnionFSM(",")),
-    SEMICOLON(TokenType.SEPARATOR, new UnionFSM(";")),
+    OPEN_PAREN(TokenType.SEPARATOR),
+    CLOSE_PAREN(TokenType.SEPARATOR),
+    COMMA(TokenType.SEPARATOR),
+    PERIOD(TokenType.SEPARATOR),
+    SEMICOLON(TokenType.SEPARATOR),
+
+    //Primitive literals
+    INT(TokenType.LITERAL),
+    FLOAT(TokenType.LITERAL),
+    STRING(TokenType.LITERAL),
+    BOOLEAN(TokenType.LITERAL),
+    //TODO: String doesn't work
 
     //Operators
-    PLUS(TokenType.OPERATOR, new FollowedByFSM("+")),
-    MINUS(TokenType.OPERATOR, new FollowedByFSM("-")),
-    MULTIPLY(TokenType.OPERATOR, new FollowedByFSM("*")),
-    DIVIDE(TokenType.OPERATOR, new FollowedByFSM("/")),
-    ASSIGNMENT(TokenType.OPERATOR, new FollowedByFSM("=")),
-    EQUALITY(TokenType.OPERATOR, new FollowedByFSM("==")),
-    GREATERTHAN(TokenType.OPERATOR, new FollowedByFSM(">")),
-    GREATERTHANEQUALS(TokenType.OPERATOR, new FollowedByFSM(">=")),
-    LESSTHAN(TokenType.OPERATOR, new FollowedByFSM("<")),
-    LESSTHANEQUALS(TokenType.OPERATOR, new FollowedByFSM("<=")),
+    PLUS(TokenType.OPERATOR),
+    MINUS(TokenType.OPERATOR),
+    MULTIPLY(TokenType.OPERATOR),
+    DIVIDE(TokenType.OPERATOR),
+    ASSIGNMENT(TokenType.OPERATOR),
+    EQUALITY(TokenType.OPERATOR),
+    GREATER_THAN(TokenType.OPERATOR),
+    GREATER_THAN_EQUALS(TokenType.OPERATOR),
+    LESS_THAN(TokenType.OPERATOR),
+    LESS_THAN_EQUALS(TokenType.OPERATOR),
+
+    //Types
+    //TODO: Add types
 
     //Keywords
-    IF(TokenType.KEYWORD, new FollowedByFSM("if")),
-    ELSE(TokenType.KEYWORD, new FollowedByFSM("else")),
-    WHILE(TokenType.KEYWORD, new FollowedByFSM("while")),
-    FOR(TokenType.KEYWORD, new FollowedByFSM("for"))
+    IF(TokenType.KEYWORD),
+    ELSE(TokenType.KEYWORD),
+    WHILE(TokenType.KEYWORD),
+    FOR(TokenType.KEYWORD)
     ;
 
     private String value; //TODO: Not sure if this is necessary
     private TokenType tokenType;
-    private CharacterFSM machine;
+    private LexerMachine machine;
 
-    LexerGrammar(TokenType tokenType, CharacterFSM machine) {
+    LexerGrammar(TokenType tokenType) {
+        this.tokenType = tokenType;
+        this.machine = LexerMachineFactory.getMachine(this);
+    }
+
+    LexerGrammar(TokenType tokenType, LexerMachine machine) {
         this.tokenType = tokenType;
         this.machine = machine;
     }
@@ -79,7 +91,7 @@ public enum LexerGrammar implements Grammar<Character> {
     }
 
     @Override
-    public CharacterFSM getMachine() {
+    public synchronized LexerMachine getMachine() {
         return machine;
     }
 
