@@ -1,6 +1,6 @@
 package grammar;
 
-import automata.PDAFactory;
+import automata.ParserGrammarFactory;
 import automata.PushdownAutomaton;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public enum ParserGrammar implements Grammar<LexerGrammar> {
 //    PushdownAutomaton machine;
 
 //    ParserGrammar() {
-//        this.machine = PDAFactory.getMachine(this);
+//        this.machine = ParserGrammarFactory.getMachine(this);
 //    }
 
 //    ParserGrammar(PushdownAutomaton machine) {
@@ -38,6 +38,6 @@ public enum ParserGrammar implements Grammar<LexerGrammar> {
 
     @Override
     public PushdownAutomaton getMachine() {
-        return PDAFactory.getMachine(this);
+        return ParserGrammarFactory.getMachine(this);
     }
 }
