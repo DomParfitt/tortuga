@@ -5,7 +5,7 @@ import grammar.LexerGrammar;
 /**
  * Factory class with static methods to get specific LexerMachines
  */
-public class LexerMachineFactory {
+public class LexerGrammarFactory {
 
     public static LexerMachine getMachine(LexerGrammar grammar) {
         switch (grammar) {
