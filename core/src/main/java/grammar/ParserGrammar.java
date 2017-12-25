@@ -7,7 +7,14 @@ import java.util.List;
 
 public enum ParserGrammar implements Grammar<LexerGrammar> {
 
-    MATH_STATEMENT;
+    BOOLEAN_EXPRESSION,
+    INT_EXPRESSION,
+    FLOAT_EXPRESSION,
+    MATH_EXPRESSION,
+    ASSIGNMENT_STATEMENT,
+    IF_STATEMENT,
+    FOR_STATEMENT,
+    WHILE_STATEMENT;
 
 //    PushdownAutomaton machine;
 

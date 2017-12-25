@@ -35,7 +35,6 @@ public enum LexerGrammar implements Grammar<Character> {
     FLOAT_LITERAL(TokenType.LITERAL),
     STRING_LITERAL(TokenType.LITERAL),
     BOOLEAN_LITERAL(TokenType.LITERAL),
-    //TODO: String doesn't work
 
     //Operators
     PLUS(TokenType.OPERATOR),
