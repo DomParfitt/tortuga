@@ -23,7 +23,7 @@ public class TestLexerGrammar {
     public void testStringLiteral() {
         grammar = LexerGrammar.STRING_LITERAL;
 
-        parsePass("\"Hello, world!\"");
+        parsePass("\"Hello world\"");
     }
 
     @Test

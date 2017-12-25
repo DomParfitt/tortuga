@@ -1,8 +1,8 @@
 package automata;
 
+import grammar.LexerGrammar;
 import lexer.Lexer;
 import lexer.Token;
-import grammar.LexerGrammar;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,7 +23,7 @@ public class TestPushdownAutomata {
 
     @Test
     public void testAdditionStatement() {
-        pda = PDAFactory.getMathematicalStatement();
+        pda = PDAFactory.getMathematicalExpression();
         List<Token> tokens = lexer.tokenize("(10) + 326");
         List<LexerGrammar> lexerGrammars = new ArrayList<>();
 
