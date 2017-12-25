@@ -9,15 +9,15 @@ public enum ParserGrammar implements Grammar<LexerGrammar> {
 
     MATH_STATEMENT;
 
-    PushdownAutomaton machine;
+//    PushdownAutomaton machine;
 
-    ParserGrammar() {
-        this.machine = PDAFactory.getMachine(this);
-    }
+//    ParserGrammar() {
+//        this.machine = PDAFactory.getMachine(this);
+//    }
 
-    ParserGrammar(PushdownAutomaton machine) {
-        this.machine = machine;
-    }
+//    ParserGrammar(PushdownAutomaton machine) {
+//        this.machine = machine;
+//    }
 
 //    @Override
 //    public boolean parse(LexerGrammar input) {
@@ -26,11 +26,11 @@ public enum ParserGrammar implements Grammar<LexerGrammar> {
 
     @Override
     public boolean parse(List<LexerGrammar> input) {
-        return this.machine.parse(input);
+        return this.getMachine().parse(input);
     }
 
     @Override
     public PushdownAutomaton getMachine() {
-        return machine;
+        return PDAFactory.getMachine(this);
     }
 }

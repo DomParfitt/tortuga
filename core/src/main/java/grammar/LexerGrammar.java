@@ -1,6 +1,7 @@
 package grammar;
 
-import automata.*;
+import automata.LexerMachine;
+import automata.LexerMachineFactory;
 import lexer.TokenType;
 import utils.StringUtils;
 
@@ -30,10 +31,10 @@ public enum LexerGrammar implements Grammar<Character> {
     SEMICOLON(TokenType.SEPARATOR),
 
     //Primitive literals
-    INT(TokenType.LITERAL),
-    FLOAT(TokenType.LITERAL),
-    STRING(TokenType.LITERAL),
-    BOOLEAN(TokenType.LITERAL),
+    INT_LITERAL(TokenType.LITERAL),
+    FLOAT_LITERAL(TokenType.LITERAL),
+    STRING_LITERAL(TokenType.LITERAL),
+    BOOLEAN_LITERAL(TokenType.LITERAL),
     //TODO: String doesn't work
 
     //Operators
@@ -50,6 +51,9 @@ public enum LexerGrammar implements Grammar<Character> {
 
     //Types
     //TODO: Add types
+    INT(TokenType.KEYWORD),
+    FLOAT(TokenType.KEYWORD),
+    BOOLEAN(TokenType.KEYWORD),
 
     //Keywords
     IF(TokenType.KEYWORD),

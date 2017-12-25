@@ -31,13 +31,13 @@ public class LexerMachineFactory {
                 return getPeriodMachine();
             case SEMICOLON:
                 return getSemiColonMachine();
-            case INT:
+            case INT_LITERAL:
                 return getIntLiteralMachine();
-            case FLOAT:
+            case FLOAT_LITERAL:
                 return getFloatLiteralMachine();
-            case STRING:
+            case STRING_LITERAL:
                 return getStringLiteralMachine();
-            case BOOLEAN:
+            case BOOLEAN_LITERAL:
                 return getBooleanLiteralMachine();
             case PLUS:
                 return getPlusMachine();
@@ -59,6 +59,12 @@ public class LexerMachineFactory {
                 return getLessThanMachine();
             case LESS_THAN_EQUALS:
                 return getLessThanOrEqualsMachine();
+            case INT:
+                return getIntTypeMachine();
+            case FLOAT:
+                return getFloatTypeMachine();
+            case BOOLEAN:
+                return getBooleanTypeMachine();
             case IF:
                 return getIfMachine();
             case ELSE:
@@ -67,9 +73,9 @@ public class LexerMachineFactory {
                 return getWhileMachine();
             case FOR:
                 return getForMachine();
-            default:
-                return null;
         }
+
+        return null;
     }
 
     public static LexerMachine getWhitespaceMachine() {
@@ -198,6 +204,18 @@ public class LexerMachineFactory {
 
     public static LexerMachine getForMachine() {
         return  new FollowedByFSM("for");
+    }
+
+    public static LexerMachine getIntTypeMachine() {
+        return new FollowedByFSM("int");
+    }
+
+    public static LexerMachine getFloatTypeMachine() {
+        return new FollowedByFSM("float");
+    }
+
+    public static LexerMachine getBooleanTypeMachine() {
+        return new FollowedByFSM("boolean");
     }
 
     private static LexerMachine getLetterOrDigitMachine() {

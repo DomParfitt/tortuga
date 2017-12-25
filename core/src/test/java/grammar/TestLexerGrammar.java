@@ -1,6 +1,5 @@
 package grammar;
 
-import automata.LexerMachine;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -22,28 +21,28 @@ public class TestLexerGrammar {
 
     @Test
     public void testStringLiteral() {
-        grammar = LexerGrammar.STRING;
+        grammar = LexerGrammar.STRING_LITERAL;
 
-        assertTrue(grammar.parse("\"Hello, world!\""));
+        parsePass("\"Hello, world!\"");
     }
 
     @Test
     public void testIntLiteral() {
-        grammar = LexerGrammar.INT;
+        grammar = LexerGrammar.INT_LITERAL;
 
-        assertTrue(grammar.parse("1"));
-        assertFalse(grammar.parse("11.0"));
+        parsePass("1");
+        parseFail("11.0");
     }
 
     @Test
     public void testFloatLiteral() {
-        grammar = LexerGrammar.FLOAT;
+        grammar = LexerGrammar.FLOAT_LITERAL;
 
-        assertTrue(grammar.parse("1.0"));
-        assertTrue(grammar.parse("11.0"));
-        assertTrue(grammar.parse("1.01"));
-        assertTrue(grammar.parse("11.01"));
-        assertFalse(grammar.parse("1"));
+        parsePass("1.0");
+        parsePass("11.0");
+        parsePass("1.01");
+        parsePass("11.01");
+        parseFail("1");
     }
 
     private void parsePass(String input) {
