@@ -1,5 +1,7 @@
 package automata;
 
+import grammar.LexerGrammar;
+
 /**
  * Concrete implementation of a FiniteStateMachine, which validates on zero or
  * more of the inner FSM
@@ -8,6 +10,10 @@ public class LoopingFSM extends LexerMachine {
 
     public LoopingFSM() {
 
+    }
+
+    public LoopingFSM(LexerGrammar grammar) {
+        this(grammar.getMachine());
     }
 
     public LoopingFSM(LexerMachine fsm) {

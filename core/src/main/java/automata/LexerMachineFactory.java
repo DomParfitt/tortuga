@@ -99,9 +99,9 @@ public class LexerMachineFactory {
     }
 
     public static LexerMachine getIdentifierMachine() {
-        // (letter|CLOSE_PAREN)(letter|digit|CLOSE_PAREN)*
+        // (letter|_)(letter|digit|_)*
 
-        LexerMachine letterOrUnderscore = new UnionFSM(getLetterMachine(), new UnionFSM("_"));
+        LexerMachine letterOrUnderscore = new UnionFSM(LexerGrammar.LETTER, new UnionFSM("_"));
 
         LexerMachine letterOrDigit = getLetterOrDigitMachine();
 
@@ -133,17 +133,23 @@ public class LexerMachineFactory {
     }
 
     public static LexerMachine getIntLiteralMachine() {
-        return  new LoopingFSM(getDigitMachine());
+       return new LoopingFSM(LexerGrammar.DIGIT); //TODO: Is this form preferable?
+//        return  new LoopingFSM(getDigitMachine());
     }
 
     public static LexerMachine getFloatLiteralMachine() {
-        LexerMachine intAndPeriod = new FollowedByFSM(getIntLiteralMachine(), getPeriodMachine());
-        return new FollowedByFSM(intAndPeriod, getIntLiteralMachine());
+//        LexerMachine intAndPeriod = new FollowedByFSM(getIntLiteralMachine(), getPeriodMachine());
+//        return new FollowedByFSM(intAndPeriod, getIntLiteralMachine());
+        LexerMachine intAndPeriod = new FollowedByFSM(LexerGrammar.INT_LITERAL, LexerGrammar.PERIOD);
+        return new FollowedByFSM(intAndPeriod, LexerGrammar.INT_LITERAL);
+
     }
 
     public static LexerMachine getStringLiteralMachine() {
-        //TODO: Fix implementation
-        return new FollowedByFSM(new FollowedByFSM(getQuoteMachine(), new LoopingFSM(getLetterMachine())), getQuoteMachine());
+        //TODO: Fix implementation, how to allow any character between quotes?
+        LexerMachine letterOrWhitespace = new UnionFSM(LexerGrammar.LETTER, LexerGrammar.WHITESPACE);
+        LexerMachine lettersOrWhitespaces = new LoopingFSM(letterOrWhitespace);
+        return new FollowedByFSM(new FollowedByFSM(LexerGrammar.QUOTE, lettersOrWhitespaces), LexerGrammar.QUOTE);
     }
 
     public static LexerMachine getBooleanLiteralMachine() {
@@ -219,6 +225,7 @@ public class LexerMachineFactory {
     }
 
     private static LexerMachine getLetterOrDigitMachine() {
-        return new UnionFSM(getLetterMachine(), getDigitMachine());
+//        return new UnionFSM(getLetterMachine(), getDigitMachine());
+        return new UnionFSM(LexerGrammar.LETTER, LexerGrammar.DIGIT);
     }
 }

@@ -1,5 +1,6 @@
 package automata;
 
+import grammar.LexerGrammar;
 import utils.StringUtils;
 
 /**
@@ -15,6 +16,18 @@ public class UnionFSM extends LexerMachine {
         this.terminalStateIndex = this.stateCounter - 1;
         Transition<Character> transition = new Transition<Character>(StringUtils.toCharacterList(characters), this.getInitialState(), this.getTerminalState());
         this.transitions.add(transition);
+    }
+
+    public UnionFSM(LexerGrammar first, LexerGrammar second) {
+        this(first.getMachine(), second.getMachine());
+    }
+
+    public UnionFSM(LexerGrammar first, LexerMachine second) {
+        this(first.getMachine(), second);
+    }
+
+    public UnionFSM(LexerMachine first, LexerGrammar second) {
+        this(first, second.getMachine());
     }
 
     public UnionFSM(LexerMachine first, LexerMachine second) {

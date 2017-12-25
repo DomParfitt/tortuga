@@ -1,5 +1,7 @@
 package automata;
 
+import grammar.LexerGrammar;
+
 /**
  * Concrete implementation of FiniteStateMachine representing the case
  * of some token A followed by another token B. These tokens can either
@@ -20,6 +22,18 @@ public class FollowedByFSM extends LexerMachine {
         }
         this.getTerminalState().setAcceptingState(true);
 
+    }
+
+    public FollowedByFSM(LexerGrammar first, LexerGrammar second) {
+        this(first.getMachine(), second.getMachine());
+    }
+
+    public FollowedByFSM(LexerGrammar first, LexerMachine second) {
+        this(first.getMachine(), second);
+    }
+
+    public FollowedByFSM(LexerMachine first, LexerGrammar second) {
+        this(first, second.getMachine());
     }
 
     public FollowedByFSM(LexerMachine first, LexerMachine second) {
