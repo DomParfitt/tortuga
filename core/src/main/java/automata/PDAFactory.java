@@ -33,9 +33,11 @@ public class PDAFactory {
     }
 
     public PushdownAutomaton getIntExpression() {
+        List<State> states = PDAFactory.getListOfStates(2, 1);
+        Set<Transition<LexerGrammar>> transitions = new HashSet<>();
+        transitions.add(new PDATransition(LexerGrammar.INT_LITERAL, new StackAction(StackAction.StackActionType.NONE), states.get(0), states.get(1)));
 
-
-        return null;
+        return new PushdownAutomaton(states, transitions);
     }
 
     public static PushdownAutomaton getMathematicalExpression() {
