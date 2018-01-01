@@ -79,7 +79,7 @@ public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
     }
 
     @Override
-    public FiniteStateMachine<LexerGrammar> copy() {
+    public PushdownAutomaton copy() {
         return null;
     }
 
@@ -114,6 +114,7 @@ public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
             return false;
         }
     }
+
 
 
 }
