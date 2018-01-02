@@ -1,7 +1,6 @@
-package automata;
+package grammar;
 
-import grammar.LexerGrammar;
-import grammar.ParserGrammar;
+import automata.*;
 
 import java.util.*;
 

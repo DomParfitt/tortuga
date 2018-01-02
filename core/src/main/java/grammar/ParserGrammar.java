@@ -1,6 +1,5 @@
 package grammar;
 
-import automata.ParserGrammarFactory;
 import automata.PushdownAutomaton;
 
 import java.util.List;
