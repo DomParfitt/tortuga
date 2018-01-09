@@ -75,15 +75,15 @@ public class UnionFSM extends LexerMachine {
 
     }
 
-    @Override
-    public LexerMachine copy() {
-        LexerMachine copy = new UnionFSM("");
-        copy.stateCounter = this.stateCounter;
-        copy.terminalStateIndex = this.terminalStateIndex;
-        copy.states = this.copyStates();
-        copy.transitions = this.copyTransitions(copy.states);
-
-        return copy;
-    }
+//    @Override
+//    public LexerMachine copy() {
+//        LexerMachine copy = new UnionFSM("");
+//        copy.stateCounter = this.stateCounter;
+//        copy.terminalStateIndex = this.terminalStateIndex;
+//        copy.states = this.copyStates();
+//        copy.transitions = this.copyTransitions(copy.states);
+//
+//        return copy;
+//    }
 
 }
