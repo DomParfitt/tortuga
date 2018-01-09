@@ -80,7 +80,14 @@ public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
 
     @Override
     public PushdownAutomaton copy() {
-        return null;
+        PushdownAutomaton copy = new PushdownAutomaton();
+        //copy.stack
+        copy.stateCounter = this.stateCounter;
+        copy.terminalStateIndex = this.terminalStateIndex;
+        copy.states = this.copyStates();
+        copy.transitions = this.copyTransitions(copy.states);
+
+        return copy;
     }
 
 //    @Override
@@ -96,7 +103,7 @@ public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
 //
     //TODO: Rename this to getResultingState and resolve Transition to a single type
     private PDATransition getTransition(LexerGrammar token) {
-        for(Transition transition : this.transitions) {
+        for(Transition<LexerGrammar> transition : this.transitions) {
             if (transition.getFromState().equals(this.getCurrentState())) {
                 if (transition.hasTransition(token)) {
                     return (PDATransition) transition;
