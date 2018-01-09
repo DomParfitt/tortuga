@@ -138,6 +138,12 @@ public abstract class FiniteStateMachine<T> {
         }
     }
 
+    public FiniteStateMachine<T> concat(FiniteStateMachine<T> other) {
+        FiniteStateMachine<T> copy = this.copy();
+        copy.concatenate(other);
+        return copy;
+    }
+
     public void concatenate(FiniteStateMachine<T> other) {
         FiniteStateMachine<T> copy = other.copy();
 
