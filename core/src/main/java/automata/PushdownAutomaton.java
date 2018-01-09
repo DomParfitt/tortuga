@@ -18,7 +18,7 @@ public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
         //TODO: Implement
         super();
         this.stack = new Stack<>();
-        this.transitions = new TreeSet<>();
+//        this.transitions = new TreeSet<>();
     }
 
     public PushdownAutomaton(List<State> states, Set<Transition<LexerGrammar>> transitions) {
@@ -78,19 +78,19 @@ public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
 //        return false; //TODO: Probably remove this
     }
 
-    @Override
-    public void concatenate(FiniteStateMachine<LexerGrammar> other) {
+    public void addTransition(State fromState, State toState, LexerGrammar token, StackAction stackAction) {
+      super.addTransition(new PDATransition(token, stackAction, fromState, toState));
+    }
+
+    public void addTransition(int fromStateNumber, int toStateNumber, LexerGrammar token, StackAction stackAction) {
+//        this.addTransition(this.s);
         //TODO: Implement
     }
 
-    @Override
-    public void union(FiniteStateMachine<LexerGrammar> other) {
-        //TODO: Implement
-    }
+    public void addStackAction(State fromState, State toState, LexerGrammar token, StackAction stackAction) {
+        PDATransition transition = this.getTransition(fromState, toState, token);
+        transition.stackAction = stackAction;
 
-    @Override
-    public void loop() {
-        //TODO: Implement
     }
 
     @Override
@@ -120,6 +120,18 @@ public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
     private PDATransition getTransition(LexerGrammar token) {
         for(Transition<LexerGrammar> transition : this.transitions) {
             if (transition.getFromState().equals(this.getCurrentState())) {
+                if (transition.hasTransition(token)) {
+                    return (PDATransition) transition;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private PDATransition getTransition(State fromState, State toState, LexerGrammar token) {
+        for(Transition<LexerGrammar> transition : this.transitions) {
+            if (transition.getFromState().equals(fromState) && transition.getToState().equals(toState)) {
                 if (transition.hasTransition(token)) {
                     return (PDATransition) transition;
                 }
