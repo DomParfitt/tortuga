@@ -79,6 +79,21 @@ public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
     }
 
     @Override
+    public void concatenate(FiniteStateMachine<LexerGrammar> other) {
+        //TODO: Implement
+    }
+
+    @Override
+    public void union(FiniteStateMachine<LexerGrammar> other) {
+        //TODO: Implement
+    }
+
+    @Override
+    public void loop() {
+        //TODO: Implement
+    }
+
+    @Override
     public PushdownAutomaton copy() {
         PushdownAutomaton copy = new PushdownAutomaton();
         //copy.stack
