@@ -1,6 +1,10 @@
 package automata;
 
+import grammar.LexerGrammar;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -45,6 +49,29 @@ public class LexerMachineTest {
         assertTrue(union.parse("aaaa"));
         assertTrue(union.parse("abababa"));
 
+
+    }
+
+    @Test
+    public void loopPDA() {
+        PushdownAutomaton pda = new PushdownAutomaton();
+        State state1 = new State(0, false);
+        state1.setCurrentState(true);
+        State state2 = new State(1, true);
+        pda.addState(state1);
+        pda.addState(state2);
+        PDATransition transition = new PDATransition(LexerGrammar.MINUS, new StackAction(StackAction.StackActionType.NONE), state1, state2);
+        pda.addTransition(transition);
+
+        assertTrue(pda.parse(LexerGrammar.MINUS));
+
+        pda.loop();
+        List<LexerGrammar> tokens = new ArrayList<>();
+        tokens.add(LexerGrammar.MINUS);
+        tokens.add(LexerGrammar.MINUS);
+        tokens.add(LexerGrammar.MINUS);
+
+        assertTrue(pda.parse(tokens));
 
     }
 }

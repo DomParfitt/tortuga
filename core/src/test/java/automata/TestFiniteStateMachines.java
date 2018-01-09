@@ -81,8 +81,9 @@ public class TestFiniteStateMachines {
     @Test
     // a*
     public void testLooping() {
-        fsm = new LoopingFSM(new UnionFSM("a"));
-
+//        fsm = new LoopingFSM(new UnionFSM("a"));
+        fsm = new UnionFSM("a");
+        fsm.loop();
         System.out.print("a*");
 
         try {
