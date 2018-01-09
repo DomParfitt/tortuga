@@ -1,5 +1,7 @@
 package automata;
 
+import grammar.Grammar;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -135,6 +137,20 @@ public abstract class FiniteStateMachine<T> {
             return false;
         }
     }
+
+    public abstract void concatenate(FiniteStateMachine<T> other);
+
+    public final void concatenate(Grammar<T> grammar) {
+        this.concatenate(grammar.getMachine());
+    }
+
+    public abstract void union(FiniteStateMachine<T> other);
+
+    public final void union(Grammar<T> grammar) {
+        this.union(grammar.getMachine());
+    }
+
+    public abstract void loop();
 
     public abstract FiniteStateMachine<T> copy();
 
