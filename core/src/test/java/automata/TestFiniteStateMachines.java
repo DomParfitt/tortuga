@@ -83,7 +83,7 @@ public class TestFiniteStateMachines {
     public void testLooping() {
 //        fsm = new LoopingFSM(new UnionFSM("a"));
         fsm = new UnionFSM("a");
-        fsm.loop();
+        fsm = fsm.loop();
         System.out.print("a*");
 
         try {
@@ -120,7 +120,7 @@ public class TestFiniteStateMachines {
     // (a|b)*
     public void testLoopingUnion() {
         fsm = new UnionFSM("ab");
-        fsm.loop();
+        fsm = fsm.loop();
 //        fsm = new LoopingFSM(inner);
         System.out.print("(a|b)*");
 
@@ -155,7 +155,7 @@ public class TestFiniteStateMachines {
     // (abc)*
     public void testLoopingFollowedBy() {
         fsm = new FollowedByFSM(characters);
-        fsm.loop();
+        fsm = fsm.loop();
 //        fsm = new LoopingFSM(inner);
         System.out.print("(abc)*");
 
@@ -200,7 +200,7 @@ public class TestFiniteStateMachines {
     public void testSingleFollowedByFollowedBy() {
 
         fsm = new FollowedByFSM("a");//new FollowedByFSM(new FollowedByFSM("a"), new FollowedByFSM("bc"));
-        fsm.concatenate(new FollowedByFSM("bc"));
+        fsm = fsm.concatenate(new FollowedByFSM("bc"));
         System.out.print("a(bc)");
 
         try {
@@ -232,7 +232,7 @@ public class TestFiniteStateMachines {
     public void testFollowedByFollowedBySingle() {
 
         fsm = new FollowedByFSM("ab");//new FollowedByFSM(new FollowedByFSM("ab"), new FollowedByFSM("c"));
-        fsm.concatenate(new FollowedByFSM("c"));
+        fsm = fsm.concatenate(new FollowedByFSM("c"));
         System.out.print("(ab)c)");
 
         try {
@@ -264,7 +264,7 @@ public class TestFiniteStateMachines {
     public void testUnionFollowedBySingle() {
 
         fsm = new UnionFSM("ab");//new FollowedByFSM(new UnionFSM("ab"), new FollowedByFSM("c"));
-        fsm.concatenate(new FollowedByFSM("c"));
+        fsm = fsm.concatenate(new FollowedByFSM("c"));
         System.out.print("(a|b)c");
 
         try {
@@ -294,7 +294,7 @@ public class TestFiniteStateMachines {
     public void testSingleFollowedByUnion() {
 
         fsm = new FollowedByFSM("a");//new FollowedByFSM(new FollowedByFSM("a"), new UnionFSM("bc"));
-        fsm.concatenate(new UnionFSM("bc"));
+        fsm = fsm.concatenate(new UnionFSM("bc"));
         System.out.print("a(b|c)");
 
         try {
@@ -328,8 +328,8 @@ public class TestFiniteStateMachines {
     // a|(bc)
     public void testSingleUnionFollowedBy() {
 
-        fsm = new UnionFSM("a");//new UnionFSM(new UnionFSM("a"), new FollowedByFSM("bc"));
-        fsm.union(new FollowedByFSM("bc"));
+        fsm = new UnionFSM("a").union(new FollowedByFSM("bc"));//new UnionFSM(new UnionFSM("a"), new FollowedByFSM("bc"));
+//        fsm = fsm.union(new FollowedByFSM("bc"));
         System.out.print("a|(bc)");
 
         try {
@@ -355,8 +355,7 @@ public class TestFiniteStateMachines {
     @Test
     // (ab)|c
     public void testFollowedByUnionSingle() {
-        fsm = new FollowedByFSM("ab");//new UnionFSM(new FollowedByFSM("ab"), new FollowedByFSM("c"));
-        fsm.union(new FollowedByFSM("c"));
+        fsm = new FollowedByFSM("ab").union(new FollowedByFSM("c"));//new UnionFSM(new FollowedByFSM("ab"), new FollowedByFSM("c"));
         System.out.print("a|(bc)");
 
         try {
@@ -384,7 +383,7 @@ public class TestFiniteStateMachines {
     public void testSingleUnionUnion() {
 
         fsm = new UnionFSM("a");//new UnionFSM(new UnionFSM("a"), new UnionFSM("bc"));
-        fsm.union(new UnionFSM("bc"));
+        fsm = fsm.union(new UnionFSM("bc"));
         System.out.print("a|(b|c)");
 
         try {
@@ -417,7 +416,7 @@ public class TestFiniteStateMachines {
     public void testUnionUnionSingle() {
 
         fsm = new UnionFSM("ab");//new UnionFSM(new UnionFSM("ab"), new UnionFSM("c"));
-        fsm.union(new UnionFSM("c"));
+        fsm = fsm.union(new UnionFSM("c"));
         System.out.print("(a|b)|c");
 
         try {
@@ -465,7 +464,7 @@ public class TestFiniteStateMachines {
     public void testFollowedByFollowedByFollowedBy() {
 
         fsm = new FollowedByFSM("ab");//new FollowedByFSM(new FollowedByFSM("ab"), new FollowedByFSM("cd"));
-        fsm.concatenate(new FollowedByFSM("cd"));
+        fsm = fsm.concatenate(new FollowedByFSM("cd"));
         System.out.print("(ab)(cd)");
 
         try {
@@ -497,7 +496,7 @@ public class TestFiniteStateMachines {
     public void testFollowedByFollowedByUnion() {
 
         fsm = new FollowedByFSM("ab");//new FollowedByFSM(new FollowedByFSM("ab"), new UnionFSM("cd"));
-        fsm.concatenate(new UnionFSM("cd"));
+        fsm = fsm.concatenate(new UnionFSM("cd"));
         System.out.print("(ab)(c|d)");
 
         try {
@@ -527,7 +526,7 @@ public class TestFiniteStateMachines {
     // (a|b)(cd)
     public void UnionFollowedByFollowedBy() {
         fsm = new UnionFSM("ab");//new FollowedByFSM(new UnionFSM("ab"), new FollowedByFSM("cd"));
-        fsm.concatenate(new FollowedByFSM("cd"));
+        fsm = fsm.concatenate(new FollowedByFSM("cd"));
         System.out.print("(a|b)(cd)");
 
         try {
@@ -558,7 +557,7 @@ public class TestFiniteStateMachines {
     public void testUnionFollowedByUnion() {
 
         fsm = new UnionFSM("ab");//new FollowedByFSM(new UnionFSM("ab"), new UnionFSM("cd"));
-        fsm.concatenate(new UnionFSM("cd"));
+        fsm = fsm.concatenate(new UnionFSM("cd"));
         System.out.print("(a|b)(c|d)");
 
         try {
@@ -595,7 +594,7 @@ public class TestFiniteStateMachines {
     public void testFollowedByUnionFollowedBy() {
 
         fsm = new FollowedByFSM("ab");//new UnionFSM(new FollowedByFSM("ab"), new FollowedByFSM("cd"));
-        fsm.union(new FollowedByFSM("cd"));
+        fsm = fsm.union(new FollowedByFSM("cd"));
         System.out.print("(ab)|(cd)");
 
         try {
@@ -625,7 +624,7 @@ public class TestFiniteStateMachines {
     public void testUnionUnionUnion() {
 
         fsm = new UnionFSM("ab");//new UnionFSM(new UnionFSM("ab"), new UnionFSM("cd"));
-        fsm.union(new UnionFSM("cd"));
+        fsm = fsm.union(new UnionFSM("cd"));
         System.out.print("(a|b)|(c|d)");
 
         try {
@@ -663,7 +662,7 @@ public class TestFiniteStateMachines {
     public void testFollowedByUnionUnion() {
 
         fsm = new FollowedByFSM("ab");//new UnionFSM(new FollowedByFSM("ab"), new UnionFSM("cd"));
-        fsm.union(new UnionFSM("cd"));
+        fsm = fsm.union(new UnionFSM("cd"));
         System.out.print("(ab)|(c|d)");
 
         try {
@@ -693,7 +692,7 @@ public class TestFiniteStateMachines {
     // (a|b)|(cd)
     public void testUnionUnionFollowedBy() {
         fsm = new UnionFSM("ab");//new UnionFSM(new UnionFSM("ab"), new FollowedByFSM("cd"));
-        fsm.union(new FollowedByFSM("cd"));
+        fsm = fsm.union(new FollowedByFSM("cd"));
         System.out.print("(a|b)|(cd)");
 
         try {
@@ -739,8 +738,7 @@ public class TestFiniteStateMachines {
     public void testLoopingOnUnionFollowedByFollowedBy() {
 
         fsm = new UnionFSM("ab");//new FollowedByFSM(new UnionFSM("ab"), new FollowedByFSM("c"));
-        fsm.concatenate(new FollowedByFSM("c"));
-        fsm.loop();
+        fsm = fsm.concatenate(new FollowedByFSM("c")).loop();
         System.out.print("((a|b)c)*");
 
         try {
@@ -775,8 +773,7 @@ public class TestFiniteStateMachines {
     public void testLoopingOnUnionUnionUnion() {
 //        LexerMachine union = new UnionFSM(new UnionFSM("ab"), new UnionFSM("cd"));
         fsm = new UnionFSM("ab");
-        fsm.union(new UnionFSM("cd"));
-        fsm.loop();
+        fsm = fsm.union(new UnionFSM("cd")).loop();
         System.out.print("((a|b)|(c|d))*");
 
         try {
