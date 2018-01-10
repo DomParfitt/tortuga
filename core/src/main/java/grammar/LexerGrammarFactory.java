@@ -2,9 +2,8 @@ package grammar;
 
 import automata.FollowedByFSM;
 import automata.LexerMachine;
-import automata.LoopingFSM;
 import automata.UnionFSM;
-import grammar.LexerGrammar;
+import lexer.Lexer;
 
 /**
  * Factory class with static methods to get specific LexerMachines
@@ -137,7 +136,7 @@ public class LexerGrammarFactory {
     }
 
     public static LexerMachine getIntLiteralMachine() {
-       return LexerGrammar.DIGIT.loop(); //TODO: Is this form preferable?
+       return LexerGrammar.DIGIT.concatenate(LexerGrammar.DIGIT.loop()); //TODO: Is this form preferable?
 //        return  new LoopingFSM(getDigitMachine());
     }
 
