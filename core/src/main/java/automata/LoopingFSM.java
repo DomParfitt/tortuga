@@ -6,6 +6,7 @@ import grammar.LexerGrammar;
  * Concrete implementation of a FiniteStateMachine, which validates on zero or
  * more of the inner FSM
  */
+@Deprecated
 public class LoopingFSM extends LexerMachine {
 
     public LoopingFSM() {
@@ -32,12 +33,4 @@ public class LoopingFSM extends LexerMachine {
 
     }
 
-//    @Override
-//    public LexerMachine copy() {
-//        LexerMachine copy = new LoopingFSM();
-//        copy.states = this.copyStates();
-//        copy.transitions = this.copyTransitions(copy.states);
-//
-//        return copy;
-//    }
 }

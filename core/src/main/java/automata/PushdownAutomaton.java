@@ -7,7 +7,6 @@ import parser.StackUnderflowError;
 
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
 

@@ -18,18 +18,22 @@ public class UnionFSM extends LexerMachine {
         this.transitions.add(transition);
     }
 
+    @Deprecated
     public UnionFSM(LexerGrammar first, LexerGrammar second) {
         this(first.getMachine(), second.getMachine());
     }
 
+    @Deprecated
     public UnionFSM(LexerGrammar first, LexerMachine second) {
         this(first.getMachine(), second);
     }
 
+    @Deprecated
     public UnionFSM(LexerMachine first, LexerGrammar second) {
         this(first, second.getMachine());
     }
 
+    @Deprecated
     public UnionFSM(LexerMachine first, LexerMachine second) {
         LexerMachine firstCopy = first.copy();
         LexerMachine secondCopy = second.copy();
@@ -74,16 +78,5 @@ public class UnionFSM extends LexerMachine {
         }
 
     }
-
-//    @Override
-//    public LexerMachine copy() {
-//        LexerMachine copy = new UnionFSM("");
-//        copy.stateCounter = this.stateCounter;
-//        copy.terminalStateIndex = this.terminalStateIndex;
-//        copy.states = this.copyStates();
-//        copy.transitions = this.copyTransitions(copy.states);
-//
-//        return copy;
-//    }
 
 }

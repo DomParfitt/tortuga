@@ -823,10 +823,7 @@ public class TestFiniteStateMachines {
 // (a|b)c*
     public void testUnionFollowedByLoopingFollowedBy() {
 
-        fsm = new UnionFSM("ab");//new FollowedByFSM(new UnionFSM("ab"), new LoopingFSM(new FollowedByFSM("c")));
-        LexerMachine inner = new FollowedByFSM("c");
-        inner.loop();
-        fsm.union(inner);
+        fsm = new UnionFSM("ab").concatenate(new FollowedByFSM("c").loop());//new FollowedByFSM(new UnionFSM("ab"), new LoopingFSM(new FollowedByFSM("c")));
         System.out.print("(a|b)c*");
         System.out.println(fsm);
 

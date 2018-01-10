@@ -43,6 +43,7 @@ public class TestLexerGrammar {
         parsePass("1.01");
         parsePass("11.01");
         parseFail("1");
+        parseFail(".1");
     }
 
     private void parsePass(String input) {

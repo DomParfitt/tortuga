@@ -24,18 +24,22 @@ public class FollowedByFSM extends LexerMachine {
 
     }
 
+    @Deprecated
     public FollowedByFSM(LexerGrammar first, LexerGrammar second) {
         this(first.getMachine(), second.getMachine());
     }
 
+    @Deprecated
     public FollowedByFSM(LexerGrammar first, LexerMachine second) {
         this(first.getMachine(), second);
     }
 
+    @Deprecated
     public FollowedByFSM(LexerMachine first, LexerGrammar second) {
         this(first, second.getMachine());
     }
 
+    @Deprecated
     public FollowedByFSM(LexerMachine first, LexerMachine second) {
         LexerMachine firstCopy = first.copy();
         LexerMachine secondCopy = second.copy();
@@ -86,14 +90,4 @@ public class FollowedByFSM extends LexerMachine {
         this.terminalStateIndex = this.stateCounter - 1;
     }
 
-//    @Override
-//    public LexerMachine copy() {
-//        LexerMachine copy = new FollowedByFSM("");
-//        copy.stateCounter = this.stateCounter;
-//        copy.terminalStateIndex = this.terminalStateIndex;
-//        copy.states = this.copyStates();
-//        copy.transitions = this.copyTransitions(copy.states);
-//
-//        return copy;
-//    }
 }
