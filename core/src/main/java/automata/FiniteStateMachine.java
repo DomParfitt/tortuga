@@ -116,6 +116,14 @@ public abstract class FiniteStateMachine<T> {
         return this.stateCounter - 1;
     }
 
+    public final void addState(boolean isAcceptingState) {
+        State state = new State(this.stateCounter++, isAcceptingState);
+        this.states.add(state);
+        if(isAcceptingState) {
+            this.terminalStateIndex = this.stateCounter - 1;
+        }
+    }
+
     public boolean parse(List<T> input) {
         this.setCurrentState(this.getInitialState());
 //        char[] characters = input.toCharArray();
@@ -282,7 +290,7 @@ public abstract class FiniteStateMachine<T> {
 
             State fromState = states.get(states.indexOf(transition.getFromState()));
             State toState = states.get(states.indexOf(transition.getToState()));
-            Transition<T> transitionCopy = new Transition<T>(inputSymbols, fromState, toState);
+            Transition<T> transitionCopy = new Transition<>(inputSymbols, fromState, toState, transition.getAction());
 
             transitions.add(transitionCopy);
         }
