@@ -76,7 +76,7 @@ public class TestPushdownAutomata {
 
         PushdownAutomaton pda2 = new PushdownAutomaton(states2, transitions2);
 
-        PushdownAutomaton compound = PDAFactory.concatenate(pda, pda2);
+        PushdownAutomaton compound = pda.concatenate(pda2);
 
         List<LexerGrammar> tokens = new ArrayList<>();
         tokens.add(LexerGrammar.MINUS);
