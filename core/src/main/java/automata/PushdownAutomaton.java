@@ -5,19 +5,21 @@ import grammar.ParserGrammar;
 import parser.Stack;
 import parser.StackUnderflowError;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
 
     protected Stack<LexerGrammar> stack;
+    protected Map<Transition<LexerGrammar>, StackAction> actions;
 
     public PushdownAutomaton() {
         //TODO: Implement
         super();
         this.stack = new Stack<>();
+        this.actions = new HashMap<>();
     }
 
+    @Deprecated
     public PushdownAutomaton(List<State> states, Set<Transition<LexerGrammar>> transitions) {
         this();
         this.states = states;
@@ -28,24 +30,26 @@ public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
     public boolean parse(List<LexerGrammar> tokens) {
         for(LexerGrammar token : tokens) {
             if(this.hasTransition(token)) {
-                PDATransition transition = this.getTransition(token);
-                PushdownAction action = transition.getResultingState();
+                Transition<LexerGrammar> transition = this.getTransition(token);
+//                PushdownAction action = transition.getResultingState();
+
+                StackAction action = this.actions.get(transition);
 
                 //Do any required actions on the stack
-                switch (action.getStackAction().getStackActionType()) {
+                switch (action.getStackActionType()) {
                     case PUSH: {
                         this.stack.push(token);
                         break;
                     }
                     case POP: {
-                        boolean isExpectedToken = this.popAndCompare(action.getStackAction().getTokenType());
+                        boolean isExpectedToken = this.popAndCompare(action.getTokenType());
                         if(!isExpectedToken) {
                             return false;
                         }
                         break;
                     }
                     case BOTH: {
-                        boolean isExpectedToken = this.popAndCompare(action.getStackAction().getTokenType());
+                        boolean isExpectedToken = this.popAndCompare(action.getTokenType());
                         if(!isExpectedToken) {
                             return false;
                         }
@@ -58,7 +62,7 @@ public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
                 }
 
                 //Set the resulting state as the current state
-                this.setCurrentState(action.getResultingState());
+                this.setCurrentState(transition.getToState());
             }
         }
 
@@ -85,18 +89,15 @@ public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
         return (PushdownAutomaton) super.loop();
     }
 
-    public void addTransition(State fromState, State toState, LexerGrammar token, StackAction stackAction) {
-      super.addTransition(new PDATransition(token, stackAction, fromState, toState));
+    public void addTransition(State fromState, State toState, LexerGrammar token, StackAction.StackActionType stackActionType, LexerGrammar actionToken) {
+        Transition<LexerGrammar> transition = new Transition<>(token, fromState, toState);
+        super.addTransition(transition);
+        this.addAction(transition, stackActionType, actionToken);
     }
 
-    public void addTransition(int fromStateNumber, int toStateNumber, LexerGrammar token, StackAction stackAction) {
-//        this.addTransition(this.s);
-        //TODO: Implement
-    }
-
-    public void addStackAction(State fromState, State toState, LexerGrammar token, StackAction stackAction) {
-        PDATransition transition = this.getTransition(fromState, toState, token);
-        transition.stackAction = stackAction;
+    public void addAction(Transition<LexerGrammar> transition, StackAction.StackActionType stackActionType, LexerGrammar actionToken) {
+        StackAction stackAction = new StackAction(stackActionType, actionToken);
+        this.actions.put(transition, stackAction);
 
     }
 
@@ -112,24 +113,12 @@ public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
         return copy;
     }
 
-    //TODO: Rename this to getResultingState and resolve Transition to a single type
-    private PDATransition getTransition(LexerGrammar token) {
+    //TODO: This could be pushed up the hierarchy
+    private Transition<LexerGrammar> getTransition(LexerGrammar token) {
         for(Transition<LexerGrammar> transition : this.transitions) {
             if (transition.getFromState().equals(this.getCurrentState())) {
                 if (transition.hasTransition(token)) {
-                    return (PDATransition) transition;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    private PDATransition getTransition(State fromState, State toState, LexerGrammar token) {
-        for(Transition<LexerGrammar> transition : this.transitions) {
-            if (transition.getFromState().equals(fromState) && transition.getToState().equals(toState)) {
-                if (transition.hasTransition(token)) {
-                    return (PDATransition) transition;
+                    return transition;
                 }
             }
         }
