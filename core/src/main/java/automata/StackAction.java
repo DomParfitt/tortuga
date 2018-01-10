@@ -2,7 +2,7 @@ package automata;
 
 import grammar.LexerGrammar;
 
-public class StackAction {
+public class StackAction implements TransitionAction {
 
     public enum StackActionType {
         PUSH, POP, BOTH, NONE
