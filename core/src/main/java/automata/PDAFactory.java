@@ -3,6 +3,7 @@ package automata;
 import grammar.LexerGrammar;
 import grammar.ParserGrammar;
 
+@Deprecated
 public class PDAFactory {
 
     /*

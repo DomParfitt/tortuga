@@ -2,6 +2,7 @@ package automata;
 
 import grammar.LexerGrammar;
 
+@Deprecated
 public class PDATransition extends Transition<LexerGrammar> {
 
 //    Set<T> stackSymbols = new HashSet<>();
