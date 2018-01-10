@@ -10,13 +10,13 @@ import java.util.*;
 public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
 
     protected Stack<LexerGrammar> stack;
-    protected Map<Transition<LexerGrammar>, StackAction> actions;
+//    protected Map<Transition<LexerGrammar>, StackAction> actions;
 
     public PushdownAutomaton() {
         //TODO: Implement
         super();
         this.stack = new Stack<>();
-        this.actions = new HashMap<>();
+//        this.actions = new HashMap<>();
     }
 
     @Deprecated
@@ -31,9 +31,7 @@ public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
         for(LexerGrammar token : tokens) {
             if(this.hasTransition(token)) {
                 Transition<LexerGrammar> transition = this.getTransition(token);
-//                PushdownAction action = transition.getResultingState();
-
-                StackAction action = this.actions.get(transition);
+                StackAction action = (StackAction) transition.getAction();
 
                 //Do any required actions on the stack
                 switch (action.getStackActionType()) {
@@ -71,6 +69,14 @@ public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
 
     public PushdownAutomaton concatenate(PushdownAutomaton other) {
         return (PushdownAutomaton) super.concatenate(other);
+//        for(Map.Entry<Transition<LexerGrammar>, StackAction> action : other.actions.entrySet()) {
+//            for(LexerGrammar token : action.getKey().getInputSymbols()) {
+//                Transition<LexerGrammar> transition = pda.getTransition(token);
+//                pda.actions.put(transition, action.getValue());
+//            }
+////            pda.actions.put(action.getKey(), action.getValue());
+//        }
+//        return pda;
     }
 
     public PushdownAutomaton concatenate(ParserGrammar grammar) {
@@ -90,16 +96,17 @@ public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
     }
 
     public void addTransition(State fromState, State toState, LexerGrammar token, StackAction.StackActionType stackActionType, LexerGrammar actionToken) {
-        Transition<LexerGrammar> transition = new Transition<>(token, fromState, toState);
-        super.addTransition(transition);
-        this.addAction(transition, stackActionType, actionToken);
-    }
-
-    public void addAction(Transition<LexerGrammar> transition, StackAction.StackActionType stackActionType, LexerGrammar actionToken) {
         StackAction stackAction = new StackAction(stackActionType, actionToken);
-        this.actions.put(transition, stackAction);
-
+        Transition<LexerGrammar> transition = new Transition<>(token, fromState, toState, stackAction);
+        super.addTransition(transition);
+//        this.addAction(transition, stackActionType, actionToken);
     }
+
+//    public void addAction(Transition<LexerGrammar> transition, StackAction.StackActionType stackActionType, LexerGrammar actionToken) {
+//        StackAction stackAction = new StackAction(stackActionType, actionToken);
+//        this.actions.put(transition, stackAction);
+//
+//    }
 
     @Override
     public PushdownAutomaton copy() {
@@ -109,6 +116,8 @@ public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
         copy.terminalStateIndex = this.terminalStateIndex;
         copy.states = this.copyStates();
         copy.transitions = this.copyTransitions(copy.states);
+//        copy.actions = this.actions; //TODO:May need to be made to copy
+
 
         return copy;
     }
