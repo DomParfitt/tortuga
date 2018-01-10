@@ -1,5 +1,6 @@
 package automata;
 
+import grammar.LexerGrammar;
 import utils.StringUtils;
 
 public class LexerMachine extends FiniteStateMachine<Character> {
@@ -18,4 +19,25 @@ public class LexerMachine extends FiniteStateMachine<Character> {
 
         return copy;
     }
+
+    public LexerMachine concatenate(LexerMachine other) {
+        return (LexerMachine) super.concatenate(other);
+    }
+
+    public LexerMachine concatenate(LexerGrammar grammar) {
+        return this.concatenate(grammar.getMachine());
+    }
+
+    public LexerMachine union(LexerMachine other) {
+        return (LexerMachine) super.union(other);
+    }
+
+    public LexerMachine union(LexerGrammar grammar) {
+        return this.union(grammar.getMachine());
+    }
+
+    public LexerMachine loop() {
+        return (LexerMachine) super.loop();
+    }
+
 }

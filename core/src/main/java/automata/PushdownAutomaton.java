@@ -1,6 +1,7 @@
 package automata;
 
 import grammar.LexerGrammar;
+import grammar.ParserGrammar;
 import parser.Stack;
 import parser.StackUnderflowError;
 
@@ -10,15 +11,12 @@ import java.util.TreeSet;
 
 public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
 
-//    protected Set<State> states;
     protected Stack<LexerGrammar> stack;
-//    protected Set<PDATransition> transitions; //TODO: Does this override the named variable from superclass?
 
     public PushdownAutomaton() {
         //TODO: Implement
         super();
         this.stack = new Stack<>();
-//        this.transitions = new TreeSet<>();
     }
 
     public PushdownAutomaton(List<State> states, Set<Transition<LexerGrammar>> transitions) {
@@ -26,15 +24,6 @@ public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
         this.states = states;
         this.transitions = transitions;
     }
-
-//    public boolean parse(List<Token> tokens) {
-//        List<LexerGrammar> tokenTypes = new ArrayList<>();
-//        for(Token token : tokens) {
-//            tokenTypes.add(token.getTokenType());
-//        }
-//
-//        return this.parse(tokenTypes);
-//    }
 
     @Override
     public boolean parse(List<LexerGrammar> tokens) {
@@ -75,7 +64,26 @@ public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
         }
 
         return this.getCurrentState().isAcceptingState() && this.stack.isEmpty();
-//        return false; //TODO: Probably remove this
+    }
+
+    public PushdownAutomaton concatenate(PushdownAutomaton other) {
+        return (PushdownAutomaton) super.concatenate(other);
+    }
+
+    public PushdownAutomaton concatenate(ParserGrammar grammar) {
+        return this.concatenate(grammar.getMachine());
+    }
+
+    public PushdownAutomaton union(PushdownAutomaton other) {
+        return (PushdownAutomaton) super.union(other);
+    }
+
+    public PushdownAutomaton union(ParserGrammar grammar) {
+        return this.union(grammar.getMachine());
+    }
+
+    public PushdownAutomaton loop() {
+        return (PushdownAutomaton) super.loop();
     }
 
     public void addTransition(State fromState, State toState, LexerGrammar token, StackAction stackAction) {
@@ -105,17 +113,6 @@ public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
         return copy;
     }
 
-//    @Override
-//    public boolean hasTransition(Token token) {
-//        for(PDATransition transition : this.transitions) {
-//            if(transition.hasTransition(token)) {
-//                return true;
-//            }
-//        }
-//
-//        return false;
-//    }
-//
     //TODO: Rename this to getResultingState and resolve Transition to a single type
     private PDATransition getTransition(LexerGrammar token) {
         for(Transition<LexerGrammar> transition : this.transitions) {
