@@ -1,5 +1,9 @@
-package automata;
+package grammar;
 
+import automata.FollowedByFSM;
+import automata.LexerMachine;
+import automata.LoopingFSM;
+import automata.UnionFSM;
 import grammar.LexerGrammar;
 
 /**
@@ -79,11 +83,11 @@ public class LexerGrammarFactory {
     }
 
     public static LexerMachine getWhitespaceMachine() {
-        return new LoopingFSM(new UnionFSM(" \n\t\r\f"));
+        return new UnionFSM(" \n\t\r\f").loop();
     }
 
     public static LexerMachine getNewlineMachine() {
-        return new LoopingFSM(new UnionFSM("\n\r"));
+        return new UnionFSM("\n\r").loop();
     }
 
     public static LexerMachine getQuoteMachine() {
@@ -101,15 +105,15 @@ public class LexerGrammarFactory {
     public static LexerMachine getIdentifierMachine() {
         // (letter|_)(letter|digit|_)*
 
-        LexerMachine letterOrUnderscore = new UnionFSM(LexerGrammar.LETTER, new UnionFSM("_"));
+        LexerMachine letterOrUnderscore = LexerGrammar.LETTER.union(new UnionFSM("_"));
 
         LexerMachine letterOrDigit = getLetterOrDigitMachine();
 
-        LexerMachine letterOrDigitOrUnderscore = new UnionFSM(letterOrDigit, new UnionFSM("_"));
+        LexerMachine letterOrDigitOrUnderscore = letterOrDigit.union(new UnionFSM("_"));
 
-        LexerMachine loopOnLetterOrDigitOrUnderscore = new LoopingFSM(letterOrDigitOrUnderscore);
+        LexerMachine loopOnLetterOrDigitOrUnderscore = letterOrDigitOrUnderscore.loop();
 
-        return new FollowedByFSM(letterOrUnderscore, loopOnLetterOrDigitOrUnderscore);
+        return letterOrUnderscore.concatenate(loopOnLetterOrDigitOrUnderscore);
     }
 
     public static LexerMachine getOpenParenMachine() {
@@ -133,27 +137,27 @@ public class LexerGrammarFactory {
     }
 
     public static LexerMachine getIntLiteralMachine() {
-       return new LoopingFSM(LexerGrammar.DIGIT); //TODO: Is this form preferable?
+       return LexerGrammar.DIGIT.loop(); //TODO: Is this form preferable?
 //        return  new LoopingFSM(getDigitMachine());
     }
 
     public static LexerMachine getFloatLiteralMachine() {
 //        LexerMachine intAndPeriod = new FollowedByFSM(getIntLiteralMachine(), getPeriodMachine());
 //        return new FollowedByFSM(intAndPeriod, getIntLiteralMachine());
-        LexerMachine intAndPeriod = new FollowedByFSM(LexerGrammar.INT_LITERAL, LexerGrammar.PERIOD);
-        return new FollowedByFSM(intAndPeriod, LexerGrammar.INT_LITERAL);
+        LexerMachine intAndPeriod = LexerGrammar.INT_LITERAL.concatenate(LexerGrammar.PERIOD);
+        return intAndPeriod.concatenate(LexerGrammar.INT_LITERAL);
 
     }
 
     public static LexerMachine getStringLiteralMachine() {
         //TODO: Fix implementation, how to allow any character between quotes?
-        LexerMachine letterOrWhitespace = new UnionFSM(LexerGrammar.LETTER, LexerGrammar.WHITESPACE);
-        LexerMachine lettersOrWhitespaces = new LoopingFSM(letterOrWhitespace);
-        return new FollowedByFSM(new FollowedByFSM(LexerGrammar.QUOTE, lettersOrWhitespaces), LexerGrammar.QUOTE);
+        LexerMachine letterOrWhitespace = LexerGrammar.LETTER.union(LexerGrammar.WHITESPACE);
+        LexerMachine lettersOrWhitespaces = letterOrWhitespace.loop();
+        return LexerGrammar.QUOTE.concatenate(lettersOrWhitespaces).concatenate(LexerGrammar.QUOTE);
     }
 
     public static LexerMachine getBooleanLiteralMachine() {
-        return new UnionFSM(new FollowedByFSM("true"), new FollowedByFSM("false"));
+        return new FollowedByFSM("true").union(new FollowedByFSM("false"));
     }
 
     public static LexerMachine getPlusMachine() {
@@ -226,6 +230,6 @@ public class LexerGrammarFactory {
 
     private static LexerMachine getLetterOrDigitMachine() {
 //        return new UnionFSM(getLetterMachine(), getDigitMachine());
-        return new UnionFSM(LexerGrammar.LETTER, LexerGrammar.DIGIT);
+        return LexerGrammar.LETTER.union(LexerGrammar.DIGIT);
     }
 }
