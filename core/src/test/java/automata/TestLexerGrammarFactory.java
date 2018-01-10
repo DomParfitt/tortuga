@@ -1,5 +1,6 @@
 package automata;
 
+import grammar.LexerGrammarFactory;
 import org.junit.Test;
 
 public class TestLexerGrammarFactory {

@@ -1,6 +1,5 @@
 package grammar;
 
-import automata.LexerGrammarFactory;
 import automata.LexerMachine;
 import lexer.TokenType;
 import utils.StringUtils;
@@ -95,11 +94,30 @@ public enum LexerGrammar implements Grammar<Character> {
 
     @Override
     public synchronized LexerMachine getMachine() {
-//        return machine;
         return LexerGrammarFactory.getMachine(this);
     }
 
     public TokenType getTokenType() {
         return tokenType;
+    }
+
+    public LexerMachine concatenate(LexerMachine other) {
+        return this.getMachine().concatenate(other);
+    }
+
+    public LexerMachine concatenate(LexerGrammar grammar) {
+        return this.concatenate(grammar.getMachine());
+    }
+
+    public LexerMachine union(LexerMachine other) {
+        return this.getMachine().union(other);
+    }
+
+    public LexerMachine union(LexerGrammar grammar) {
+        return this.union(grammar.getMachine());
+    }
+
+    public LexerMachine loop() {
+        return this.getMachine().loop();
     }
 }
