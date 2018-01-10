@@ -31,12 +31,19 @@ public class ParserGrammarFactory {
 
     }
 
-    public PushdownAutomaton getIntExpression() {
-        List<State> states = ParserGrammarFactory.getListOfStates(2, 1);
-        Set<Transition<LexerGrammar>> transitions = new HashSet<>();
-        transitions.add(new PDATransition(LexerGrammar.INT_LITERAL, new StackAction(StackAction.StackActionType.NONE), states.get(0), states.get(1)));
+    public static PushdownAutomaton getIntExpression() {
+//        List<State> states = ParserGrammarFactory.getListOfStates(2, 1);
+//        Set<Transition<LexerGrammar>> transitions = new HashSet<>();
+//        transitions.add(new PDATransition(LexerGrammar.INT_LITERAL, new StackAction(StackAction.StackActionType.NONE), states.get(0), states.get(1)));
+//
+//        return new PushdownAutomaton(states, transitions);
 
-        return new PushdownAutomaton(states, transitions);
+        PushdownAutomaton intExpression = new None(LexerGrammar.INT_LITERAL);
+        return intExpression;
+    }
+
+    private static PushdownAutomaton getMathematicalOperator() {
+        return new None(LexerGrammar.PLUS).union(new None(LexerGrammar.MINUS)).union(new None(LexerGrammar.MULTIPLY)).union(new None(LexerGrammar.DIVIDE));
     }
 
     public static PushdownAutomaton getMathematicalExpression() {
@@ -56,6 +63,8 @@ public class ParserGrammarFactory {
 
         return new PushdownAutomaton(states, transitions);
 
+//        PushdownAutomaton mathExpr = new Push(LexerGrammar.OPEN_PAREN).loop().concatenate(getIntExpression()).concatenate(getMathematicalOperator()).concatenate(getIntExpression()).concatenate(new Pop(LexerGrammar.CLOSE_PAREN, LexerGrammar.OPEN_PAREN));
+//        return mathExpr;
 
     }
 
