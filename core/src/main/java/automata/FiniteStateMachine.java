@@ -138,25 +138,20 @@ public abstract class FiniteStateMachine<T> {
         }
     }
 
-    public FiniteStateMachine<T> concat(FiniteStateMachine<T> other) {
+    public FiniteStateMachine<T> concatenate(FiniteStateMachine<T> other) {
         FiniteStateMachine<T> copy = this.copy();
-        copy.concatenate(other);
-        return copy;
-    }
+        FiniteStateMachine<T> otherCopy = other.copy();
 
-    public void concatenate(FiniteStateMachine<T> other) {
-        FiniteStateMachine<T> copy = other.copy();
-
-        State secondInitial = copy.getInitialState();
+        State secondInitial = otherCopy.getInitialState();
         //Add each state of secondCopy except initial
         boolean addedState = false;
-        for (State state : copy.getStates()) {
+        for (State state : otherCopy.getStates()) {
             if (!state.equals(secondInitial)) {
-                int newNumber = this.addState(state);
+                int newNumber = copy.addState(state);
                 addedState = true;
 
                 //Find any transitions referencing that state and update their number
-                for (Transition<T> transition : copy.getTransitions()) {
+                for (Transition<T> transition : otherCopy.getTransitions()) {
                     if (transition.fromState.equals(state)) {
                         transition.fromState.setNumber(newNumber);
                     }
@@ -171,48 +166,51 @@ public abstract class FiniteStateMachine<T> {
         //Update secondCopy transitions with initial to use this's terminal
         //Add transitions
         //Add all transitions from secondCopy into this, replacing initial and terminal states with this's
-        for (Transition<T> transition : copy.getTransitions()) {
+        for (Transition<T> transition : otherCopy.getTransitions()) {
             if (transition.fromState.equals(secondInitial)) {
-                transition.fromState = this.getTerminalState();
+                transition.fromState = copy.getTerminalState();
             }
 
             if (transition.toState.equals(secondInitial)) {
-                transition.toState = this.getTerminalState();
+                transition.toState = copy.getTerminalState();
             }
 
-            this.addTransition(transition);
+            copy.addTransition(transition);
         }
 
         //Mark terminal state of this as non-terminal if new states have been added
         if (addedState) {
-            this.getTerminalState().setAcceptingState(false);
+            copy.getTerminalState().setAcceptingState(false);
         }
 
         //Update terminal index of this
-        this.terminalStateIndex = this.stateCounter - 1;
+        copy.terminalStateIndex = copy.stateCounter - 1;
+
+        return copy;
     }
 
-    public final void concatenate(Grammar<T> grammar) {
-        this.concatenate(grammar.getMachine());
+    public final FiniteStateMachine<T> concatenate(Grammar<T> grammar) {
+        return this.concatenate(grammar.getMachine());
     }
 
-    public void union(FiniteStateMachine<T> other) {
-        FiniteStateMachine<T> copy = other.copy();
+    public FiniteStateMachine<T> union(FiniteStateMachine<T> other) {
+        FiniteStateMachine<T> copy = this.copy();
+        FiniteStateMachine<T> otherCopy = other.copy();
 
-        State secondInitial = copy.getInitialState();
-        State secondTerminal = copy.getTerminalState();
+        State secondInitial = otherCopy.getInitialState();
+        State secondTerminal = otherCopy.getTerminalState();
 
         //Add all states from secondCopy into this, except initial and terminal state
-        for(State state : copy.getStates()) {
+        for(State state : otherCopy.getStates()) {
 
             //We don't want to copy across the initial or terminal states
             if(!state.equals(secondInitial) && !state.equals(secondTerminal)) {
 
                 //Add the state and get its new number
-                int newNumber = this.addState(state);
+                int newNumber = copy.addState(state);
 
                 //Find any transitions referencing that state and update their number
-                for(Transition<T> transition : copy.getTransitions()) {
+                for(Transition<T> transition : otherCopy.getTransitions()) {
                     if(transition.fromState.equals(state)) {
                         transition.fromState.setNumber(newNumber);
                     }
@@ -225,38 +223,42 @@ public abstract class FiniteStateMachine<T> {
         }
 
         //Add all transitions from secondCopy into this, replacing initial and terminal states with this's
-        for(Transition<T> transition : copy.getTransitions()) {
+        for(Transition<T> transition : otherCopy.getTransitions()) {
             if(transition.fromState.equals(secondInitial)) {
-                transition.fromState = this.getInitialState();
+                transition.fromState = copy.getInitialState();
             }
 
             if(transition.toState.equals(secondTerminal)) {
-                transition.toState = this.getTerminalState();
+                transition.toState = copy.getTerminalState();
             }
 
-            this.addTransition(transition);
+            copy.addTransition(transition);
         }
+
+        return copy;
 
     }
 
-    public final void union(Grammar<T> grammar) {
-        this.union(grammar.getMachine());
+    public final FiniteStateMachine<T> union(Grammar<T> grammar) {
+        return this.union(grammar.getMachine());
     }
 
-//    public abstract void loop();
+    public FiniteStateMachine<T> loop() {
 
-    public void loop() {
+        FiniteStateMachine<T> copy = this.copy();
 
-        for(Transition<T> transition : this.getTransitions()) {
-            if(transition.getToState().equals(this.getTerminalState())) {
-                transition.toState = this.getInitialState();
+        for(Transition<T> transition : copy.getTransitions()) {
+            if(transition.getToState().equals(copy.getTerminalState())) {
+                transition.toState = copy.getInitialState();
             }
         }
 
-        State terminalState = this.getTerminalState();
-        this.getStates().remove(terminalState);
-        this.getInitialState().setAcceptingState(true);
-        this.terminalStateIndex = this.initialStateIndex;
+        State terminalState = copy.getTerminalState();
+        copy.getStates().remove(terminalState);
+        copy.getInitialState().setAcceptingState(true);
+        copy.terminalStateIndex = copy.initialStateIndex;
+
+        return copy;
     }
 
     public abstract FiniteStateMachine<T> copy();
