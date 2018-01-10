@@ -1,5 +1,6 @@
 package automata;
 
+@Deprecated
 public class PushdownAction {
 
     private StackAction stackAction;
