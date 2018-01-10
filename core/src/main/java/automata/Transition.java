@@ -8,6 +8,7 @@ public class Transition<T> implements Comparable {
 
     Set<T> inputSymbols = new HashSet<>();
     State fromState, toState;
+    TransitionAction action;
 
     public Transition(T inputSymbol, State from, State to) {
         this.inputSymbols.add(inputSymbol);
@@ -23,6 +24,16 @@ public class Transition<T> implements Comparable {
         this.toState = to;
     }
 
+    public Transition(T inputSymbol, State from, State to, TransitionAction action) {
+        this(inputSymbol, from, to);
+        this.action = action;
+    }
+
+    public Transition(List<T> inputSymbols, State from, State to, TransitionAction action) {
+        this(inputSymbols, from, to);
+        this.action = action;
+    }
+
     public State getFromState() {
         return this.fromState;
     }
@@ -33,6 +44,14 @@ public class Transition<T> implements Comparable {
 
     public Set<T> getInputSymbols() {
         return this.inputSymbols;
+    }
+
+    public boolean hasAction() {
+        return this.action != null;
+    }
+
+    public TransitionAction getAction() {
+        return action;
     }
 
     public boolean hasTransition(State from, T inputSymbol) {
