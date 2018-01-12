@@ -30,6 +30,21 @@ public class StackAction implements TransitionAction {
         return token;
     }
 
+    @Override
+    public <T> void doAction(FiniteStateMachine<T> machine) {
+        switch(this.getStackActionType()) {
+
+            case PUSH:
+                break;
+            case POP:
+                break;
+            case BOTH:
+                break;
+            case NONE:
+                break;
+        }
+    }
+
 //    public boolean appliesTo(Transition<LexerGrammar> transition) {
 //        return this.transition.equals(transition);
 //    }
