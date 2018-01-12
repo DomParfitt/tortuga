@@ -27,7 +27,7 @@ public class TestPushdownAutomata {
     @Test
     public void testAdditionStatement() {
         pda = ParserGrammarFactory.getMathematicalExpression();
-        List<Token> tokens = lexer.tokenize("(10) + 326");
+        List<Token> tokens = lexer.tokenize("(10 + 326)");
         List<LexerGrammar> lexerGrammars = new ArrayList<>();
 
         for(Token token : tokens) {
