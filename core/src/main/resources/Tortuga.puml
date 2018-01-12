@@ -1,0 +1,59 @@
+@startuml
+
+class FiniteStateMachine<T> {
+    +bool parse()
+}
+
+class Transition<T> {
+    -State fromState
+    -State toState
+    -List<T> tokens
+    -Action action
+
+}
+
+class State {
+    - int number
+    - bool isAccepting
+}
+
+interface Action {
+    +doAction(FiniteStateMachine<T>)
+}
+
+
+class LexerMachine<Character> {
+    +LexerMachine(String)
+}
+
+class UnionFSM
+
+class FollowedByFSM
+
+class PushdownAutomaton<LexerGrammar>
+
+class Stack<T> {
+    +T push()
+    +T pop()
+}
+
+class StackAction {
+}
+
+FiniteStateMachine <|-- LexerMachine
+FiniteStateMachine <|-- PushdownAutomaton
+
+LexerMachine <|-- UnionFSM
+LexerMachine <|-- FollowedByFSM
+
+FiniteStateMachine -- "1*" Transition
+FiniteStateMachine -- "1*" State
+
+Transition -- "2" State
+Transition -- "1" Action
+
+PushdownAutomaton -- "1" Stack
+
+Action <|-- StackAction
+
+@enduml
