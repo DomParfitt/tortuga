@@ -1,11 +1,10 @@
 package automata;
 
+import automata.actions.AutomataAction;
+import automata.actions.Transition;
 import grammar.Grammar;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * Abstract base class for a finite state machine
@@ -16,34 +15,103 @@ public abstract class FiniteStateMachine<T> {
     protected int initialStateIndex = 0;
     protected int terminalStateIndex = 0;
 
-    protected List<State> states;
-    protected Set<Transition<T>> transitions;
+    protected Map<State, Set<AutomataAction<T>>> states;
 
     public FiniteStateMachine() {
-        this.states = new ArrayList<>();
-        this.transitions = new TreeSet<>();
-        State initialState = new State(this.stateCounter++, false); //TODO: Initialise this as accepting?
-        initialState.setCurrentState(true);
-        this.states.add(initialState);
+        this.states = new TreeMap<>();
+        this.addState(false, true);
+//        this.transitions = new TreeSet<>();
+//        State initialState = new State(this.stateCounter++, false); //TODO: Initialise this as accepting?
+//        initialState.setCurrentState(true);
+//        this.states.add(initialState);
+
     }
 
+    @Deprecated
     protected final void initialise(FiniteStateMachine<T> fsm) {
         this.states = fsm.states;
-        this.transitions = fsm.transitions;
+//        this.transitions = fsm.transitions;
         this.terminalStateIndex = fsm.terminalStateIndex;
         this.stateCounter = fsm.stateCounter;
     }
 
+    /**
+     * Gets a Set of all the States contained within the automaton
+     * @return a set of States
+     */
+    public Set<State> getStates() {
+        return this.states.keySet();
+    }
+
+    /**
+     * Gets a Map of all the States in the automaton along with the actions
+     * associated with each state
+     * @return a Map of States to AutomataActions
+     */
+    public Map<State, Set<AutomataAction<T>>> getStatesWithActions() {
+        return this.states;
+    }
+
+    /**
+     * Removes a state, all its actions and all actions which result in it
+     * @param state the state to remove
+     */
+    public void removeState(State state) {
+
+    }
+
+    /**
+     * Gets the set of AutomataActions for a given state
+     * @param state the State to get the actions for
+     * @return a set of AutomataActions
+     */
+    public Set<AutomataAction<T>> getActions(State state) {
+        return this.states.get(state);
+    }
+
+    /**
+     * Gets the set of AutomataActions for the current state
+     * @return a set of AutomataActions
+     */
+    public Set<AutomataAction<T>> getActions() {
+        return this.getActions(this.getCurrentState());
+    }
+
+    /**
+     * Gets the initial state of the automata
+     * @return the initial state
+     */
     public final State getInitialState() {
-        return this.states.get(this.initialStateIndex);
+        for(State state : this.states.keySet()) {
+            if(state.getNumber() == this.initialStateIndex) {
+                return state;
+            }
+        }
+
+        return null; //throw Exception
     }
 
+    /**
+     * Gets the terminal state of the automata
+     * @return the terminal state
+     */
     public final State getTerminalState() {
-        return this.states.get(this.terminalStateIndex);
+        for(State state : this.states.keySet()) {
+            if(state.getNumber() == this.terminalStateIndex) {
+                return state;
+            }
+        }
+
+        return null;// throw Exception
+//        return this.states.get(this.terminalStateIndex);
     }
 
+    /**
+     * Gets the current state of the automata
+     * @return the current state
+     */
     public final State getCurrentState() {
-        for (State state : this.states) {
+        for (State state : this.states.keySet()) {
             if (state.isCurrentState()) {
                 return state;
             }
@@ -52,100 +120,169 @@ public abstract class FiniteStateMachine<T> {
         return this.getInitialState();
     }
 
+    /**
+     * Sets the current state of the automata to the state provided if
+     * that state is present in the automata
+     * @param newState the state to set as the current state
+     */
     public final void setCurrentState(State newState) {
-        this.getCurrentState().setCurrentState(false);
-        for (State state : this.states) {
+        State oldState = this.getCurrentState();
+        for (State state : this.states.keySet()) {
             if (state.equals(newState)) {
                 state.setCurrentState(true);
-
+                oldState.setCurrentState(false);
+                break;
             }
         }
     }
 
-    public boolean hasTransition(T token) {
-        for (Transition<T> transition : this.transitions) {
-            if (transition.getFromState().equals(this.getCurrentState())) {
-                if (transition.hasTransition(token)) {
-                    return true;
-                }
+    /**
+     * Checks whether there are any possibly actions in the current state
+     * @return true, if there are actions in the current state, false otherwise
+     */
+    public boolean hasAction() {
+        Set<AutomataAction<T>> actions = this.getActions();
+        return (actions != null) && !actions.isEmpty();
+    }
+
+    /**
+     * Checks if there is an action in the current state that consumes a given
+     * token.
+     * @param token the token the action consumes
+     * @return true, if there is an action in the current state which consumes the
+     *          token, false otherwise
+     */
+    public boolean hasAction(T token) {
+        Set<AutomataAction<T>> actions = this.getActions();
+        for(AutomataAction<T> action : actions) {
+            if(action.appliesTo(token)) {
+                return true;
             }
         }
 
         return false;
     }
 
-    public final State getResultingState(T token) {
-        for (Transition<T> transition : this.transitions) {
-            if (transition.getFromState().equals(this.getCurrentState())) {
-                if (transition.hasTransition(token)) {
-                    return transition.getResultingState(token);
-                }
-            }
+    /**
+     * Associates an action with a particular state. Adds the state to the automata if
+     * it is not already present
+     * @param state the state that the action is associated with
+     * @param action the action to be taken
+     */
+    public void addAction(State state, AutomataAction<T> action) {
+        if(!this.states.containsKey(state)) {
+            this.addState(state.isAcceptingState());
         }
-
-        return null;
+        this.getActions(state).add(action);
     }
 
-    public final void addTransition(Transition<T> transition) {
-        boolean exists = false;
-        for (Transition<T> existing : this.transitions) {
-            if (existing.equals(transition)) {
-                for (T token : transition.inputSymbols) {
-                    existing.inputSymbols.add(token);
-                }
-                exists = true;
-            }
-        }
-
-        if (!exists) {
-            this.transitions.add(transition);
+    /**
+     * Associates a set of actions with a particular state without overwriting any
+     * existing actions.
+     * @param state the state that the actions are associcated with
+     * @param actions a set of actions
+     */
+    public void addActions(State state, Set<AutomataAction<T>> actions) {
+        for(AutomataAction<T> action : actions) {
+            this.addAction(state, action);
         }
     }
 
     /**
-     * Adds a new state to the set of state belonging to this FSM. Updates the
-     * number of the added state to reflect the state counter of this FSM.
-     *
-     * @param state the state to be added
-     * @return the new number of the added state
+     * Adds a new state to the automata, updating the state counter and terminal
+     * state index as required
+     * @param isAcceptingState true if the new state is a terminal, false otherwise
+     * @param isCurrentState true if the new state should be set as the current state, false otherwise
+     * @return a reference to the new state
      */
-    public final int addState(State state) {
-        State newState = state.copy();
-        newState.setNumber(this.stateCounter++);
-        this.states.add(newState);
-        return this.stateCounter - 1;
-    }
-
-    public final void addState(boolean isAcceptingState) {
+    //TODO: Should this be private? Only used as convenience in constructor?
+    public final State addState(boolean isAcceptingState, boolean isCurrentState) {
         State state = new State(this.stateCounter++, isAcceptingState);
-        this.states.add(state);
+        state.setCurrentState(isCurrentState);
+        this.states.put(state, new HashSet<>()); //TODO: Treeset for ordering?
         if(isAcceptingState) {
-            this.terminalStateIndex = this.stateCounter - 1;
+            this.terminalStateIndex = state.getNumber();
         }
+
+        return state;
     }
 
+    /**
+     * Adds a new state to the automata, updating the state counter and terminal
+     * state index as required
+     * @param isAcceptingState true if the new state is a terminal, false otherwise
+     * @return a reference to the new state
+     */
+    public final State addState(boolean isAcceptingState) {
+        return this.addState(isAcceptingState, false);
+    }
+
+    /**
+     * Adds a new state to the automata, updating the state counter and terminal
+     * state index as required
+     * @param state the state to be added
+     * @return the new State
+     */
+    public final State addState(State state) {
+        return this.addState(state.isAcceptingState());
+    }
+
+    /**
+     * Parses a list of input tokens
+     * @param input list of tokens to parse
+     * @return true, if consuming each token in turn results in a terminal state with no further tokens, false otherwise
+     */
     public boolean parse(List<T> input) {
         this.setCurrentState(this.getInitialState());
-//        char[] characters = input.toCharArray();
-        for (T token : input) {
-            if (this.hasTransition(token)) {
-                this.setCurrentState(this.getResultingState(token));
-            } else {
+        for(T token : input) {
+
+            if(!this.parseHelper(token)) {
                 return false;
             }
         }
+
         return this.getCurrentState().isAcceptingState();
     }
 
+    /**
+     * Parses a single input token
+     * @param input the tokens to parse
+     * @return true, if consuming the token results in a terminal state, false otherwise
+     */
     public boolean parse(T input) {
-        this.setCurrentState((this.getInitialState()));
-        if (this.hasTransition(input)) {
-            return this.getResultingState(input).isAcceptingState();
-        } else {
-            return false;
-        }
+        this.setCurrentState(this.getInitialState());
+        return this.parseHelper(input) && this.getCurrentState().isAcceptingState();
     }
 
+    /**
+     * Helper method for parsing
+     * @param token the token to parse
+     * @return true, if the automata has a valid action from the current state consuming this token, false otherwise
+     */
+    private boolean parseHelper(T token) {
+        //Check if we have an action from the current state
+        if(!this.hasAction(token)) {
+            return false;
+        }
+
+        //Get the actions and if we have one for this token then do it
+        Set<AutomataAction<T>> actions = this.getActions();
+        for(AutomataAction<T> action : actions) {
+            if(action.appliesTo(token)) {
+                action.doAction(this);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Concatenate this automata to another. Assumes this automata has a single terminal
+     * state, which replaces the initial state of the other automata.
+     * @param other the automata to concatenate to this
+     * @return a new automata resulting from the concatenation, not mutating either original
+     */
     public FiniteStateMachine<T> concatenate(FiniteStateMachine<T> other) {
         FiniteStateMachine<T> copy = this.copy();
         FiniteStateMachine<T> otherCopy = other.copy();
@@ -197,6 +334,11 @@ public abstract class FiniteStateMachine<T> {
         return copy;
     }
 
+    /**
+     * Concatenate with a grammar
+     * @param grammar the grammar to concatenate with
+     * @return
+     */
     public final FiniteStateMachine<T> concatenate(Grammar<T> grammar) {
         return this.concatenate(grammar.getMachine());
     }
@@ -208,40 +350,57 @@ public abstract class FiniteStateMachine<T> {
         State secondInitial = otherCopy.getInitialState();
         State secondTerminal = otherCopy.getTerminalState();
 
+        Map<State, State> oldToNew = new HashMap<>();
+
+        Map<State, Set<AutomataAction<T>>> statesCopy = new TreeMap<>();
+
         //Add all states from secondCopy into this, except initial and terminal state
         for(State state : otherCopy.getStates()) {
 
-            //We don't want to copy across the initial or terminal states
-            if(!state.equals(secondInitial) && !state.equals(secondTerminal)) {
+            State newState;
+            if(state.equals(secondInitial)) {
+                newState = copy.getInitialState();
+            } else if (state.equals(secondTerminal)) {
+                newState = copy.getTerminalState();
+            } else {
+                newState = copy.addState(state);
+            }
 
-                //Add the state and get its new number
-                int newNumber = copy.addState(state);
+            oldToNew.put(state, newState);
 
-                //Find any transitions referencing that state and update their number
-                for(Transition<T> transition : otherCopy.getTransitions()) {
-                    if(transition.fromState.equals(state)) {
-                        transition.fromState.setNumber(newNumber);
-                    }
+//            //We don't want to copy across the initial or terminal states
+//            if(!state.equals(secondInitial) && !state.equals(secondTerminal)) {
 
-                    if(transition.toState.equals(state)) {
-                        transition.toState.setNumber(newNumber);
+                //Add the state and get a reference to it
+//                newState = copy.addState(state);
+
+                //Update any actions which result in this state to result in the new state
+                Set<AutomataAction<T>> actions = otherCopy.getActions(state);
+                for(AutomataAction<T> action : actions) {
+
+                    if(action.getResultingState().equals(state)) {
+                        action.setResultingState(newState);
                     }
                 }
-            }
+
+                //Add the existing actions against the new state
+//                otherCopy.addActions(newState, actions);
+
+//            }
         }
 
         //Add all transitions from secondCopy into this, replacing initial and terminal states with this's
-        for(Transition<T> transition : otherCopy.getTransitions()) {
-            if(transition.fromState.equals(secondInitial)) {
-                transition.fromState = copy.getInitialState();
-            }
-
-            if(transition.toState.equals(secondTerminal)) {
-                transition.toState = copy.getTerminalState();
-            }
-
-            copy.addTransition(transition);
-        }
+//        for(Transition<T> transition : otherCopy.getTransitions()) {
+//            if(transition.fromState.equals(secondInitial)) {
+//                transition.fromState = copy.getInitialState();
+//            }
+//
+//            if(transition.toState.equals(secondTerminal)) {
+//                transition.toState = copy.getTerminalState();
+//            }
+//
+//            copy.addTransition(transition);
+//        }
 
         return copy;
 
@@ -251,16 +410,32 @@ public abstract class FiniteStateMachine<T> {
         return this.union(grammar.getMachine());
     }
 
+    /**
+     * Create a copy of this automata which loops on itself.
+     * @return a copy of this automata with a loop
+     */
     public FiniteStateMachine<T> loop() {
 
         FiniteStateMachine<T> copy = this.copy();
 
-        for(Transition<T> transition : copy.getTransitions()) {
-            if(transition.getToState().equals(copy.getTerminalState())) {
-                transition.toState = copy.getInitialState();
+        for(State state : this.getStates()) {
+            Set<AutomataAction<T>> actions = copy.getActions(state);
+            boolean isTerminal = state.equals(copy.getTerminalState());
+            for(AutomataAction<T> action : actions) {
+
+                //If the action goes into the terminal state, move it to go into the initial state
+                if(action.getResultingState().equals(copy.getTerminalState())) {
+                    action.setResultingState(copy.getInitialState());
+                }
+
+                //Move any actions from the terminal state to the initial state
+                if(isTerminal) {
+                    this.addAction(this.getInitialState(), action);
+                }
             }
         }
 
+        //Remove the terminal state and update the terminal state index
         State terminalState = copy.getTerminalState();
         copy.getStates().remove(terminalState);
         copy.getInitialState().setAcceptingState(true);
@@ -269,47 +444,33 @@ public abstract class FiniteStateMachine<T> {
         return copy;
     }
 
+    /**
+     * Make a copy of this automata
+     * @return an exact copy of this automata
+     */
+    //TODO: Should this be implemented here?
     public abstract FiniteStateMachine<T> copy();
 
-    protected final List<State> copyStates() {
-        List<State> states = new ArrayList<>();
-        for (State state : this.states) {
-            states.add(state.copy());
-        }
-
-        return states;
-    }
-
-    protected final Set<Transition<T>> copyTransitions(List<State> states) {
-        Set<Transition<T>> transitions = new TreeSet<>();
-        for (Transition<T> transition : this.transitions) {
-            List<T> inputSymbols = new ArrayList<>();
-            for (T token : transition.inputSymbols) {
-                inputSymbols.add(token);
+    /**
+     * Make a copy of the state-action map
+     * @return a Map of States and associated Actions
+     */
+    protected final Map<State, Set<AutomataAction<T>>> copyStatesWithActions() {
+        Map<State, Set<AutomataAction<T>>> states = new TreeMap<>();
+        for(Map.Entry<State, Set<AutomataAction<T>>> state : this.getStatesWithActions().entrySet()) {
+            Set<AutomataAction<T>> actions = new HashSet<>();
+            for(AutomataAction<T> action : state.getValue()) {
+                actions.add(action); //TODO: Should this add a copy?
             }
-
-            State fromState = states.get(states.indexOf(transition.getFromState()));
-            State toState = states.get(states.indexOf(transition.getToState()));
-            Transition<T> transitionCopy = new Transition<>(inputSymbols, fromState, toState, transition.getAction());
-
-            transitions.add(transitionCopy);
+            states.put(state.getKey().copy(), actions);
         }
-
-        return transitions;
-    }
-
-    public List<State> getStates() {
-        return this.states;
-    }
-
-    public Set<Transition<T>> getTransitions() {
-        return this.transitions;
+        return states;
     }
 
     @Override
     public String toString() {
         String output = "STATES\n";
-        for (State state : this.states) {
+        for (State state : this.states.keySet()) {
             output += "\t" + state + "\n";
         }
 
