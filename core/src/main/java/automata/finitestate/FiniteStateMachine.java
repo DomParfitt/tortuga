@@ -1,5 +1,6 @@
-package automata;
+package automata.finitestate;
 
+import automata.State;
 import automata.actions.AutomataAction;
 import grammar.Grammar;
 
