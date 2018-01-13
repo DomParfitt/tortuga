@@ -1,5 +1,6 @@
-package automata;
+package automata.pushdown;
 
+import automata.actions.StackAction;
 import grammar.LexerGrammar;
 
 public class None extends PushdownAutomaton {

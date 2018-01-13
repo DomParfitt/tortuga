@@ -1,11 +1,16 @@
-package automata;
+package automata.pushdown;
 
+import automata.State;
+import automata.actions.StackAction;
+import automata.actions.Transition;
+import automata.finitestate.FiniteStateMachine;
 import grammar.LexerGrammar;
 import grammar.ParserGrammar;
 import parser.Stack;
 import parser.StackUnderflowError;
 
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 
 public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
 
@@ -60,7 +65,7 @@ public class PushdownAutomaton extends FiniteStateMachine<LexerGrammar> {
                 }
 
                 //Set the resulting state as the current state
-                this.setCurrentState(transition.getToState());
+                this.setCurrentState(transition.getResultingState());
             }
         }
 
