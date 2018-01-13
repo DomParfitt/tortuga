@@ -1,6 +1,7 @@
 package automata.finitestate;
 
 import automata.State;
+import automata.actions.ActionFailedException;
 import automata.actions.AutomataAction;
 import grammar.Grammar;
 
@@ -25,14 +26,6 @@ public abstract class FiniteStateMachine<T> {
 //        initialState.setCurrentState(true);
 //        this.states.add(initialState);
 
-    }
-
-    @Deprecated
-    protected final void initialise(FiniteStateMachine<T> fsm) {
-        this.states = fsm.states;
-//        this.transitions = fsm.transitions;
-        this.terminalStateIndex = fsm.terminalStateIndex;
-        this.stateCounter = fsm.stateCounter;
     }
 
     /**
@@ -269,8 +262,12 @@ public abstract class FiniteStateMachine<T> {
         Set<AutomataAction<T>> actions = this.getActions();
         for(AutomataAction<T> action : actions) {
             if(action.appliesTo(token)) {
-                action.doAction(this);
-                return true;
+                try {
+                    action.doAction(this);
+                    return true;
+                } catch (ActionFailedException e) {
+                    return false;
+                }
             }
         }
 
