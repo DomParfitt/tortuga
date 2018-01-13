@@ -1,5 +1,6 @@
 package automata;
 
+import automata.finitestate.FiniteStateMachine;
 import grammar.LexerGrammar;
 import utils.StringUtils;
 
@@ -10,12 +11,13 @@ public class LexerMachine extends FiniteStateMachine<Character> {
     }
 
     @Override
+    //TODO: Fix implementation
     public LexerMachine copy() {
         LexerMachine copy = new LexerMachine();
-        copy.stateCounter = this.stateCounter;
-        copy.terminalStateIndex = this.terminalStateIndex;
-        copy.states = this.copyStates();
-        copy.transitions = this.copyTransitions(copy.states);
+//        copy.stateCounter = this.stateCounter;
+//        copy.terminalStateIndex = this.terminalStateIndex;
+//        copy.states = this.copyStates();
+//        copy.transitions = this.copyTransitions(copy.states);
 
         return copy;
     }
