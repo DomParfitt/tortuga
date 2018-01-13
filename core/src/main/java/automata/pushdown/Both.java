@@ -1,6 +1,5 @@
 package automata.pushdown;
 
-import automata.actions.StackAction;
 import grammar.LexerGrammar;
 
 public class Both extends PushdownAutomaton {
@@ -8,6 +7,6 @@ public class Both extends PushdownAutomaton {
     public Both(LexerGrammar token, LexerGrammar expected) {
         super();
         this.addState(true);
-        this.addTransition(this.getInitialState(), this.getTerminalState(), token, StackAction.StackActionType.BOTH, expected);
+//        this.addTransition(this.getInitialState(), this.getTerminalState(), token, StackAction.StackActionType.BOTH, expected);
     }
 }
