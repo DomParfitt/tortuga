@@ -1,7 +1,7 @@
 package automata.actions;
 
-import automata.FiniteStateMachine;
 import automata.State;
+import automata.finitestate.FiniteStateMachine;
 
 import java.util.HashSet;
 import java.util.Set;
