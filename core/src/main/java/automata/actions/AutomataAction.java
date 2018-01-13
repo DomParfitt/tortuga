@@ -20,7 +20,7 @@ public interface AutomataAction<T> {
      * Performs the defined action on the given automaton
      * @param machine the automaton to perform the action on
      */
-    void doAction(FiniteStateMachine<T> machine);
+    void doAction(FiniteStateMachine<T> machine) throws ActionFailedException;
 
     /**
      * Gets the state that results from performing this action (may be the current state)
@@ -30,7 +30,7 @@ public interface AutomataAction<T> {
 
     /**
      * Set the state that results from performing this action
-     * @param resultingState the resultign state
+     * @param resultingState the resulting state
      */
     void setResultingState(State resultingState);
 
