@@ -1,7 +1,6 @@
 package automata;
 
 import automata.actions.AutomataAction;
-import automata.actions.Transition;
 import grammar.Grammar;
 
 import java.util.*;
@@ -283,6 +282,7 @@ public abstract class FiniteStateMachine<T> {
      * @param other the automata to concatenate to this
      * @return a new automata resulting from the concatenation, not mutating either original
      */
+    //TODO: Reimplement
     public FiniteStateMachine<T> concatenate(FiniteStateMachine<T> other) {
         FiniteStateMachine<T> copy = this.copy();
         FiniteStateMachine<T> otherCopy = other.copy();
@@ -290,43 +290,43 @@ public abstract class FiniteStateMachine<T> {
         State secondInitial = otherCopy.getInitialState();
         //Add each state of secondCopy except initial
         boolean addedState = false;
-        for (State state : otherCopy.getStates()) {
-            if (!state.equals(secondInitial)) {
-                int newNumber = copy.addState(state);
-                addedState = true;
-
-                //Find any transitions referencing that state and update their number
-                for (Transition<T> transition : otherCopy.getTransitions()) {
-                    if (transition.fromState.equals(state)) {
-                        transition.fromState.setNumber(newNumber);
-                    }
-
-                    if (transition.toState.equals(state)) {
-                        transition.toState.setNumber(newNumber);
-                    }
-                }
-
-            }
-        }
+//        for (State state : otherCopy.getStates()) {
+//            if (!state.equals(secondInitial)) {
+//                int newNumber = copy.addState(state);
+//                addedState = true;
+//
+//                //Find any transitions referencing that state and update their number
+//                for (Transition<T> transition : otherCopy.getTransitions()) {
+//                    if (transition.fromState.equals(state)) {
+//                        transition.fromState.setNumber(newNumber);
+//                    }
+//
+//                    if (transition.toState.equals(state)) {
+//                        transition.toState.setNumber(newNumber);
+//                    }
+//                }
+//
+//            }
+//        }
         //Update secondCopy transitions with initial to use this's terminal
         //Add transitions
         //Add all transitions from secondCopy into this, replacing initial and terminal states with this's
-        for (Transition<T> transition : otherCopy.getTransitions()) {
-            if (transition.fromState.equals(secondInitial)) {
-                transition.fromState = copy.getTerminalState();
-            }
-
-            if (transition.toState.equals(secondInitial)) {
-                transition.toState = copy.getTerminalState();
-            }
-
-            copy.addTransition(transition);
-        }
+//        for (Transition<T> transition : otherCopy.getTransitions()) {
+//            if (transition.fromState.equals(secondInitial)) {
+//                transition.fromState = copy.getTerminalState();
+//            }
+//
+//            if (transition.toState.equals(secondInitial)) {
+//                transition.toState = copy.getTerminalState();
+//            }
+//
+//            copy.addTransition(transition);
+//        }
 
         //Mark terminal state of this as non-terminal if new states have been added
-        if (addedState) {
-            copy.getTerminalState().setAcceptingState(false);
-        }
+//        if (addedState) {
+//            copy.getTerminalState().setAcceptingState(false);
+//        }
 
         //Update terminal index of this
         copy.terminalStateIndex = copy.stateCounter - 1;
@@ -343,6 +343,7 @@ public abstract class FiniteStateMachine<T> {
         return this.concatenate(grammar.getMachine());
     }
 
+    //TODO: Finish reimplementing
     public FiniteStateMachine<T> union(FiniteStateMachine<T> other) {
         FiniteStateMachine<T> copy = this.copy();
         FiniteStateMachine<T> otherCopy = other.copy();
@@ -474,11 +475,12 @@ public abstract class FiniteStateMachine<T> {
             output += "\t" + state + "\n";
         }
 
-        output += "\nTRANSITIONS\n";
-        for (Transition<T> transition : this.transitions) {
-            output += "\t" + transition + "\n";
+        output += "\nACTIONS\n";
+        for (Map.Entry<State, Set<AutomataAction<T>>> state : this.states.entrySet()) {
+            for (AutomataAction<T> action : state.getValue()) {
+                output += "\t" + action + "\n";
+            }
         }
-
         return output;
     }
 
