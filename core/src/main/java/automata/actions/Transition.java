@@ -65,8 +65,9 @@ public class Transition<T> implements AutomataAction<T>, Comparable {
     }
 
     @Override
-    public void doAction(FiniteStateMachine<T> machine) {
+    public boolean doAction(FiniteStateMachine<T> machine) {
         machine.setCurrentState(this.getResultingState());
+        return machine.getCurrentState().equals(this.getResultingState());
     }
 
 //    public boolean hasTransition(State from, T inputSymbol) {

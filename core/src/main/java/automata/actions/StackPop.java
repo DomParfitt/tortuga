@@ -44,11 +44,12 @@ public class StackPop<T> extends StackAction<T> {
     }
 
     @Override
-    public void doAction(FiniteStateMachine<T> machine) {
+    public boolean doAction(FiniteStateMachine<T> machine) {
         T poppedToken = this.getStack().pop();
         if (!this.getExpectedToken().equals(poppedToken)) {
-            //throw Exception?
+            //TODO: Replace popped token?
+            return false;
         }
-        super.doAction(machine);
+        return super.doAction(machine);
     }
 }

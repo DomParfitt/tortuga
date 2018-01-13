@@ -23,10 +23,12 @@ public class StackPopAndPush<T> extends StackPop<T> {
     }
 
     @Override
-    public void doAction(FiniteStateMachine<T> machine) {
-        super.doAction(machine); //Pops and compares, then updates current state
+    public boolean doAction(FiniteStateMachine<T> machine) {
+        boolean actionSucceeded = super.doAction(machine); //Pops and compares, then updates current state
         for(T inputSymbol : this.getInputSymbols()) {
             this.getStack().push(inputSymbol);
         }
+
+        return actionSucceeded;
     }
 }

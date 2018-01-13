@@ -1,7 +1,6 @@
 package automata.finitestate;
 
 import automata.State;
-import automata.actions.ActionFailedException;
 import automata.actions.AutomataAction;
 import grammar.Grammar;
 
@@ -262,12 +261,7 @@ public abstract class FiniteStateMachine<T> {
         Set<AutomataAction<T>> actions = this.getActions();
         for(AutomataAction<T> action : actions) {
             if(action.appliesTo(token)) {
-                try {
-                    action.doAction(this);
-                    return true;
-                } catch (ActionFailedException e) {
-                    return false;
-                }
+                return action.doAction(this);
             }
         }
 

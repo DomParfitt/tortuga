@@ -11,7 +11,6 @@ import automata.actions.Transition;
  */
 public class FollowedByFSM extends LexerMachine {
 
-
     public FollowedByFSM(String characters) {
         super();
         for (Character character : characters.toCharArray()) {

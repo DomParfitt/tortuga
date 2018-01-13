@@ -19,8 +19,9 @@ public interface AutomataAction<T> {
     /**
      * Performs the defined action on the given automaton
      * @param machine the automaton to perform the action on
+     * @return true if the action succeeded, false otherwise
      */
-    void doAction(FiniteStateMachine<T> machine) throws ActionFailedException;
+    boolean doAction(FiniteStateMachine<T> machine);
 
     /**
      * Gets the state that results from performing this action (may be the current state)
