@@ -1,5 +1,7 @@
 package automata;
 
+import automata.actions.Transition;
+import automata.pushdown.PushdownAutomaton;
 import grammar.LexerGrammar;
 import grammar.ParserGrammar;
 
