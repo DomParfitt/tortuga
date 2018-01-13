@@ -1,6 +1,6 @@
 package grammar;
 
-import automata.PushdownAutomaton;
+import automata.pushdown.PushdownAutomaton;
 
 import java.util.List;
 

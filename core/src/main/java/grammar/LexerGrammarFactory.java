@@ -1,8 +1,8 @@
 package grammar;
 
-import automata.FollowedByFSM;
 import automata.LexerMachine;
-import automata.UnionFSM;
+import automata.finitestate.FollowedByFSM;
+import automata.finitestate.UnionFSM;
 
 /**
  * Factory class with static methods to get specific LexerMachines

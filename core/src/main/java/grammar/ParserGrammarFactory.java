@@ -1,6 +1,10 @@
 package grammar;
 
-import automata.*;
+import automata.State;
+import automata.actions.StackAction;
+import automata.actions.Transition;
+import automata.pushdown.None;
+import automata.pushdown.PushdownAutomaton;
 
 import java.util.*;
 
@@ -63,7 +67,7 @@ public class ParserGrammarFactory {
 
         return new PushdownAutomaton(states, transitions);
 
-//        PushdownAutomaton mathExpr = new Push(LexerGrammar.OPEN_PAREN).loop().concatenate(getIntExpression()).concatenate(getMathematicalOperator()).concatenate(getIntExpression()).concatenate(new Pop(LexerGrammar.CLOSE_PAREN, LexerGrammar.OPEN_PAREN));
+//        PushdownAutomaton mathExpr = new StackPush(LexerGrammar.OPEN_PAREN).loop().concatenate(getIntExpression()).concatenate(getMathematicalOperator()).concatenate(getIntExpression()).concatenate(new Pop(LexerGrammar.CLOSE_PAREN, LexerGrammar.OPEN_PAREN));
 //        return mathExpr;
 
     }

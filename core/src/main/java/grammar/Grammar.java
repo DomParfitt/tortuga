@@ -1,6 +1,6 @@
 package grammar;
 
-import automata.FiniteStateMachine;
+import automata.finitestate.FiniteStateMachine;
 
 import java.util.List;
 
