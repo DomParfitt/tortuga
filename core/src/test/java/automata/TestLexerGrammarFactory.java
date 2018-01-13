@@ -1,5 +1,6 @@
 package automata;
 
+import automata.finitestate.FiniteStateMachine;
 import grammar.LexerGrammarFactory;
 import org.junit.Test;
 

@@ -1,5 +1,9 @@
 package automata;
 
+import automata.actions.StackAction;
+import automata.finitestate.FollowedByFSM;
+import automata.finitestate.UnionFSM;
+import automata.pushdown.PushdownAutomaton;
 import grammar.LexerGrammar;
 import org.junit.Test;
 

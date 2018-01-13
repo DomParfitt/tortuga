@@ -1,5 +1,8 @@
 package automata;
 
+import automata.actions.StackAction;
+import automata.actions.Transition;
+import automata.pushdown.PushdownAutomaton;
 import grammar.LexerGrammar;
 import grammar.ParserGrammarFactory;
 import lexer.Lexer;
