@@ -6,7 +6,7 @@ class FiniteStateMachine<T> {
 
 class Transition<T> {
     -State fromState
-    -State toState
+    -State resultingState
     -List<T> tokens
     -Action action
 
