@@ -3,7 +3,7 @@ package automata;
 /**
  * A class to represent a State within an FSM
  */
-public class State {
+public class State implements Comparable<State> {
 
     private int number;
     private boolean isCurrentState;
@@ -71,4 +71,8 @@ public class State {
         return output;
     }
 
+    @Override
+    public int compareTo(State o) {
+        return ((Integer) this.getNumber()).compareTo(o.getNumber());
+    }
 }
