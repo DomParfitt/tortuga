@@ -1,15 +1,8 @@
 @startuml
 
 class FiniteStateMachine<T> {
+    -Map<State, Set<AutomataAction<T>>> states
     +bool parse()
-}
-
-class Transition<T> {
-    -State fromState
-    -State resultingState
-    -List<T> tokens
-    -Action action
-
 }
 
 class State {
@@ -17,8 +10,10 @@ class State {
     - bool isAccepting
 }
 
-interface Action {
-    +doAction(FiniteStateMachine<T>)
+interface AutomataAction<T> {
+    +bool doAction(FiniteStateMachine<T>)
+    +State getResultingState()
+    +void setResultingState()
 }
 
 
@@ -37,7 +32,20 @@ class Stack<T> {
     +T pop()
 }
 
-class StackAction {
+class Transition<T> {
+
+}
+
+abstract class StackAction<T> {
+    -Stack stack
+    +Stack getStack()
+    +void setStack()
+}
+
+class StackPop<T> {
+    -T expectedToken
+    +T getExpectedToken()
+    +void setExpectedToken()
 }
 
 FiniteStateMachine <|-- LexerMachine
@@ -46,14 +54,15 @@ FiniteStateMachine <|-- PushdownAutomaton
 LexerMachine <|-- UnionFSM
 LexerMachine <|-- FollowedByFSM
 
-FiniteStateMachine -- "1*" Transition
 FiniteStateMachine -- "1*" State
-
-Transition -- "2" State
-Transition -- "1" Action
+FiniteStateMachine -- "*" AutomataAction
 
 PushdownAutomaton -- "1" Stack
 
-Action <|-- StackAction
+AutomataAction <|-- Transition
+Transition <|-- StackAction
+StackAction <-- StackPush
+StackAction <-- StackPop
+StackPop <-- StackPopAndPush
 
 @enduml
