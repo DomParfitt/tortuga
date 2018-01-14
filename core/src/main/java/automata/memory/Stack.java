@@ -1,4 +1,4 @@
-package parser;
+package automata.memory;
 
 import java.util.ArrayList;
 import java.util.List;

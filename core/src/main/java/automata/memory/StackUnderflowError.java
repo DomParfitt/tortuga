@@ -1,4 +1,4 @@
-package parser;
+package automata.memory;
 
 public class StackUnderflowError extends RuntimeException {
     public StackUnderflowError() {
