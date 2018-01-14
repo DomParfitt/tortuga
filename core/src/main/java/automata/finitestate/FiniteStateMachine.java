@@ -70,6 +70,24 @@ public abstract class FiniteStateMachine<T> {
     }
 
     /**
+     * Gets all actions which have a resulting state equal to the state provided
+     * @param resultingState the resulting state of the actions to retrieve
+     * @return a set of actions
+     */
+    public Set<AutomataAction<T>> getActionsByResultingState(State resultingState) {
+        Set<AutomataAction<T>> actions = new TreeSet<>();
+        for(State state : this.getStates()) {
+            for(AutomataAction<T> action : this.getStatesWithActions().get(state)) {
+                if(action.getResultingState().equals(resultingState)) {
+                    actions.add(action);
+                }
+            }
+        }
+
+        return actions;
+    }
+
+    /**
      * Gets the initial state of the automata
      * @return the initial state
      */
@@ -343,9 +361,9 @@ public abstract class FiniteStateMachine<T> {
         State secondInitial = otherCopy.getInitialState();
         State secondTerminal = otherCopy.getTerminalState();
 
-        Map<State, State> oldToNew = new HashMap<>();
+        Map<State, State> oldToNew = new TreeMap<>();
 
-        Map<State, Set<AutomataAction<T>>> statesCopy = new TreeMap<>();
+        Map<State, Set<AutomataAction<T>>> statesCopy = otherCopy.copyStatesWithActions();
 
         //Add all states from secondCopy into this, except initial and terminal state
         for(State state : otherCopy.getStates()) {
@@ -361,25 +379,18 @@ public abstract class FiniteStateMachine<T> {
 
             oldToNew.put(state, newState);
 
-//            //We don't want to copy across the initial or terminal states
-//            if(!state.equals(secondInitial) && !state.equals(secondTerminal)) {
+        }
 
-                //Add the state and get a reference to it
-//                newState = copy.addState(state);
+        for(State oldState : oldToNew.keySet()) {
+            //Update outward actions to the new state in the copy
+            State newState = oldToNew.get(oldState);
+            Set<AutomataAction<T>> actions = otherCopy.getActions(oldState);//statesCopy.get(oldState);
+            copy.addActions(newState, actions);
 
-                //Update any actions which result in this state to result in the new state
-                Set<AutomataAction<T>> actions = otherCopy.getActions(state);
-                for(AutomataAction<T> action : actions) {
-
-                    if(action.getResultingState().equals(state)) {
-                        action.setResultingState(newState);
-                    }
-                }
-
-                //Add the existing actions against the new state
-//                otherCopy.addActions(newState, actions);
-
-//            }
+            //Update inward actions to point to the new state
+            for(AutomataAction<T> action : otherCopy.getActionsByResultingState(oldState)) {
+                action.setResultingState(newState);
+            }
         }
 
         //Add all transitions from secondCopy into this, replacing initial and terminal states with this's
