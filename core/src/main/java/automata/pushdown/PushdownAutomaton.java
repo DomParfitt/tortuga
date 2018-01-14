@@ -3,9 +3,9 @@ package automata.pushdown;
 import automata.State;
 import automata.actions.Transition;
 import automata.finitestate.FiniteStateMachine;
+import automata.memory.Stack;
 import grammar.LexerGrammar;
 import grammar.ParserGrammar;
-import parser.Stack;
 
 import java.util.List;
 import java.util.Set;

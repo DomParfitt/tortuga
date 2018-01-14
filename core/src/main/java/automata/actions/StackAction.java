@@ -1,7 +1,7 @@
 package automata.actions;
 
 import automata.State;
-import parser.Stack;
+import automata.memory.Stack;
 
 import java.util.Set;
 
