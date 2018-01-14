@@ -14,11 +14,9 @@ public class LexerMachine extends FiniteStateMachine<Character> {
     //TODO: Fix implementation
     public LexerMachine copy() {
         LexerMachine copy = new LexerMachine();
-//        copy.stateCounter = this.stateCounter;
-//        copy.terminalStateIndex = this.terminalStateIndex;
-//        copy.states = this.copyStates();
-//        copy.transitions = this.copyTransitions(copy.states);
-
+        copy.stateCounter = this.stateCounter;
+        copy.terminalStateIndex = this.terminalStateIndex;
+        copy.states = this.copyStatesWithActions();
         return copy;
     }
 
