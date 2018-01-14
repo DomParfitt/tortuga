@@ -6,6 +6,9 @@ import utils.StringUtils;
 
 import java.util.List;
 
+/**
+ * Enumeration of lexemes that exist in the grammar over characters
+ */
 public enum LexerGrammar implements Grammar<Character> {
 
     //TokenTypes defined in order of precedence, from lowest to highest
@@ -60,28 +63,21 @@ public enum LexerGrammar implements Grammar<Character> {
     FOR(TokenType.KEYWORD)
     ;
 
-//    private String value; //TODO: Not sure if this is necessary
     private TokenType tokenType;
-//    private LexerMachine machine;
 
     LexerGrammar(TokenType tokenType) {
         this.tokenType = tokenType;
-//        this.machine = LexerGrammarFactory.getMachine(this);
     }
 
-//    LexerGrammar(TokenType tokenType, LexerMachine machine) {
-//        this.tokenType = tokenType;
-//        this.machine = machine;
-//    }
 
+    /**
+     * Convenience method for parsing a String
+     * @param input String representing a list of Characters
+     * @return true if the parse succeeds, false otherwise
+     */
     public boolean parse(String input) {
         return this.getMachine().parse(StringUtils.toCharacterList(input));
     }
-
-//    @Override
-//    public boolean parse(Character input) {
-//        return this.machine.parse(input);
-//    }
 
     @Override
     public boolean parse(List<Character> input) {
