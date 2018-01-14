@@ -12,6 +12,7 @@
     <modules>
         <module>core</module>
         <module>lexer</module>
+        <module>visualiser</module>
     </modules>
 
 
