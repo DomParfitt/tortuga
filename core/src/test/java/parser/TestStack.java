@@ -1,5 +1,7 @@
 package parser;
 
+import automata.memory.Stack;
+import automata.memory.StackUnderflowError;
 import org.junit.Before;
 import org.junit.Test;
 
