@@ -204,6 +204,7 @@ public class TestFiniteStateMachines {
         fsm = new FollowedByFSM("a");//new FollowedByFSM(new FollowedByFSM("a"), new FollowedByFSM("bc"));
         fsm = fsm.concatenate(new FollowedByFSM("bc"));
         System.out.print("a(bc)");
+        System.out.println(fsm);
 
         try {
             //Passes on valid chain

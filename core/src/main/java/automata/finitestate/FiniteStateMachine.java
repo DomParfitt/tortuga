@@ -299,7 +299,34 @@ public abstract class FiniteStateMachine<T> {
 
         State secondInitial = otherCopy.getInitialState();
         //Add each state of secondCopy except initial
-        boolean addedState = false;
+//        boolean addedState = false;
+
+        Map<State, State> oldToNew = new TreeMap<>();
+
+        //Add all states from secondCopy into this, except initial and terminal state
+        for(State state : otherCopy.getStates()) {
+
+            State newState;
+            if(state.equals(secondInitial)) {
+                newState = copy.getTerminalState();
+            } else {
+                newState = copy.addState(state);
+            }
+
+            oldToNew.put(state, newState);
+        }
+
+        for(State oldState : oldToNew.keySet()) {
+            //Update outward actions to the new state in the copy
+            State newState = oldToNew.get(oldState);
+            Set<AutomataAction<T>> actions = otherCopy.getActions(oldState);//statesCopy.get(oldState);
+            copy.addActions(newState, actions);
+
+            //Update inward actions to point to the new state
+            for(AutomataAction<T> action : otherCopy.getActionsByResultingState(oldState)) {
+                action.setResultingState(newState);
+            }
+        }
 //        for (State state : otherCopy.getStates()) {
 //            if (!state.equals(secondInitial)) {
 //                int newNumber = copy.addState(state);
@@ -335,7 +362,7 @@ public abstract class FiniteStateMachine<T> {
 
         //Mark terminal state of this as non-terminal if new states have been added
 //        if (addedState) {
-//            copy.getTerminalState().setAcceptingState(false);
+            copy.getTerminalState().setAcceptingState(false);
 //        }
 
         //Update terminal index of this
@@ -353,7 +380,11 @@ public abstract class FiniteStateMachine<T> {
         return this.concatenate(grammar.getMachine());
     }
 
-    //TODO: Finish reimplementing
+    /**
+     * Creates a new automata by unioning this one with another
+     * @param other the other automata
+     * @return a new automata which is the union of the two originals
+     */
     public FiniteStateMachine<T> union(FiniteStateMachine<T> other) {
         FiniteStateMachine<T> copy = this.copy();
         FiniteStateMachine<T> otherCopy = other.copy();
@@ -362,8 +393,6 @@ public abstract class FiniteStateMachine<T> {
         State secondTerminal = otherCopy.getTerminalState();
 
         Map<State, State> oldToNew = new TreeMap<>();
-
-        Map<State, Set<AutomataAction<T>>> statesCopy = otherCopy.copyStatesWithActions();
 
         //Add all states from secondCopy into this, except initial and terminal state
         for(State state : otherCopy.getStates()) {
@@ -393,23 +422,15 @@ public abstract class FiniteStateMachine<T> {
             }
         }
 
-        //Add all transitions from secondCopy into this, replacing initial and terminal states with this's
-//        for(Transition<T> transition : otherCopy.getTransitions()) {
-//            if(transition.fromState.equals(secondInitial)) {
-//                transition.fromState = copy.getInitialState();
-//            }
-//
-//            if(transition.toState.equals(secondTerminal)) {
-//                transition.toState = copy.getTerminalState();
-//            }
-//
-//            copy.addTransition(transition);
-//        }
-
         return copy;
 
     }
 
+    /**
+     * Unions with a grammar
+     * @param grammar the grammar to union with this
+     * @return a new automata which is the union of this and the grammar
+     */
     public final FiniteStateMachine<T> union(Grammar<T> grammar) {
         return this.union(grammar.getMachine());
     }
