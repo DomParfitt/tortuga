@@ -5,12 +5,24 @@ import grammar.ParserGrammar;
 
 public class ParserMachine extends PushdownAutomaton<LexerGrammar> {
 
+    public ParserMachine concatenate(ParserMachine automata) {
+        return (ParserMachine) super.concatenate(automata);
+    }
+
     public ParserMachine concatenate(ParserGrammar grammar) {
         return (ParserMachine) super.concatenate(grammar);
     }
 
+    public ParserMachine union(ParserMachine automata) {
+        return (ParserMachine) super.union(automata);
+    }
+
     public ParserMachine union(ParserGrammar grammar) {
         return  (ParserMachine) super.union(grammar);
+    }
+
+    public ParserMachine loop() {
+        return (ParserMachine) super.loop();
     }
 
     @Override

@@ -8,7 +8,7 @@ public class Both extends ParserMachine {
 
     public Both(LexerGrammar token, LexerGrammar expected) {
         super();
-        State initialState = this.addState(false);
+        State initialState = this.getInitialState();
         State terminalState = this.addState(true);
         this.addAction(initialState, new StackPopAndPush<>(token, initialState, terminalState, this.getStack(), expected));
     }

@@ -26,7 +26,7 @@ public abstract class PushdownAutomaton<T> extends FiniteStateMachine<T> {
         //TODO: Figure out possible implementation for this
     }
 
-    public PushdownAutomaton<T> concatenate(PushdownAutomaton other) {
+    public PushdownAutomaton<T> concatenate(PushdownAutomaton<T> other) {
         return (PushdownAutomaton<T>) super.concatenate(other);
     }
 
@@ -34,7 +34,7 @@ public abstract class PushdownAutomaton<T> extends FiniteStateMachine<T> {
         return (PushdownAutomaton<T>)super.concatenate(grammar.getMachine());
     }
 
-    public PushdownAutomaton<T> union(PushdownAutomaton other) {
+    public PushdownAutomaton<T> union(PushdownAutomaton<T> other) {
         return (PushdownAutomaton<T>) super.union(other);
     }
 
