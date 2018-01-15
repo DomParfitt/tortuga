@@ -149,8 +149,8 @@ public abstract class FiniteStateMachine<T> {
         State oldState = this.getCurrentState();
         for (State state : this.states.keySet()) {
             if (state.equals(newState)) {
-                state.setCurrentState(true);
                 oldState.setCurrentState(false);
+                state.setCurrentState(true);
                 break;
             }
         }
@@ -197,7 +197,16 @@ public abstract class FiniteStateMachine<T> {
             this.addState(state.isAcceptingState());
         }
         action.setFromState(state);
-        this.getActions(state).add(action);
+        Set<AutomataAction<T>> actions = this.getActions(state);
+        if(!actions.contains(action)) {
+            actions.add(action);
+        } else {
+            for(AutomataAction<T> existingAction : actions) {
+                if(existingAction.equals(action)) {
+                    existingAction.getInputSymbols().addAll(action.getInputSymbols());
+                }
+            }
+        }
     }
 
     /**
@@ -329,7 +338,7 @@ public abstract class FiniteStateMachine<T> {
             if (state.equals(secondInitial)) {
                 State terminal = copy.getTerminalState();
                 newState = terminal;
-                terminal.setAcceptingState(false);
+                terminal.setAcceptingState(state.isAcceptingState());
             } else {
                 newState = copy.addState(state);
             }
@@ -370,7 +379,9 @@ public abstract class FiniteStateMachine<T> {
      */
     public FiniteStateMachine<T> union(FiniteStateMachine<T> other) {
         FiniteStateMachine<T> copy = this.copy();
+        System.out.println(copy);
         FiniteStateMachine<T> otherCopy = other.copy();
+        System.out.println(otherCopy);
 
         State secondInitial = otherCopy.getInitialState();
         State secondTerminal = otherCopy.getTerminalState();
@@ -391,6 +402,11 @@ public abstract class FiniteStateMachine<T> {
 
             oldToNew.put(state, newState);
 
+            //Update inward actions to point to the new state
+            for (AutomataAction<T> action : otherCopy.getActionsByResultingState(state)) {
+                action.setResultingState(newState);
+            }
+
         }
 
         for (State oldState : oldToNew.keySet()) {
@@ -399,10 +415,6 @@ public abstract class FiniteStateMachine<T> {
             Set<AutomataAction<T>> actions = otherCopy.getActions(oldState);//statesCopy.get(oldState);
             copy.addActions(newState, actions);
 
-            //Update inward actions to point to the new state
-            for (AutomataAction<T> action : otherCopy.getActionsByResultingState(oldState)) {
-                action.setResultingState(newState);
-            }
         }
 
         return copy;
@@ -467,7 +479,6 @@ public abstract class FiniteStateMachine<T> {
      *
      * @return a Map of States and associated Actions
      */
-    //TODO: Needs fixing
     protected final Map<State, Set<AutomataAction<T>>> copyStatesWithActions() {
         Map<State, Set<AutomataAction<T>>> states = new TreeMap<>();
 
