@@ -3,6 +3,8 @@ package automata.actions;
 import automata.State;
 import automata.finitestate.FiniteStateMachine;
 
+import java.util.Set;
+
 /**
  * Interface for actions within an automaton
  * @param <T> the type of object that the action acts upon
@@ -39,5 +41,15 @@ public interface AutomataAction<T> {
      */
     void setResultingState(State resultingState);
 
-//    AutomataAction<T> copy();
+    /**
+     * Get the input symbols that can be consumed for this transition
+     * @return the set of input symbols
+     */
+    Set<T> getInputSymbols();
+
+    /**
+     * Makes a copy of the action
+     * @return a copy of the action
+     */
+    AutomataAction<T> copy();
 }
