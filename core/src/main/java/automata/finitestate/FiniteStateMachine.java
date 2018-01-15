@@ -183,6 +183,7 @@ public abstract class FiniteStateMachine<T> {
         if(!this.states.containsKey(state)) {
             this.addState(state.isAcceptingState());
         }
+        action.setFromState(state);
         this.getActions(state).add(action);
     }
 
@@ -292,14 +293,11 @@ public abstract class FiniteStateMachine<T> {
      * @param other the automata to concatenate to this
      * @return a new automata resulting from the concatenation, not mutating either original
      */
-    //TODO: Reimplement
     public FiniteStateMachine<T> concatenate(FiniteStateMachine<T> other) {
         FiniteStateMachine<T> copy = this.copy();
         FiniteStateMachine<T> otherCopy = other.copy();
 
         State secondInitial = otherCopy.getInitialState();
-        //Add each state of secondCopy except initial
-//        boolean addedState = false;
 
         Map<State, State> oldToNew = new TreeMap<>();
 
@@ -308,7 +306,9 @@ public abstract class FiniteStateMachine<T> {
 
             State newState;
             if(state.equals(secondInitial)) {
-                newState = copy.getTerminalState();
+                State terminal = copy.getTerminalState();
+                newState = terminal;
+                terminal.setAcceptingState(false);
             } else {
                 newState = copy.addState(state);
             }
@@ -327,46 +327,6 @@ public abstract class FiniteStateMachine<T> {
                 action.setResultingState(newState);
             }
         }
-//        for (State state : otherCopy.getStates()) {
-//            if (!state.equals(secondInitial)) {
-//                int newNumber = copy.addState(state);
-//                addedState = true;
-//
-//                //Find any transitions referencing that state and update their number
-//                for (Transition<T> transition : otherCopy.getTransitions()) {
-//                    if (transition.fromState.equals(state)) {
-//                        transition.fromState.setNumber(newNumber);
-//                    }
-//
-//                    if (transition.toState.equals(state)) {
-//                        transition.toState.setNumber(newNumber);
-//                    }
-//                }
-//
-//            }
-//        }
-        //Update secondCopy transitions with initial to use this's terminal
-        //Add transitions
-        //Add all transitions from secondCopy into this, replacing initial and terminal states with this's
-//        for (Transition<T> transition : otherCopy.getTransitions()) {
-//            if (transition.fromState.equals(secondInitial)) {
-//                transition.fromState = copy.getTerminalState();
-//            }
-//
-//            if (transition.toState.equals(secondInitial)) {
-//                transition.toState = copy.getTerminalState();
-//            }
-//
-//            copy.addTransition(transition);
-//        }
-
-        //Mark terminal state of this as non-terminal if new states have been added
-//        if (addedState) {
-            copy.getTerminalState().setAcceptingState(false);
-//        }
-
-        //Update terminal index of this
-        copy.terminalStateIndex = copy.stateCounter - 1;
 
         return copy;
     }
@@ -480,6 +440,7 @@ public abstract class FiniteStateMachine<T> {
      * Make a copy of the state-action map
      * @return a Map of States and associated Actions
      */
+    //TODO: Needs fixing
     protected final Map<State, Set<AutomataAction<T>>> copyStatesWithActions() {
         Map<State, Set<AutomataAction<T>>> states = new TreeMap<>();
         for(Map.Entry<State, Set<AutomataAction<T>>> state : this.getStatesWithActions().entrySet()) {
