@@ -1,6 +1,7 @@
 package automata;
 
 import automata.finitestate.FollowedByFSM;
+import automata.finitestate.LexerMachine;
 import automata.finitestate.UnionFSM;
 import org.junit.Before;
 import org.junit.Test;

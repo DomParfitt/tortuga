@@ -1,6 +1,5 @@
 package automata.finitestate;
 
-import automata.LexerMachine;
 import automata.State;
 import automata.actions.Transition;
 import utils.StringUtils;

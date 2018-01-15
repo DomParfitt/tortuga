@@ -1,6 +1,6 @@
 package grammar;
 
-import automata.LexerMachine;
+import automata.finitestate.LexerMachine;
 import automata.finitestate.FollowedByFSM;
 import automata.finitestate.UnionFSM;
 

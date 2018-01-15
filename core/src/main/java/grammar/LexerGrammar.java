@@ -1,6 +1,6 @@
 package grammar;
 
-import automata.LexerMachine;
+import automata.finitestate.LexerMachine;
 import lexer.TokenType;
 import utils.StringUtils;
 

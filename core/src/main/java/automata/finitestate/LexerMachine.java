@@ -1,6 +1,5 @@
-package automata;
+package automata.finitestate;
 
-import automata.finitestate.FiniteStateMachine;
 import grammar.LexerGrammar;
 import utils.StringUtils;
 
