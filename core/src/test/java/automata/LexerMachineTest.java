@@ -20,7 +20,7 @@ public class LexerMachineTest {
 
         assertTrue(concat.parse("c"));
 
-        union.concatenate(concat);
+        union = union.concatenate(concat);
         assertTrue(union.parse("ac"));
         assertTrue(union.parse("bc"));
 
@@ -31,7 +31,7 @@ public class LexerMachineTest {
         LexerMachine union = new UnionFSM("ab");
         LexerMachine concat = new FollowedByFSM("c");
 
-        union.union(concat);
+        union = union.union(concat);
         assertTrue(union.parse("a"));
         assertTrue(union.parse("b"));
         assertTrue(union.parse("c"));
@@ -42,7 +42,7 @@ public class LexerMachineTest {
     public void loop() {
         LexerMachine union = new UnionFSM("ab");
 
-        union.loop();
+        union = union.loop();
         assertTrue(union.parse(""));
         assertTrue(union.parse("aaaa"));
         assertTrue(union.parse("abababa"));
