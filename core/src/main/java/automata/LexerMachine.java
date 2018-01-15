@@ -10,16 +10,6 @@ public class LexerMachine extends FiniteStateMachine<Character> {
         return super.parse(StringUtils.toCharacterList(input));
     }
 
-    @Override
-    //TODO: Fix implementation
-    public LexerMachine copy() {
-        LexerMachine copy = new LexerMachine();
-        copy.stateCounter = this.stateCounter;
-        copy.terminalStateIndex = this.terminalStateIndex;
-        copy.states = this.copyStatesWithActions();
-        return copy;
-    }
-
     public LexerMachine concatenate(LexerMachine other) {
         return (LexerMachine) super.concatenate(other);
     }
@@ -38,6 +28,16 @@ public class LexerMachine extends FiniteStateMachine<Character> {
 
     public LexerMachine loop() {
         return (LexerMachine) super.loop();
+    }
+
+    @Override
+    //TODO: Fix implementation
+    public LexerMachine copy() {
+        LexerMachine copy = new LexerMachine();
+        copy.stateCounter = this.stateCounter;
+        copy.terminalStateIndex = this.terminalStateIndex;
+        copy.states = this.copyStatesWithActions();
+        return copy;
     }
 
 }
