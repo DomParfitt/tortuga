@@ -30,4 +30,11 @@ public class StackPush<T> extends StackAction<T> {
         }
         return super.doAction(machine);
     }
+
+    @Override
+    public StackPush<T> copy() {
+        return new StackPush<>(this.getInputSymbols(), this.getFromState(), this.getResultingState(), this.getStack());
+    }
+
+
 }

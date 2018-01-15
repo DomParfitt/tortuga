@@ -53,4 +53,6 @@ public abstract class StackAction<T> extends Transition<T> {
     public void setStack(Stack<T> stack) {
         this.stack = stack;
     }
+
+
 }

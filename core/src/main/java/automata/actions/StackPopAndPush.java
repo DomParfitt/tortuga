@@ -31,4 +31,9 @@ public class StackPopAndPush<T> extends StackPop<T> {
 
         return actionSucceeded;
     }
+
+    @Override
+    public StackPopAndPush<T> copy() {
+        return new StackPopAndPush<>(this.getInputSymbols(), this.getFromState(), this.getResultingState(), this.getStack(), this.getExpectedToken());
+    }
 }

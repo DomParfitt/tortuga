@@ -52,4 +52,9 @@ public class StackPop<T> extends StackAction<T> {
         }
         return super.doAction(machine);
     }
+
+    @Override
+    public StackPop<T> copy() {
+        return new StackPop<>(this.getInputSymbols(), this.getFromState(), this.getResultingState(), this.getStack(), this.getExpectedToken());
+    }
 }
