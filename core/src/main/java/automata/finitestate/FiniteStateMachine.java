@@ -20,11 +20,6 @@ public abstract class FiniteStateMachine<T> {
     public FiniteStateMachine() {
         this.states = new TreeMap<>();
         this.addState(false, true);
-//        this.transitions = new TreeSet<>();
-//        State initialState = new State(this.stateCounter++, false); //TODO: Initialise this as accepting?
-//        initialState.setCurrentState(true);
-//        this.states.add(initialState);
-
     }
 
     /**
@@ -325,7 +320,9 @@ public abstract class FiniteStateMachine<T> {
      */
     public FiniteStateMachine<T> concatenate(FiniteStateMachine<T> other) {
         FiniteStateMachine<T> copy = this.copy();
+        System.out.println(copy);
         FiniteStateMachine<T> otherCopy = other.copy();
+        System.out.println(otherCopy);
 
         State secondInitial = otherCopy.getInitialState();
 
@@ -344,6 +341,11 @@ public abstract class FiniteStateMachine<T> {
             }
 
             oldToNew.put(state, newState);
+
+            //Update inward actions to point to the new state
+            for (AutomataAction<T> action : otherCopy.getActionsByResultingState(state)) {
+                action.setResultingState(newState);
+            }
         }
 
         for (State oldState : oldToNew.keySet()) {
@@ -352,10 +354,7 @@ public abstract class FiniteStateMachine<T> {
             Set<AutomataAction<T>> actions = otherCopy.getActions(oldState);//statesCopy.get(oldState);
             copy.addActions(newState, actions);
 
-            //Update inward actions to point to the new state
-            for (AutomataAction<T> action : otherCopy.getActionsByResultingState(oldState)) {
-                action.setResultingState(newState);
-            }
+
         }
 
         return copy;
@@ -489,6 +488,7 @@ public abstract class FiniteStateMachine<T> {
 
             oldToNew.put(state, newState);
 
+
         }
 
         for (State oldState : oldToNew.keySet()) {
@@ -498,9 +498,18 @@ public abstract class FiniteStateMachine<T> {
             Set<AutomataAction<T>> newActions = new TreeSet<>();
             for (AutomataAction<T> action : actions) {
                 AutomataAction<T> actionCopy = action.copy();
-                actionCopy.setFromState(newState);
                 actionCopy.setResultingState(oldToNew.get(actionCopy.getResultingState()));
-                newActions.add(actionCopy);
+                actionCopy.setFromState(newState);
+
+                if(!newActions.contains(actionCopy)) {
+                    newActions.add(actionCopy);
+                } else {
+                    for(AutomataAction<T> existingAction : newActions) {
+                        if(existingAction.equals(actionCopy)) {
+                            existingAction.getInputSymbols().addAll(actionCopy.getInputSymbols());
+                        }
+                    }
+                }
             }
             states.put(newState, newActions);
         }
