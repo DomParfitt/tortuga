@@ -85,11 +85,6 @@ public class Transition<T> implements AutomataAction<T>, Comparable {
         return machine.getCurrentState().equals(this.getResultingState());
     }
 
-
-//    public boolean hasTransition(State from, T inputSymbol) {
-//        return (this.fromState == from) && (this.inputSymbols.contains(inputSymbol));
-//    }
-
     @Override
     public int compareTo(Object o) {
         Transition other = (Transition) o;
@@ -107,13 +102,6 @@ public class Transition<T> implements AutomataAction<T>, Comparable {
         } else {
             return ((Boolean) resulting.isAcceptingState()).compareTo(otherResulting.isAcceptingState());
         }
-//        if(from.getNumber() != otherFrom.getNumber()) {
-//            return from.getNumber() - otherFrom.getNumber();
-//        } else if(resulting.getNumber() != otherResulting.getNumber()) {
-//            return this.resultingState.getNumber() - other.resultingState.getNumber();
-//        } else {
-////            this.fromState.isAcceptingState() - other.fromState.isAcceptingState();
-//        }
     }
 
     @Override
