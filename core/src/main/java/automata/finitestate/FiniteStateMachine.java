@@ -76,7 +76,7 @@ public abstract class FiniteStateMachine<T> {
      * @return a set of actions
      */
     public Set<AutomataAction<T>> getActionsByResultingState(State resultingState) {
-        Set<AutomataAction<T>> actions = new TreeSet<>();
+        Set<AutomataAction<T>> actions = new HashSet<>();
         for (State state : this.getStates()) {
             for (AutomataAction<T> action : this.getStatesWithActions().get(state)) {
                 if (action.getResultingState().equals(resultingState)) {
@@ -229,7 +229,7 @@ public abstract class FiniteStateMachine<T> {
     public final State addState(boolean isAcceptingState, boolean isCurrentState) {
         State state = new State(this.stateCounter++, isAcceptingState);
         state.setCurrentState(isCurrentState);
-        this.states.put(state, new TreeSet<>());
+        this.states.put(state, new HashSet<>());
         if (isAcceptingState) {
             this.terminalStateIndex = state.getNumber();
         }
@@ -320,9 +320,7 @@ public abstract class FiniteStateMachine<T> {
      */
     public FiniteStateMachine<T> concatenate(FiniteStateMachine<T> other) {
         FiniteStateMachine<T> copy = this.copy();
-        System.out.println(copy);
         FiniteStateMachine<T> otherCopy = other.copy();
-        System.out.println(otherCopy);
 
         State secondInitial = otherCopy.getInitialState();
 
@@ -495,7 +493,7 @@ public abstract class FiniteStateMachine<T> {
             //Update outward actions to the new state in the copy
             State newState = oldToNew.get(oldState);
             Set<AutomataAction<T>> actions = this.getActions(oldState);
-            Set<AutomataAction<T>> newActions = new TreeSet<>();
+            Set<AutomataAction<T>> newActions = new HashSet<>();
             for (AutomataAction<T> action : actions) {
                 AutomataAction<T> actionCopy = action.copy();
                 actionCopy.setResultingState(oldToNew.get(actionCopy.getResultingState()));
