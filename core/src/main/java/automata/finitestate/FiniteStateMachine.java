@@ -379,9 +379,7 @@ public abstract class FiniteStateMachine<T> {
      */
     public FiniteStateMachine<T> union(FiniteStateMachine<T> other) {
         FiniteStateMachine<T> copy = this.copy();
-        System.out.println(copy);
         FiniteStateMachine<T> otherCopy = other.copy();
-        System.out.println(otherCopy);
 
         State secondInitial = otherCopy.getInitialState();
         State secondTerminal = otherCopy.getTerminalState();
