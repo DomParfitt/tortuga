@@ -366,7 +366,7 @@ public abstract class FiniteStateMachine<T> {
      * @param grammar the grammar to concatenate with
      * @return
      */
-    public final FiniteStateMachine<T> concatenate(Grammar<T> grammar) {
+    public FiniteStateMachine<T> concatenate(Grammar<T> grammar) {
         return this.concatenate(grammar.getMachine());
     }
 
@@ -424,7 +424,7 @@ public abstract class FiniteStateMachine<T> {
      * @param grammar the grammar to union with this
      * @return a new automata which is the union of this and the grammar
      */
-    public final FiniteStateMachine<T> union(Grammar<T> grammar) {
+    public FiniteStateMachine<T> union(Grammar<T> grammar) {
         return this.union(grammar.getMachine());
     }
 
