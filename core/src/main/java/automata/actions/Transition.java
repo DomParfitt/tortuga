@@ -50,6 +50,16 @@ public class Transition<T> implements AutomataAction<T>, Comparable {
     }
 
     @Override
+    public State getFromState() {
+        return this.fromState;
+    }
+
+    @Override
+    public void setFromState(State fromState) {
+        this.fromState = fromState;
+    }
+
+    @Override
     public State getResultingState() {
         return this.resultingState;
     }
@@ -69,6 +79,8 @@ public class Transition<T> implements AutomataAction<T>, Comparable {
         machine.setCurrentState(this.getResultingState());
         return machine.getCurrentState().equals(this.getResultingState());
     }
+
+
 
 //    public boolean hasTransition(State from, T inputSymbol) {
 //        return (this.fromState == from) && (this.inputSymbols.contains(inputSymbol));

@@ -23,6 +23,10 @@ public interface AutomataAction<T> {
      */
     boolean doAction(FiniteStateMachine<T> machine);
 
+    State getFromState();
+
+    void setFromState(State fromState);
+
     /**
      * Gets the state that results from performing this action (may be the current state)
      * @return the resulting state
