@@ -334,6 +334,7 @@ public class TestFiniteStateMachines {
         fsm = new UnionFSM("a").union(new FollowedByFSM("bc"));//new UnionFSM(new UnionFSM("a"), new FollowedByFSM("bc"));
 //        fsm = fsm.union(new FollowedByFSM("bc"));
         System.out.print("a|(bc)");
+        System.out.println(fsm);
 
         try {
             //Passes on either of expected inputs
@@ -388,6 +389,7 @@ public class TestFiniteStateMachines {
         fsm = new UnionFSM("a");//new UnionFSM(new UnionFSM("a"), new UnionFSM("bc"));
         fsm = fsm.union(new UnionFSM("bc"));
         System.out.print("a|(b|c)");
+        System.out.println(fsm);
 
         try {
             //Passes on any of valid input tokens
@@ -531,6 +533,7 @@ public class TestFiniteStateMachines {
         fsm = new UnionFSM("ab");//new FollowedByFSM(new UnionFSM("ab"), new FollowedByFSM("cd"));
         fsm = fsm.concatenate(new FollowedByFSM("cd"));
         System.out.print("(a|b)(cd)");
+        System.out.println(fsm);
 
         try {
             //Passes on valid input
@@ -599,6 +602,7 @@ public class TestFiniteStateMachines {
         fsm = new FollowedByFSM("ab");//new UnionFSM(new FollowedByFSM("ab"), new FollowedByFSM("cd"));
         fsm = fsm.union(new FollowedByFSM("cd"));
         System.out.print("(ab)|(cd)");
+        System.out.println(fsm);
 
         try {
             //Passes on either valid chain
@@ -826,9 +830,12 @@ public class TestFiniteStateMachines {
 // (a|b)c*
     public void testUnionFollowedByLoopingFollowedBy() {
 
-        fsm = new UnionFSM("ab").concatenate(new FollowedByFSM("c").loop());//new FollowedByFSM(new UnionFSM("ab"), new LoopingFSM(new FollowedByFSM("c")));
+        LexerMachine inner = new FollowedByFSM("c").loop();
+        System.out.println(inner);
+        fsm = new UnionFSM("ab").concatenate(inner);//new FollowedByFSM(new UnionFSM("ab"), new LoopingFSM(new FollowedByFSM("c")));
         System.out.print("(a|b)c*");
         System.out.println(fsm);
+        System.out.println(inner);
 
         try {
 
