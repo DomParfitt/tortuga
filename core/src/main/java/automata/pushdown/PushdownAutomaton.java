@@ -18,6 +18,14 @@ public abstract class PushdownAutomaton<T> extends FiniteStateMachine<T> {
         this.stack = new Stack<>();
     }
 
+    public Stack<T> getStack() {
+        return stack;
+    }
+
+    public void addStackAction() {
+        //TODO: Figure out possible implementation for this
+    }
+
     public PushdownAutomaton<T> concatenate(PushdownAutomaton other) {
         return (PushdownAutomaton<T>) super.concatenate(other);
     }
