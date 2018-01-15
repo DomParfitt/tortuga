@@ -5,6 +5,7 @@ import grammar.ParserGrammar;
 
 public class ParserMachine extends PushdownAutomaton<LexerGrammar> {
 
+    //TODO: Need to update the stack reference when concatenating (and unioning and probably looping)
     public ParserMachine concatenate(ParserMachine automata) {
         return (ParserMachine) super.concatenate(automata);
     }
@@ -31,7 +32,7 @@ public class ParserMachine extends PushdownAutomaton<LexerGrammar> {
         copy.stateCounter = this.stateCounter;
         copy.terminalStateIndex = this.terminalStateIndex;
         copy.states = this.copyStatesWithActions();
-        copy.stack = this.stack.copy();
+        copy.stack = this.stack;//.copy();
         return copy;
     }
 }
