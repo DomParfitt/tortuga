@@ -1,12 +1,16 @@
 package automata.pushdown;
 
+import automata.State;
+import automata.actions.StackPush;
 import grammar.LexerGrammar;
 
-public class Push extends PushdownAutomaton {
+public class Push extends ParserMachine {
 
     public Push(LexerGrammar token) {
         super();
-        this.addState(true);
-//        this.addTransition(this.getInitialState(), this.getTerminalState(), token, StackAction.StackActionType.PUSH, token);
+        State initialState = this.addState(false);
+        State terminalState = this.addState(true);
+        this.addAction(initialState, new StackPush<>(token, initialState, terminalState, this.getStack()));
     }
+
 }
