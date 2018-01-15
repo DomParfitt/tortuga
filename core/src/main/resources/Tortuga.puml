@@ -25,7 +25,7 @@ class UnionFSM
 
 class FollowedByFSM
 
-class PushdownAutomaton<LexerGrammar>
+abstract class PushdownAutomaton<T>
 
 class Stack<T> {
     +T push()
@@ -56,6 +56,12 @@ LexerMachine <|-- FollowedByFSM
 
 FiniteStateMachine -- "1*" State
 FiniteStateMachine -- "*" AutomataAction
+
+PushdownAutomaton <|-- ParserMachine
+ParserMachine <|-- Push
+ParserMachine <|-- Pop
+ParserMachine <|-- Both
+ParserMachine <|-- None
 
 PushdownAutomaton -- "1" Stack
 

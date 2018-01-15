@@ -1,15 +1,14 @@
 package grammar;
 
+import automata.pushdown.ParserMachine;
 import automata.State;
 import automata.actions.Transition;
-import automata.pushdown.None;
-import automata.pushdown.PushdownAutomaton;
 
 import java.util.*;
 
 public class ParserGrammarFactory {
 
-    public static PushdownAutomaton getMachine(ParserGrammar grammar) {
+    public static ParserMachine getMachine(ParserGrammar grammar) {
         switch (grammar) {
 
             case BOOLEAN_EXPRESSION:
@@ -34,22 +33,23 @@ public class ParserGrammarFactory {
 
     }
 
-    public static PushdownAutomaton getIntExpression() {
+    public static ParserMachine getIntExpression() {
 //        List<State> states = ParserGrammarFactory.getListOfStates(2, 1);
 //        Set<Transition<LexerGrammar>> transitions = new HashSet<>();
 //        transitions.add(new PDATransition(LexerGrammar.INT_LITERAL, new StackAction(StackAction.StackActionType.NONE), states.get(0), states.get(1)));
 //
 //        return new PushdownAutomaton(states, transitions);
 
-        PushdownAutomaton intExpression = new None(LexerGrammar.INT_LITERAL);
-        return intExpression;
+//        PushdownAutomaton intExpression = new None(LexerGrammar.INT_LITERAL);
+        return null;
     }
 
-    private static PushdownAutomaton getMathematicalOperator() {
-        return new None(LexerGrammar.PLUS).union(new None(LexerGrammar.MINUS)).union(new None(LexerGrammar.MULTIPLY)).union(new None(LexerGrammar.DIVIDE));
+    private static ParserMachine getMathematicalOperator() {
+//        return new None(LexerGrammar.PLUS).union(new None(LexerGrammar.MINUS)).union(new None(LexerGrammar.MULTIPLY)).union(new None(LexerGrammar.DIVIDE));
+        return null;
     }
 
-    public static PushdownAutomaton getMathematicalExpression() {
+    public static ParserMachine getMathematicalExpression() {
         List<State> states = ParserGrammarFactory.getListOfStates(4, 3);
 
         Set<Transition<LexerGrammar>> transitions = new HashSet<>();

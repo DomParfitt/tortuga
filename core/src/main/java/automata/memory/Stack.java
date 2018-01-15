@@ -59,6 +59,20 @@ public class Stack<T> {
     }
 
     /**
+     * Creates a copy of the stack
+     * @return a copy of the stack
+     */
+    //TODO: Does this need to copy the items in the stack?
+    public Stack<T> copy() {
+        Stack<T> copy = new Stack<>();
+        for(T item : this.stack) {
+            copy.stack.add(item);
+        }
+        return copy;
+
+    }
+
+    /**
      * Returns the index of the topmost element on the stack, i.e. the next
      * element to be popped
      * @return the index of the topmost element on the stack
@@ -66,5 +80,7 @@ public class Stack<T> {
     private int getTopIndex() {
         return this.stack.size() - 1;
     }
+
+
 
 }
