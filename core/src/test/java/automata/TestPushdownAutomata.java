@@ -14,6 +14,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class TestPushdownAutomata {
@@ -54,6 +55,9 @@ public class TestPushdownAutomata {
         lexemes.add(LexerGrammar.CLOSE_PAREN);
 
         assertTrue(pda.parse(lexemes));
+
+        lexemes.remove(LexerGrammar.CLOSE_PAREN);
+        assertFalse(pda.parse(lexemes));
     }
 
     @Test
