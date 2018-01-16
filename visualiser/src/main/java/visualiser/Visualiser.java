@@ -21,12 +21,15 @@ public class Visualiser {
         System.out.println(this.stringify(grammar));
     }
 
+    public <T> void render(FiniteStateMachine<T> automata) {
+        System.out.println(this.stringify(automata));
+    }
+
 //    private <T> File getFile(Grammar<T> grammar) {
 //        File file = new File(".");
 //    }
 
-    private <T> String stringify(Grammar<T> grammar) {
-        FiniteStateMachine<T> automata = grammar.getMachine();
+    private <T> String stringify(FiniteStateMachine<T> automata) {
         String output = "@startuml\n";
         output += "digraph G {\n";
         output += "rankdir=LR;";
@@ -61,5 +64,11 @@ public class Visualiser {
         output += "}\n";
         output += "@enduml";
         return output;
+    }
+
+    private <T> String stringify(Grammar<T> grammar) {
+        FiniteStateMachine<T> automata = grammar.getMachine();
+        return this.stringify(automata);
+
     }
 }
