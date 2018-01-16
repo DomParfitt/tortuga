@@ -1,5 +1,6 @@
 package grammar;
 
+import automata.pushdown.None;
 import automata.pushdown.ParserMachine;
 import automata.State;
 import automata.actions.Transition;
@@ -34,40 +35,27 @@ public class ParserGrammarFactory {
     }
 
     public static ParserMachine getIntExpression() {
-//        List<State> states = ParserGrammarFactory.getListOfStates(2, 1);
-//        Set<Transition<LexerGrammar>> transitions = new HashSet<>();
-//        transitions.add(new PDATransition(LexerGrammar.INT_LITERAL, new StackAction(StackAction.StackActionType.NONE), states.get(0), states.get(1)));
-//
-//        return new PushdownAutomaton(states, transitions);
-
-//        PushdownAutomaton intExpression = new None(LexerGrammar.INT_LITERAL);
-        return null;
+        //TODO: Needs to be recursive
+        ParserMachine intLit = new None(LexerGrammar.INT_LITERAL);
+        ParserMachine intExpr = intLit.concatenate(getMathematicalOperator()).concatenate(intLit);
+        intExpr = intExpr.union(intLit);
+        return intExpr;
     }
 
-    private static ParserMachine getMathematicalOperator() {
-//        return new None(LexerGrammar.PLUS).union(new None(LexerGrammar.MINUS)).union(new None(LexerGrammar.MULTIPLY)).union(new None(LexerGrammar.DIVIDE));
-        return null;
+    public static ParserMachine getMathematicalOperator() {
+        ParserMachine add = new None(LexerGrammar.PLUS);
+        ParserMachine minus = new None(LexerGrammar.MINUS);
+        ParserMachine times = new None(LexerGrammar.MULTIPLY);
+        ParserMachine divide = new None(LexerGrammar.DIVIDE);
+
+        ParserMachine mathOp = add.union(minus).union(times).union(divide);
+
+        return mathOp;
     }
 
     public static ParserMachine getMathematicalExpression() {
-        List<State> states = ParserGrammarFactory.getListOfStates(4, 3);
 
-        Set<Transition<LexerGrammar>> transitions = new HashSet<>();
-//        transitions.add(new PDATransition(LexerGrammar.OPEN_PAREN, new StackAction(StackAction.StackActionType.PUSH), states.get(0), states.get(0)));
-//        transitions.add(new PDATransition(LexerGrammar.INT_LITERAL, new StackAction(StackAction.StackActionType.NONE), states.get(0), states.get(1)));
-//        transitions.add(new PDATransition(LexerGrammar.PLUS, new StackAction(StackAction.StackActionType.NONE), states.get(1), states.get(2)));
-//        transitions.add(new PDATransition(LexerGrammar.MINUS, new StackAction(StackAction.StackActionType.NONE), states.get(1), states.get(2)));
-//        transitions.add(new PDATransition(LexerGrammar.DIVIDE, new StackAction(StackAction.StackActionType.NONE), states.get(1), states.get(2)));
-//        transitions.add(new PDATransition(LexerGrammar.MULTIPLY, new StackAction(StackAction.StackActionType.NONE), states.get(1), states.get(2)));
-//        transitions.add(new PDATransition(LexerGrammar.CLOSE_PAREN, new StackAction(StackAction.StackActionType.POP, LexerGrammar.OPEN_PAREN), states.get(1), states.get(1)));
-//        transitions.add(new PDATransition(LexerGrammar.INT_LITERAL, new StackAction(StackAction.StackActionType.NONE), states.get(2), states.get(3)));
-//        transitions.add(new PDATransition(LexerGrammar.OPEN_PAREN, new StackAction(StackAction.StackActionType.PUSH), states.get(2), states.get(0)));
-//        transitions.add(new PDATransition(LexerGrammar.CLOSE_PAREN, new StackAction(StackAction.StackActionType.POP, LexerGrammar.OPEN_PAREN), states.get(3), states.get(3)));
-
-        return null;//new PushdownAutomaton(states, transitions);
-
-//        PushdownAutomaton mathExpr = new StackPush(LexerGrammar.OPEN_PAREN).loop().concatenate(getIntExpression()).concatenate(getMathematicalOperator()).concatenate(getIntExpression()).concatenate(new Pop(LexerGrammar.CLOSE_PAREN, LexerGrammar.OPEN_PAREN));
-//        return mathExpr;
+        return null;
 
     }
 
